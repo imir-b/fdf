@@ -6,7 +6,60 @@
 #    By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2025/12/29 13:31:54 by vbleskin         ###   ########.fr        #
+#    Updated: 2025/12/30 00:06:15 by vbleskin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+# NAME
+
+NAME			=	fdf
+
+# DEF
+
+CC				=	cc
+CFLAGS			=	-Wall -Werror -Wextra -I includes -I $(LIBFT_DIR)includes -g3
+RM				=	rm -rf
+
+# DIR
+
+SRC_DIR			=	src/
+PARS_DIR		=	parsing/
+REND_DIR		=	render/
+UTIL_DIR		=	utils/
+OBJ_DIR			=	obj/
+LIB_DIR			=	lib/
+LIBFT_DIR		=	$(LIB_DIR)libft/
+
+# FILES
+
+SRC_PARS		=	$(PARS_DIR)parsing.c
+SRC_REND		=	$(REND_DIR)render.c
+SRC_UTIL		=	$(UTIL_DIR)utils.c $(UTIL_DIR)error.c
+SRC_FILES		=	main.c $(SRC_PARS) $(SRC_REND) $(SRC_UTIL)
+SRCS			=	$(addprefix $(SRC_DIR), $(SRC_FILES))
+OBJS			=	$(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))
+LIBS			=	-L$(LIBFT_DIR) -lft
+
+# RULES
+
+all :			$(NAME)
+
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+				@mkdir -p $(dir $@)
+				$(CC) $(CFLAGS) -c $< -o $@
+
+$(NAME) :		$(OBJS)
+				@make -C $(LIBFT_DIR)
+				$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
+
+clean :
+				@make clean -C $(LIBFT_DIR)
+				$(RM) $(OBJ_DIR)
+
+fclean :		clean
+				@make fclean -C $(LIBFT_DIR)
+				$(RM) $(NAME)
+
+re :			fclean all
+
+.PHONY:			all clean fclean re

@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2025/12/29 13:31:01 by vbleskin         ###   ########.fr       */
+/*   Updated: 2025/12/30 00:20:37 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,26 @@ typedef struct s_map
 	int	height;
 	int	**grid;
 }	t_map;
+
+//
+// ------ UTILS ------
+//
+int				ft_count_words_sep(char *str, char sep);
+void			*ft_free_tab(char **tab);
+void			*ft_free_grid(t_map *map);
+int				ft_error(char *str);
+
+//
+// ------ RENDER ------
+//
+int				ft_render_map(t_map *map);
+
+//
+// ------ PARSING ------
+//
+int				ft_check_filename(const char *filename);
+int				ft_get_dimensions(t_map *map, int fd);
+int				ft_get_grid(t_map *map, int fd);
+t_map			*ft_parse_map(const char *filename);
 
 #endif

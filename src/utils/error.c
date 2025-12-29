@@ -1,32 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/25 21:11:10 by vlad              #+#    #+#             */
-/*   Updated: 2025/12/30 00:20:04 by vbleskin         ###   ########.fr       */
+/*   Created: 2025/12/29 23:20:43 by vbleskin          #+#    #+#             */
+/*   Updated: 2025/12/29 23:21:13 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	main(int ac, char **av)
+int	ft_error(char *str)
 {
-	const char	*filename;
-	t_map		*map;
-
-	if (ac != 2)
-		return (ft_error("This program needs 2 args"));
-	filename = (const char *)av[1];
-	if (ft_check_filename(filename))
-		return (ft_error("File name is not valid"));
-	map = ft_parse_map(filename);
-	if (!map)
-		return (ft_error("Parsing map failed"));
-	ft_render_map(map);
-	ft_free_grid(map);
-	free(map);
-	return (SUCCESS);
+	ft_putstr_fd("Error: ", STDERR_FILENO);
+	ft_putstr_fd(str, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
+	return (ERROR);
 }
