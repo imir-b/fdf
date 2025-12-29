@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:11:10 by vlad              #+#    #+#             */
-/*   Updated: 2025/12/26 01:43:10 by vlad             ###   ########.fr       */
+/*   Updated: 2025/12/29 13:46:20 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int ft_check_filename(const char *filename)
+int	ft_check_filename(const char *filename)
 {
 	char	*format;
 	int		format_len;
@@ -23,10 +23,10 @@ int ft_check_filename(const char *filename)
 		return (ERROR);
 	len = ft_strlen(filename);
 	format_len = ft_strlen((const char *)format);
-    if (!ft_strncmp(format, ".fdf", 4) && format_len == 4 && format_len < len)
-        return (SUCCESS);
-    else
-        return (ERROR);
+	if (!ft_strncmp(format, ".fdf", 4) && format_len == 4 && format_len < len)
+		return (SUCCESS);
+	else
+		return (ERROR);
 }
 
 int	ft_error(char *str)
@@ -72,14 +72,43 @@ int	ft_get_dimensions(t_map *map, int fd)
 	return (SUCCESS);
 }
 
+/*
+ou alors faire une fonction count qui prend un char separateur et une fonction 
+ft_is* (alpha, digit...)
+*/
 int	ft_count_digits(char *str)
 {
-	// ou alors faire une fonction count qui prend un char separateur et une fonction ft_is* (alpha, digit...)
+	
 }
 
+/*
+alloue un tab concatene de tab1 et tab2 et free tab1, si pas de tab1 on ret tab2
+*/
 char	**ft_tabjoin(char **tab1, char **tab2)
 {
-	// alloue un tab concatene de tab1 et tab2 et free tab1, si pas de tab1 on ret tab2
+	char	**ret;
+	int		len1;
+	int		len2;
+	int		i;
+
+	if (!tab1)
+		return (tab2);
+	len1 = 0;
+	len2 = 0;
+	i = 0;
+	while (tab1[len1])
+		len1++;
+	while (tab2[len2])
+		len2++;
+	ret = malloc(sizeof(char *) * (len1 + len2 + 1));
+	if (!ret)
+		return (NULL);
+	while (*tab1)
+		ret[i++] = tab1++;
+	while (*tab2)
+		ret[i++] = tab2++;
+	ret[i] = NULL;
+	return (free(tab1), tab1 = NULL, ret);
 }
 
 char	**ft_get_grid(int fd)

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2025/12/25 23:29:08 by vlad             ###   ########.fr       */
+/*   Updated: 2025/12/29 13:31:01 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
-#define FDF_H
+# define FDF_H
 
 # include "libft.h"
 # include <unistd.h>
@@ -26,9 +26,9 @@
 
 typedef struct s_map
 {
-    int width;
-    int height;
-    int **grid;
-}   t_map;
+	int	width;
+	int	height;
+	int	**grid;
+}	t_map;
 
 #endif
