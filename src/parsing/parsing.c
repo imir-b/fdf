@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:17:30 by vbleskin          #+#    #+#             */
-/*   Updated: 2025/12/30 00:24:21 by vbleskin         ###   ########.fr       */
+/*   Updated: 2025/12/30 11:32:37 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,20 +66,17 @@ int	ft_get_grid(t_map *map, int fd)
 	{
 		line = get_next_line(fd);
 		if (!line)
-			break ;
+			return (ERROR);
 		grid = ft_split(line, ' ');
-		if (!grid)
-			return (free(line), ERROR);
 		free(line);
+		if (!grid)
+			return (ERROR);
 		map->grid[height] = malloc(sizeof(int) * map->width);
 		if (!map->grid[height])
 			return (ft_free_tab(grid), ERROR);
-		width = 0;
-		while (width < map->width)
-		{
+		width = -1;
+		while (++width < map->width)
 			map->grid[height][width] = ft_atoi(grid[width]);
-			width++;
-		}
 		ft_free_tab(grid);
 		height++;
 	}

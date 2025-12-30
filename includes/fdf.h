@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2025/12/30 00:20:37 by vbleskin         ###   ########.fr       */
+/*   Updated: 2025/12/30 12:40:54 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FDF_H
 
 # include "libft.h"
+# include "keys.h"
 # include <unistd.h>
 # include <fcntl.h>
 # include <string.h>
@@ -31,6 +32,18 @@ typedef struct s_map
 	int	**grid;
 }	t_map;
 
+typedef struct s_fdf
+{
+	void	*mlx_ptr;
+	void	*win_ptr;
+	void	*img_ptr;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	t_map	*map;
+}	t_fdf;
+
 //
 // ------ UTILS ------
 //
@@ -42,7 +55,8 @@ int				ft_error(char *str);
 //
 // ------ RENDER ------
 //
-int				ft_render_map(t_map *map);
+t_fdf			*ft_init_data(t_map *map);
+int				ft_process_map(t_map *map);
 
 //
 // ------ PARSING ------
