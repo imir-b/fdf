@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2025/12/30 12:40:54 by vbleskin         ###   ########.fr       */
+/*   Updated: 2025/12/31 05:42:05 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "libft.h"
 # include "keys.h"
+# include "matrice.h"
 # include <unistd.h>
 # include <fcntl.h>
 # include <string.h>
@@ -50,6 +51,8 @@ typedef struct s_fdf
 int				ft_count_words_sep(char *str, char sep);
 void			*ft_free_tab(char **tab);
 void			*ft_free_grid(t_map *map);
+void			*ft_free_data(t_fdf *data);
+t_fdf			*ft_init_data(t_map *map);
 int				ft_error(char *str);
 
 //

@@ -6,24 +6,12 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2025/12/30 12:47:09 by vbleskin         ###   ########.fr       */
+/*   Updated: 2025/12/31 06:05:15 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "mlx.h"
-
-void	*ft_free_data(t_fdf *data)
-{
-	if (data->mlx_ptr)
-		free(data->mlx_ptr);
-	if (data)
-	{
-		free(data);
-		data = NULL;
-	}
-	return (NULL);
-}
 
 void	my_mlx_pixel_put(t_fdf *data, int x, int y, int color)
 {
@@ -53,30 +41,37 @@ int	ft_key_hook(int keycode, t_fdf *data)
 	return (SUCCESS);
 }
 
-t_fdf	*ft_init_data(t_map *map)
+void	ft_draw_line(t_fdf *data, t_point p1, t_point p2)
 {
-	t_fdf	*data;
-
-	data = malloc(sizeof(t_fdf));
-	if (!data)
-		return (NULL);
-	data->mlx_ptr = mlx_init();
-	if (!data->mlx_ptr)
-		return (ft_free_data(data));
-	data->win_ptr = mlx_new_window(data->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, \
-		"FDF vbleskin");
-	if (!data->win_ptr)
-		return (ft_free_data(data));
-	data->img_ptr = mlx_new_image(data->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
-	data->addr = mlx_get_data_addr(data->img_ptr, &data->bits_per_pixel, \
-		&data->line_length, &data->endian);
-	data->map = map;
-	return (data);
+	
 }
 
 void	ft_draw_map(t_fdf *data)
 {
-	(void)data;
+	t_point	p1;
+	t_point	p2;
+
+	p1.y = 0;
+	while (p1.y < data->map->height)
+	{
+		p1.x = 0;
+		while (p1.x < data->map->width)
+		{
+			p1.z = data->map->grid[p1.y][p1.x];
+			if (p1.x < data->map->width - 1)
+			{
+				p2 = (t_point){p1.x + 1, p1.y, p1.z};
+				ft_draw_line(data, p1, p2);
+			}
+			if (p1.y < data->map->height - 1)
+			{
+				p2 = (t_point){p1.x, p1.y + 1, p1.z};
+				ft_draw_line(data, p1, p2);
+			}
+			p1.x++;
+		}
+		p1.y++;
+	}
 }
 
 int	ft_process_map(t_map *map)
