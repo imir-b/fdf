@@ -6,12 +6,21 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 01:55:35 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 15:50:11 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+/**
+ * Fonction qui utilise l'algorithme de Bresenham pour dessiner un segment de
+ * droite entre 2 points 'p1' et 'p2'. On appelle d'abord la fonction 
+ * ft_transform pour appliquer les transformations (zoom, rotation, projection)
+ * en fonction de la position de la camera. On stock les donnes necessaires a
+ * l'algo dans la structure t_bresenham. On dessine le pixel au coordonnes x y
+ * de p1 et on avance de step_x et/ou step_y pour dessiner le prochain.
+ * Quand p1 est egal a p2 on a dessine toute la ligne, on sort de la boucle.
+ */
 static void	ft_draw_line(t_fdf *data, t_point p1, t_point p2)
 {
 	t_pixel		pixel;
@@ -41,6 +50,12 @@ static void	ft_draw_line(t_fdf *data, t_point p1, t_point p2)
 	}
 }
 
+/**
+ * Fonction qui dessine la map avant de l'afficher sur la fenetre.
+ * On parcourt toute la map, on trace un trait entre le point et son voisin
+ * en appelant la fonction ft_draw_line. Si on est au dernier point de la ligne
+ * ou de la colone, on ne dessine pas car plus de voisin, la droite est tracee.
+ */
 static void	ft_draw_map(t_fdf *data)
 {
 	t_point	p1;

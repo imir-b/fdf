@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:20:18 by vbleskin          #+#    #+#             */
-/*   Updated: 2025/12/31 23:39:40 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 15:53:03 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ int	ft_absolute(int n)
 	return (n);
 }
 
-int	ft_direction(int x1, int x2)
+int	ft_direction(int pos1, int pos2)
 {
-	if (x1 < x2)
+	if (pos1 < pos2)
 		return (1);
 	return (-1);
 }

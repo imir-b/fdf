@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 01:40:06 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 01:56:10 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 15:54:18 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,10 @@ static void	ft_iso_project(t_point *p)
 	p->y = (x_copy + y_copy) * sin(RADIAN_30) - p->z;
 }
 
+/**
+ * Fonction qui applique les transformations zoom, rotate_x, rotate_y, la
+ * position sur la fenetre et la projection isometrique sur un point 'p'.
+ */
 void	ft_transform(t_point *p, t_fdf *data)
 {
 	ft_zoom(p, data->camera->zoom);
