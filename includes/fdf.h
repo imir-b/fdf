@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/01/01 16:39:47 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 19:08:33 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,16 @@
 // ------ UTILS ------
 //
 int					ft_count_words_sep(char *str, char sep);
-void				my_mlx_pixel_put(t_fdf *data, t_pixel pxl, int color);
-int					ft_close_window(t_fdf *data);
+int					ft_atoi_hexa(char *str);
 int					ft_absolute(int n);
 int					ft_direction(int x1, int x2);
+void				my_mlx_pixel_put(t_fdf *data, t_pixel pxl, int color);
+int					ft_close_window(t_fdf *data);
+t_fdf				*ft_init_data(t_map *map, t_camera *camera);
+t_bresenham			ft_init_graphics(t_point p1, t_point p2);
 void				*ft_free_tab(char **tab);
 void				*ft_free_grid(t_map *map);
 void				*ft_free_data(t_fdf *data);
-t_fdf				*ft_init_data(t_map *map, t_camera *camera);
-t_bresenham			ft_init_graphics(t_point p1, t_point p2);
 int					ft_error(char *str);
 
 //
@@ -50,11 +51,10 @@ int					ft_process_fdf(t_map *map);
 void				ft_transform(t_point *p, t_fdf *data);
 void				ft_render(t_fdf *data);
 void				ft_events(t_fdf *data);
-// int					ft_key_hook(int keycode, t_fdf *data);
-// int					ft_mouse_hook(int button, int x, int y, t_fdf *data);
-// int					ft_mouse_down(int button, int x, int y, t_fdf *data);
-// int					ft_mouse_up(int button, int x, int y, t_fdf *data);
-// int					ft_mouse_move(int x, int y, t_fdf *data);
+void				ft_iso_project(t_point *p);
+void				ft_parallel_project(t_fdf *data, float angle_x, \
+						float angle_y);
+
 
 //
 // ------ PARSING ------

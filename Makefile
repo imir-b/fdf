@@ -6,7 +6,7 @@
 #    By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2026/01/01 17:43:05 by vbleskin         ###   ########.fr        #
+#    Updated: 2026/01/01 18:24:38 by vbleskin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ MINLIB_DIR		=	$(LIB_DIR)minilibx-linux/
 
 SRC_PARS		=	$(PARS_DIR)parsing.c
 SRC_REND		=	$(REND_DIR)render.c $(REND_DIR)hooks.c $(REND_DIR)transform.c
-SRC_UTIL		=	$(UTIL_DIR)utils.c $(UTIL_DIR)error.c $(UTIL_DIR)utils_data.c
+SRC_UTIL		=	$(UTIL_DIR)utils.c $(UTIL_DIR)error.c $(UTIL_DIR)utils_data.c $(UTIL_DIR)utils_mlx.c
 SRC_FILES		=	main.c $(SRC_PARS) $(SRC_REND) $(SRC_UTIL)
 SRCS			=	$(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJS			=	$(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))

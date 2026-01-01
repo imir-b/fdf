@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 17:09:01 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 18:12:18 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 
 # define RADIAN_30 0.523599
 # define RADIAN_90 1.5708
-# define RADIAN_180 3.14159
 
 # define ISOMETRIC 0
 # define PARALLEL 1
@@ -27,6 +26,7 @@ typedef struct s_map
 {
 	int	width;
 	int	height;
+	int	**colors;
 	int	**grid;
 }	t_map;
 

@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:20:18 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 15:53:03 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 19:01:23 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,34 @@ int	ft_count_words_sep(char *str, char sep)
 	return (count);
 }
 
-void	my_mlx_pixel_put(t_fdf *data, t_pixel pxl, int color)
+static int	get_hex_value(char c)
 {
-	char	*dst;
-
-	if (pxl.x >= 0 && pxl.x < 1920 && pxl.y >= 0 && pxl.y < 1080)
-	{
-		dst = data->addr + (pxl.y * data->line_length + pxl.x * \
-			(data->bits_per_pixel / 8));
-		*(unsigned int *)dst = color;
-	}
+	if (c >= '0' && c <= '9')
+		return (c - '0');
+	if (c >= 'a' && c <= 'f')
+		return (c - 'a' + 10);
+	if (c >= 'A' && c <= 'F')
+		return (c - 'A' + 10);
+	return (-1);
 }
 
-int	ft_close_window(t_fdf *data)
+int	ft_atoi_hexa(char *str)
 {
-	ft_free_data(data);
-	exit(SUCCESS);
-	return (SUCCESS);
+	int	result;
+	int	value;
+
+	result = 0;
+	if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X'))
+		str += 2;
+	while (*str)
+	{
+		value = get_hex_value(*str);
+		if (value == -1)
+			break ;
+		result = (result * 16) + value;
+		str++;
+	}
+	return (result);
 }
 
 int	ft_absolute(int n)

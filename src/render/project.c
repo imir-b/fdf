@@ -1,35 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   keys.h                                             :+:      :+:    :+:   */
+/*   project.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/30 12:40:09 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 17:59:18 by vbleskin         ###   ########.fr       */
+/*   Created: 2026/01/01 19:07:20 by vbleskin          #+#    #+#             */
+/*   Updated: 2026/01/01 19:07:26 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef KEYS_H
-# define KEYS_H
+#include "fdf.h"
 
-# define ESC 65307
-# define LEFT 65361
-# define UP 65362
-# define RIGHT 65363
-# define DOWN 65364
+void	ft_iso_project(t_point *p)
+{
+	int	x_copy;
+	int	y_copy;
 
-# define NUM0 65438
-# define NUM1 65436
-# define NUM2 65433
-# define NUM3 65435
-# define NUM4 65430
-# define NUM5 65437
-# define NUM6 65432
-# define NUM7 65429
+	x_copy = p->x;
+	y_copy = p->y;
+	p->x = (x_copy - y_copy) * cos(RADIAN_30);
+	p->y = (x_copy + y_copy) * sin(RADIAN_30) - p->z;
+}
 
-# define LEFT_CLICK 1
-# define WHEEL_UP 4
-# define WHEEL_DOWN 5
-
-#endif
+void	ft_parallel_project(t_fdf *data, float angle_x, float angle_y)
+{
+	data->camera->projection = PARALLEL;
+	data->camera->angle_x = angle_x;
+	data->camera->angle_y = angle_y;
+}

@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   keys.h                                             :+:      :+:    :+:   */
+/*   utils_mlx.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/30 12:40:09 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 17:59:18 by vbleskin         ###   ########.fr       */
+/*   Created: 2026/01/01 18:23:51 by vbleskin          #+#    #+#             */
+/*   Updated: 2026/01/01 18:24:13 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef KEYS_H
-# define KEYS_H
+#include "fdf.h"
 
-# define ESC 65307
-# define LEFT 65361
-# define UP 65362
-# define RIGHT 65363
-# define DOWN 65364
+void	my_mlx_pixel_put(t_fdf *data, t_pixel pxl, int color)
+{
+	char	*dst;
 
-# define NUM0 65438
-# define NUM1 65436
-# define NUM2 65433
-# define NUM3 65435
-# define NUM4 65430
-# define NUM5 65437
-# define NUM6 65432
-# define NUM7 65429
+	if (pxl.x >= 0 && pxl.x < 1920 && pxl.y >= 0 && pxl.y < 1080)
+	{
+		dst = data->addr + (pxl.y * data->line_length + pxl.x * \
+			(data->bits_per_pixel / 8));
+		*(unsigned int *)dst = color;
+	}
+}
 
-# define LEFT_CLICK 1
-# define WHEEL_UP 4
-# define WHEEL_DOWN 5
-
-#endif
+int	ft_close_window(t_fdf *data)
+{
+	ft_free_data(data);
+	exit(SUCCESS);
+	return (SUCCESS);
+}

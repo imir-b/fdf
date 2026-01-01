@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 01:40:06 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 17:09:26 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 19:07:15 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,6 @@ static void	ft_rotate_y(t_point *p, double angle)
 	x_copy = p->x;
 	p->x = x_copy * cos(angle) + p->z * sin(angle);
 	p->z = -x_copy * sin(angle) + p->z * cos(angle);
-}
-
-static void	ft_iso_project(t_point *p)
-{
-	int	x_copy;
-	int	y_copy;
-
-	x_copy = p->x;
-	y_copy = p->y;
-	p->x = (x_copy - y_copy) * cos(RADIAN_30);
-	p->y = (x_copy + y_copy) * sin(RADIAN_30) - p->z;
 }
 
 /**
