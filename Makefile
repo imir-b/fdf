@@ -6,7 +6,7 @@
 #    By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2026/01/01 01:44:09 by vbleskin         ###   ########.fr        #
+#    Updated: 2026/01/01 17:43:05 by vbleskin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ NAME			=	fdf
 
 CC				=	cc
 CFLAGS			=	-Wall -Werror -Wextra -I includes -I $(LIBFT_DIR)includes -I $(MINLIB_DIR) -g3
+MAKEFLAGS 		+=	--no-print-directory
 RM				=	rm -rf
 
 # DIR
@@ -46,23 +47,29 @@ LIBS			=	-L$(LIBFT_DIR) -lft -L$(MINLIB_DIR) -lmlx_Linux -lXext -lX11 -lm -lz
 all :			$(NAME)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
-				mkdir -p $(dir $@)
-				
-				$(CC) $(CFLAGS) -c $< -o $@
+				@mkdir -p $(dir $@)
+				@$(CC) $(CFLAGS) -c $< -o $@
+				@echo "Compiling $<"
 
 $(NAME) :		$(OBJS)
 				@make -C $(LIBFT_DIR)
-				@make -C $(MINLIB_DIR)
-				$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
+				@echo "Libft compiled successfuly"
+				@make -C $(MINLIB_DIR) > /dev/null 2>&1
+				@echo "Minilibx compiled successfuly"
+				@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
+				@echo "FDF compiled successfuly"
 
 clean :
 				@make clean -C $(LIBFT_DIR)
-				@make clean -C $(MINLIB_DIR)
-				$(RM) $(OBJ_DIR)
+				@echo "Libft cleaned successfuly"
+				@make clean -C $(MINLIB_DIR) > /dev/null 2>&1
+				@echo "Minilibx cleaned successfuly"
+				@$(RM) $(OBJ_DIR)
+				@echo "FDF cleaned successfuly"
 
 fclean :		clean
 				@make fclean -C $(LIBFT_DIR)
-				$(RM) $(NAME)
+				@$(RM) $(NAME)
 
 re :			fclean all
 
