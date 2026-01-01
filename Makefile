@@ -6,7 +6,7 @@
 #    By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2026/01/01 18:24:38 by vbleskin         ###   ########.fr        #
+#    Updated: 2026/01/01 22:55:52 by vbleskin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ NAME			=	fdf
 # DEF
 
 CC				=	cc
-CFLAGS			=	-Wall -Werror -Wextra -I includes -I $(LIBFT_DIR)includes -I $(MINLIB_DIR) -g3
+CFLAGS			=	-Wall -Werror -Wextra -I includes -I $(LIBFT_DIR)includes -I $(MINLIB_DIR) -g3 -o3
 MAKEFLAGS 		+=	--no-print-directory
 RM				=	rm -rf
 
@@ -35,7 +35,7 @@ MINLIB_DIR		=	$(LIB_DIR)minilibx-linux/
 # FILES
 
 SRC_PARS		=	$(PARS_DIR)parsing.c
-SRC_REND		=	$(REND_DIR)render.c $(REND_DIR)hooks.c $(REND_DIR)transform.c
+SRC_REND		=	$(REND_DIR)render.c $(REND_DIR)hooks.c $(REND_DIR)transform.c $(REND_DIR)project.c
 SRC_UTIL		=	$(UTIL_DIR)utils.c $(UTIL_DIR)error.c $(UTIL_DIR)utils_data.c $(UTIL_DIR)utils_mlx.c
 SRC_FILES		=	main.c $(SRC_PARS) $(SRC_REND) $(SRC_UTIL)
 SRCS			=	$(addprefix $(SRC_DIR), $(SRC_FILES))

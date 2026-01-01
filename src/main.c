@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:11:10 by vlad              #+#    #+#             */
-/*   Updated: 2026/01/01 00:32:56 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 19:27:27 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	main(int ac, char **av)
 	if (!map)
 		return (ft_error("Parsing map failed"));
 	ft_process_fdf(map);
-	ft_free_grid(map);
-	free(map);
+	ft_free_map(map);
 	return (SUCCESS);
 }

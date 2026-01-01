@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 18:23:51 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 18:24:13 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 19:46:51 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	my_mlx_pixel_put(t_fdf *data, t_pixel pxl, int color)
 {
 	char	*dst;
 
-	if (pxl.x >= 0 && pxl.x < 1920 && pxl.y >= 0 && pxl.y < 1080)
+	if (pxl.x >= 0 && pxl.x < WIN_WIDTH && pxl.y >= 0 && pxl.y < WIN_HEIGHT)
 	{
 		dst = data->addr + (pxl.y * data->line_length + pxl.x * \
 			(data->bits_per_pixel / 8));

@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 22:38:00 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 19:06:55 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 22:40:09 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,12 @@ static int	ft_mouse_move(int x, int y, t_fdf *data)
 {
 	if (data->mouse.is_pressed)
 	{
-		data->camera->angle_x += (y - data->mouse.y) * 0.1;
-		data->camera->angle_y += (x - data->mouse.x) * 0.1;
+		data->camera->angle_x += (y - data->mouse.y) * 0.05;
+		data->camera->angle_y += (x - data->mouse.x) * 0.05;
+		data->maths->cos_x = cos(data->camera->angle_x);
+		data->maths->sin_x = sin(data->camera->angle_x);
+		data->maths->cos_y = cos(data->camera->angle_y);
+		data->maths->sin_y = sin(data->camera->angle_y);
 		data->mouse.x = x;
 		data->mouse.y = y;
 		ft_render(data);

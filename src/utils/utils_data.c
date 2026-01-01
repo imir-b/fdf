@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 22:45:09 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 00:36:39 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 22:31:31 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,34 +24,28 @@ t_bresenham	ft_init_graphics(t_point p1, t_point p2)
 	return (graphics);
 }
 
-void	*ft_free_tab(char **tab)
+void	*ft_free_map(t_map *map)
 {
-	int	i;
-
-	i = 0;
-	while (tab[i])
-		free(tab[i++]);
-	free(tab);
-	return (NULL);
-}
-
-void	*ft_free_grid(t_map *map)
-{
-	int	i;
-
-	if (!map->grid)
-		return (NULL);
-	i = 0;
-	while (i < map->height)
-		free(map->grid[i++]);
-	free(map->grid);
+	if (map->grid)
+		ft_free_int_tab(map->grid);
+	if (map->colors)
+		ft_free_int_tab(map->colors);
+	if (map)
+		free(map);
 	return (NULL);
 }
 
 void	*ft_free_data(t_fdf *data)
 {
+	if (data->img_ptr)
+		mlx_destroy_image(data->mlx_ptr, data->img_ptr);
+	if (data->win_ptr)
+		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
 	if (data->mlx_ptr)
+	{
+		mlx_destroy_display(data->mlx_ptr);
 		free(data->mlx_ptr);
+	}
 	if (data)
 	{
 		free(data);
@@ -60,7 +54,7 @@ void	*ft_free_data(t_fdf *data)
 	return (NULL);
 }
 
-t_fdf	*ft_init_data(t_map *map, t_camera *camera)
+t_fdf	*ft_init_data(t_map *map, t_camera *camera, t_maths *maths)
 {
 	t_fdf	*data;
 
@@ -79,5 +73,6 @@ t_fdf	*ft_init_data(t_map *map, t_camera *camera)
 		&data->line_length, &data->endian);
 	data->map = map;
 	data->camera = camera;
+	data->maths = maths;
 	return (data);
 }

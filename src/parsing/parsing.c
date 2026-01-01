@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:17:30 by vbleskin          #+#    #+#             */
-/*   Updated: 2025/12/30 11:32:37 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 19:41:47 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int	ft_get_grid(t_map *map, int fd)
 	int		width;
 	char	*line;
 	char	**grid;
+	char	*comma;
 
 	height = 0;
 	while (height < map->height)
@@ -72,11 +73,20 @@ int	ft_get_grid(t_map *map, int fd)
 		if (!grid)
 			return (ERROR);
 		map->grid[height] = malloc(sizeof(int) * map->width);
-		if (!map->grid[height])
-			return (ft_free_tab(grid), ERROR);
-		width = -1;
-		while (++width < map->width)
+		map->colors[height] = malloc(sizeof(int) * map->width);
+		if (!map->grid[height] || !map->colors[height])
+			return (ERROR);
+		width = 0;
+		while (width < map->width)
+		{
 			map->grid[height][width] = ft_atoi(grid[width]);
+			comma = ft_strchr(grid[width], ',');
+			if (comma)
+				map->colors[height][width] = ft_atoi_hexa(comma + 1);
+			else
+				map->colors[height][width] = WHITE;
+			width++;
+		}
 		ft_free_tab(grid);
 		height++;
 	}
@@ -93,18 +103,21 @@ t_map	*ft_parse_map(const char *filename)
 		return (NULL);
 	fd = open(filename, O_RDONLY);
 	if (fd == FAIL)
-		return (ft_error(strerror(errno)), free(map), NULL);
+		return (ft_error(strerror(errno)), ft_free_map(map));
 	if (ft_get_dimensions(map, fd))
-		return (close(fd), free(map), NULL);
+		return (close(fd), ft_free_map(map));
 	close(fd);
 	fd = open(filename, O_RDONLY);
 	if (fd == FAIL)
-		return (ft_error(strerror(errno)), free(map), NULL);
+		return (ft_error(strerror(errno)), ft_free_map(map));
 	map->grid = malloc(sizeof(int *) * map->height);
 	if (!map->grid)
-		return (close(fd), NULL);
+		return (close(fd), ft_free_map(map));
+	map->colors = malloc(sizeof(int *) * map->height);
+	if (!map->colors)
+		return (close(fd), ft_free_map(map));
 	if (ft_get_grid(map, fd))
-		return (close(fd), free(map), ft_free_grid(map));
+		return (close(fd), ft_free_map(map));
 	close(fd);
 	return (map);
 }

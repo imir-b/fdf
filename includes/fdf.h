@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/01/01 19:08:33 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 22:42:37 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,11 @@ int					ft_absolute(int n);
 int					ft_direction(int x1, int x2);
 void				my_mlx_pixel_put(t_fdf *data, t_pixel pxl, int color);
 int					ft_close_window(t_fdf *data);
-t_fdf				*ft_init_data(t_map *map, t_camera *camera);
+t_fdf				*ft_init_data(t_map *map, t_camera *camera, t_maths *maths);
 t_bresenham			ft_init_graphics(t_point p1, t_point p2);
 void				*ft_free_tab(char **tab);
-void				*ft_free_grid(t_map *map);
+void				*ft_free_int_tab(int **tab);
+void				*ft_free_map(t_map *map);
 void				*ft_free_data(t_fdf *data);
 int					ft_error(char *str);
 
@@ -51,7 +52,7 @@ int					ft_process_fdf(t_map *map);
 void				ft_transform(t_point *p, t_fdf *data);
 void				ft_render(t_fdf *data);
 void				ft_events(t_fdf *data);
-void				ft_iso_project(t_point *p);
+void				ft_iso_project(t_point *p, t_maths *maths);
 void				ft_parallel_project(t_fdf *data, float angle_x, \
 						float angle_y);
 

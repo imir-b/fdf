@@ -6,11 +6,18 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 17:09:10 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 22:37:13 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+int	ft_is_clipping(t_point p)
+{
+	if (p.x >= 0 && p.x < WIN_WIDTH && p.y >= 0 && p.y < WIN_HEIGHT)
+		return (TRUE);
+	return (FALSE);
+}
 
 /**
  * Fonction qui utilise l'algorithme de Bresenham pour dessiner un segment de
@@ -21,7 +28,7 @@
  * de p1 et on avance de step_x et/ou step_y pour dessiner le prochain.
  * Quand p1 est egal a p2 on a dessine toute la ligne, on sort de la boucle.
  */
-static void	ft_draw_line(t_fdf *data, t_point p1, t_point p2)
+static void	ft_draw_line(t_fdf *data, t_point p1, t_point p2, int color)
 {
 	t_pixel		pixel;
 	t_bresenham	graphics;
@@ -29,11 +36,13 @@ static void	ft_draw_line(t_fdf *data, t_point p1, t_point p2)
 
 	ft_transform(&p1, data);
 	ft_transform(&p2, data);
+	if (!ft_is_clipping(p1) || !ft_is_clipping(p2))
+		return ;
 	graphics = ft_init_graphics(p1, p2);
 	while (TRUE)
 	{
 		pixel = (t_pixel){p1.x, p1.y};
-		my_mlx_pixel_put(data, pixel, 0xFFFFFF);
+		my_mlx_pixel_put(data, pixel, color);
 		if (p1.x == p2.x && p1.y == p2.y)
 			break ;
 		err2 = graphics.err * 2;
@@ -71,12 +80,12 @@ static void	ft_draw_map(t_fdf *data)
 			if (p1.x < data->map->width - 1)
 			{
 				p2 = (t_point){p1.x + 1, p1.y, data->map->grid[p1.y][p1.x + 1]};
-				ft_draw_line(data, p1, p2);
+				ft_draw_line(data, p1, p2, data->map->colors[p1.y][p1.x]);
 			}
 			if (p1.y < data->map->height - 1)
 			{
 				p2 = (t_point){p1.x, p1.y + 1, data->map->grid[p1.y + 1][p1.x]};
-				ft_draw_line(data, p1, p2);
+				ft_draw_line(data, p1, p2, data->map->colors[p1.y][p1.x]);
 			}
 			p1.x++;
 		}
@@ -95,10 +104,12 @@ int	ft_process_fdf(t_map *map)
 {
 	t_fdf		*data;
 	t_camera	camera;
+	t_maths		maths;
 
 	camera = (t_camera){WIN_WIDTH / 2, WIN_HEIGHT / 2, 20, 1.0, \
 		ISOMETRIC, RADIAN_30, RADIAN_30};
-	data = ft_init_data(map, &camera);
+	maths = (t_maths){0.0, 0.0, 0.0, 0.0, cos(RADIAN_30), sin(RADIAN_30)};
+	data = ft_init_data(map, &camera, &maths);
 	if (!data)
 		return (ERROR);
 	ft_render(data);

@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 18:12:18 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 22:30:49 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # define ISOMETRIC 0
 # define PARALLEL 1
 
+# define WHITE 16777215
+
 typedef struct s_map
 {
 	int	width;
@@ -29,6 +31,8 @@ typedef struct s_map
 	int	**colors;
 	int	**grid;
 }	t_map;
+
+
 
 typedef struct s_camera
 {
@@ -40,6 +44,16 @@ typedef struct s_camera
 	double	angle_x;
 	double	angle_y;
 }	t_camera;
+
+typedef struct s_maths
+{
+	float	cos_x;
+	float	sin_x;
+	float	cos_y;
+	float	sin_y;
+	float	cos_30;
+	float	sin_30;
+}	t_maths;
 
 typedef struct s_mouse
 {
@@ -59,6 +73,7 @@ typedef struct s_fdf
 	int			endian;
 	t_map		*map;
 	t_camera	*camera;
+	t_maths		*maths;
 	t_mouse		mouse;
 }	t_fdf;
 
