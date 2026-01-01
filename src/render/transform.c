@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 01:40:06 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 15:54:18 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 17:09:26 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ void	ft_transform(t_point *p, t_fdf *data)
 	ft_zoom(p, data->camera->zoom);
 	ft_rotate_x(p, data->camera->angle_x);
 	ft_rotate_y(p, data->camera->angle_y);
-	ft_iso_project(p);
+	if (data->camera->projection == ISOMETRIC)
+		ft_iso_project(p);
 	p->x += data->camera->shift_x;
 	p->y += data->camera->shift_y;
 }

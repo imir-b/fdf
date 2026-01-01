@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/01/01 01:55:16 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 16:39:47 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,6 @@
 # define FAIL -1
 # define TRUE 1
 # define FALSE 0
-
-# define WIN_WIDTH 1920
-# define WIN_HEIGHT 1080
-# define RADIAN_30 0.523599
 
 //
 // ------ UTILS ------

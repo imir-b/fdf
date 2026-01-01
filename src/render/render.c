@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 15:50:11 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 17:09:10 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	ft_process_fdf(t_map *map)
 	t_camera	camera;
 
 	camera = (t_camera){WIN_WIDTH / 2, WIN_HEIGHT / 2, 20, 1.0, \
-		RADIAN_30, RADIAN_30};
+		ISOMETRIC, RADIAN_30, RADIAN_30};
 	data = ft_init_data(map, &camera);
 	if (!data)
 		return (ERROR);

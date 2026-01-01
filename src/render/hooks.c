@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 22:38:00 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 01:54:51 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 17:12:38 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,63 @@ static int	ft_mouse_move(int x, int y, t_fdf *data)
 {
 	if (data->mouse.is_pressed)
 	{
-		data->camera->angle_x += (x - data->mouse.x) * 0.01;
-		data->camera->angle_y += (y - data->mouse.y) * 0.01;
+		data->camera->angle_x += (x - data->mouse.x) * 0.1;
+		data->camera->angle_y += (y - data->mouse.y) * 0.1;
 		data->mouse.x = x;
 		data->mouse.y = y;
 		ft_render(data);
 	}
 	return (SUCCESS);
 }
+#include <stdio.h>
+
+static int	ft_num_hook(int keycode, t_fdf *data)
+{
+	if (keycode == NUM0)
+	{
+		data->camera->angle_x = 0;
+		data->camera->angle_y = 0;
+		data->camera->projection = ISOMETRIC;
+	}
+	if (keycode == NUM1 || keycode == NUM2 || keycode == NUM3 \
+		|| keycode == NUM4 || keycode == NUM5 || keycode == NUM6)
+		data->camera->projection = PARALLEL;
+	if (keycode == NUM1)
+	{
+		data->camera->angle_x = 0;
+		data->camera->angle_y = 0;
+	}
+	if (keycode == NUM2)
+	{
+		data->camera->angle_x = 0;
+		data->camera->angle_y = RADIAN_90;
+	}
+	if (keycode == NUM3)
+	{
+		data->camera->angle_x = RADIAN_90;
+		data->camera->angle_y = 0;
+	}
+	if (keycode == NUM4)
+	{
+		data->camera->angle_x = -RADIAN_90;
+		data->camera->angle_y = -RADIAN_90;
+	}
+	if (keycode == NUM5)
+	{
+		data->camera->angle_x = -RADIAN_90;
+		data->camera->angle_y = 0;
+	}
+	if (keycode == NUM6)
+	{
+		data->camera->angle_x = RADIAN_90;
+		data->camera->angle_y = RADIAN_90;
+	}
+	return (SUCCESS);
+}
 
 static int	ft_key_hook(int keycode, t_fdf *data)
 {
+	printf("Touche appuyée : %d\n", keycode);
 	if (keycode == ESC)
 		ft_close_window(data);
 	if (keycode == LEFT)
@@ -67,6 +113,7 @@ static int	ft_key_hook(int keycode, t_fdf *data)
 		data->camera->shift_y += 10;
 	if (keycode == DOWN)
 		data->camera->shift_y -= 10;
+	ft_num_hook(keycode, data);
 	ft_render(data);
 	return (SUCCESS);
 }

@@ -6,12 +6,22 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 01:09:42 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 17:09:01 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DATA_H
 # define DATA_H
+
+# define WIN_WIDTH 1920
+# define WIN_HEIGHT 1080
+
+# define RADIAN_30 0.523599
+# define RADIAN_90 1.5708
+# define RADIAN_180 3.14159
+
+# define ISOMETRIC 0
+# define PARALLEL 1
 
 typedef struct s_map
 {
@@ -26,6 +36,7 @@ typedef struct s_camera
 	int		shift_y;
 	int		zoom;
 	float	z_scale;
+	int		projection;
 	double	angle_x;
 	double	angle_y;
 }	t_camera;
