@@ -6,7 +6,7 @@
 #    By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2025/12/30 00:57:38 by vbleskin         ###   ########.fr        #
+#    Updated: 2026/01/01 01:44:09 by vbleskin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,8 +34,8 @@ MINLIB_DIR		=	$(LIB_DIR)minilibx-linux/
 # FILES
 
 SRC_PARS		=	$(PARS_DIR)parsing.c
-SRC_REND		=	$(REND_DIR)render.c
-SRC_UTIL		=	$(UTIL_DIR)utils.c $(UTIL_DIR)error.c
+SRC_REND		=	$(REND_DIR)render.c $(REND_DIR)hooks.c $(REND_DIR)transform.c
+SRC_UTIL		=	$(UTIL_DIR)utils.c $(UTIL_DIR)error.c $(UTIL_DIR)utils_data.c
 SRC_FILES		=	main.c $(SRC_PARS) $(SRC_REND) $(SRC_UTIL)
 SRCS			=	$(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJS			=	$(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))
@@ -46,7 +46,7 @@ LIBS			=	-L$(LIBFT_DIR) -lft -L$(MINLIB_DIR) -lmlx_Linux -lXext -lX11 -lm -lz
 all :			$(NAME)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
-				@mkdir -p $(dir $@)
+				mkdir -p $(dir $@)
 				
 				$(CC) $(CFLAGS) -c $< -o $@
 

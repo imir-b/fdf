@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2025/12/31 05:42:05 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/01 01:55:16 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,59 +14,58 @@
 # define FDF_H
 
 # include "libft.h"
-# include "keys.h"
-# include "matrice.h"
+# include "mlx.h"
+# include "data.h"
+# include <math.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <string.h>
 # include <errno.h>
 
-# define ERROR 1
 # define SUCCESS 0
+# define ERROR 1
 # define FAIL -1
 # define TRUE 1
+# define FALSE 0
 
-typedef struct s_map
-{
-	int	width;
-	int	height;
-	int	**grid;
-}	t_map;
-
-typedef struct s_fdf
-{
-	void	*mlx_ptr;
-	void	*win_ptr;
-	void	*img_ptr;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-	t_map	*map;
-}	t_fdf;
+# define WIN_WIDTH 1920
+# define WIN_HEIGHT 1080
+# define RADIAN_30 0.523599
 
 //
 // ------ UTILS ------
 //
-int				ft_count_words_sep(char *str, char sep);
-void			*ft_free_tab(char **tab);
-void			*ft_free_grid(t_map *map);
-void			*ft_free_data(t_fdf *data);
-t_fdf			*ft_init_data(t_map *map);
-int				ft_error(char *str);
+int					ft_count_words_sep(char *str, char sep);
+void				my_mlx_pixel_put(t_fdf *data, t_pixel pxl, int color);
+int					ft_close_window(t_fdf *data);
+int					ft_absolute(int n);
+int					ft_direction(int x1, int x2);
+void				*ft_free_tab(char **tab);
+void				*ft_free_grid(t_map *map);
+void				*ft_free_data(t_fdf *data);
+t_fdf				*ft_init_data(t_map *map, t_camera *camera);
+t_bresenham			ft_init_graphics(t_point p1, t_point p2);
+int					ft_error(char *str);
 
 //
 // ------ RENDER ------
 //
-t_fdf			*ft_init_data(t_map *map);
-int				ft_process_map(t_map *map);
+int					ft_process_fdf(t_map *map);
+void				ft_transform(t_point *p, t_fdf *data);
+void				ft_render(t_fdf *data);
+void				ft_events(t_fdf *data);
+// int					ft_key_hook(int keycode, t_fdf *data);
+// int					ft_mouse_hook(int button, int x, int y, t_fdf *data);
+// int					ft_mouse_down(int button, int x, int y, t_fdf *data);
+// int					ft_mouse_up(int button, int x, int y, t_fdf *data);
+// int					ft_mouse_move(int x, int y, t_fdf *data);
 
 //
 // ------ PARSING ------
 //
-int				ft_check_filename(const char *filename);
-int				ft_get_dimensions(t_map *map, int fd);
-int				ft_get_grid(t_map *map, int fd);
-t_map			*ft_parse_map(const char *filename);
+int					ft_check_filename(const char *filename);
+int					ft_get_dimensions(t_map *map, int fd);
+int					ft_get_grid(t_map *map, int fd);
+t_map				*ft_parse_map(const char *filename);
 
 #endif
