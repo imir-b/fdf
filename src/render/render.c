@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/02 15:08:00 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/02 16:08:29 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 /**
  * Fonction qui utilise l'algorithme de Bresenham pour dessiner un segment de
- * droite entre 2 points 'p1' et 'p2'. On appelle d'abord la fonction 
- * ft_transform pour appliquer les transformations (zoom, rotation, projection)
- * en fonction de la position de la camera. On stock les donnes necessaires a
+ * droite entre 2 points 'p1' et 'p2'. On stock les donnes necessaires a
  * l'algo dans la structure t_bresenham. On dessine le pixel au coordonnes x y
  * de p1 et on avance de step_x et/ou step_y pour dessiner le prochain.
  * Quand p1 est egal a p2 on a dessine toute la ligne, on sort de la boucle.
@@ -27,8 +25,6 @@ static void	ft_draw_line(t_fdf *data, t_point p1, t_point p2, int color)
 	t_bresenham	graphics;
 	int			err2;
 
-	ft_transform(&p1, data);
-	ft_transform(&p2, data);
 	if ((p1.x < 0 && p2.x < 0) || (p1.x >= WIN_WIDTH && p2.x >= WIN_WIDTH) || \
 		(p1.y < 0 && p2.y < 0) || (p1.y >= WIN_HEIGHT && p2.y >= WIN_HEIGHT))
 		return ;
@@ -62,66 +58,79 @@ static void	ft_draw_line(t_fdf *data, t_point p1, t_point p2, int color)
  * en appelant la fonction ft_draw_line. Si on est au dernier point de la ligne
  * ou de la colone, on ne dessine pas car plus de voisin, la droite est tracee.
  */
-void	*ft_draw_thread(void *arg)
+static void	ft_draw_map_seq(t_fdf *data)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < data->map->height)
+	{
+		x = 0;
+		while (x < data->map->width)
+		{
+			if (x < data->map->width - 1)
+				ft_draw_line(data, data->map->coords[y][x], \
+					data->map->coords[y][x + 1], data->map->colors[y][x]);
+			if (y < data->map->height - 1)
+				ft_draw_line(data, data->map->coords[y][x], \
+					data->map->coords[y + 1][x], data->map->colors[y][x]);
+			x++;
+		}
+		y++;
+	}
+}
+
+void	*ft_calc_transform_thread(void *arg)
 {
 	t_thread	*thread;
 	t_fdf		*data;
-	t_point		p1;
-	t_point		p2;
+	t_point		p;
+	int			x;
+	int			y;
 
-	thread = (t_thread *)(arg);
+	thread = (t_thread *)arg;
 	data = thread->data;
-	p1.y = thread->start;
-	while (p1.y < thread->end)
+	y = thread->start;
+	while (y < thread->end)
 	{
-		p1.x = 0;
-		while (p1.x < data->map->width)
+		x = 0;
+		while (x < data->map->width)
 		{
-			p1.z = data->map->grid[p1.y][p1.x];
-			if (p1.x < data->map->width - 1)
-			{
-				p2 = (t_point){p1.x + 1, p1.y, data->map->grid[p1.y][p1.x + 1]};
-				ft_draw_line(data, p1, p2, data->map->colors[p1.y][p1.x]);
-			}
-			if (p1.y < data->map->height - 1)
-			{
-				p2 = (t_point){p1.x, p1.y + 1, data->map->grid[p1.y + 1][p1.x]};
-				ft_draw_line(data, p1, p2, data->map->colors[p1.y][p1.x]);
-			}
-			p1.x++;
+			p = (t_point){x, y, data->map->grid[y][x]};
+			ft_transform(&p, data);
+			data->map->coords[y][x] = p;
+			x++;
 		}
-		p1.y++;
+		y++;
 	}
-	return (free(thread), NULL);
+	return (NULL);
 }
 
-int	ft_render(t_fdf *data)
+void	ft_render(t_fdf *data)
 {
 	pthread_t	threads[THREADS_NB];
-	t_thread	*args;
-	int			index;
+	t_thread	args[THREADS_NB];
+	int			i;
 
 	bzero(data->addr, WIN_WIDTH * WIN_HEIGHT * (data->bits_per_pixel / 8));
-	index = -1;
-	while (++index < THREADS_NB)
+	i = 0;
+	while (i < THREADS_NB)
 	{
-		args = malloc(sizeof(t_thread));
-		if (!args)
-			return (ERROR);
-		args->data = data;
-		args->id = index;
-		args->start = index * (data->map->height / THREADS_NB);
-		args->end = (index + 1) * (data->map->height / THREADS_NB);
-		if (index == THREADS_NB - 1)
-			args->end = data->map->height;
-		if (pthread_create(&threads[index], NULL, ft_draw_thread, args))
-			return (free(args), ERROR);
+		args[i].data = data;
+		args[i].id = i;
+		args[i].start = i * (data->map->height / THREADS_NB);
+		args[i].end = (i + 1) * (data->map->height / THREADS_NB);
+		if (i == THREADS_NB - 1)
+			args[i].end = data->map->height;
+		pthread_create(&threads[i], NULL, ft_calc_transform_thread, &args[i]);
+		i++;
 	}
-	index = 0;
-	while (index < THREADS_NB)
-		pthread_join(threads[index++], NULL);
+	i = 0;
+	while (i < THREADS_NB)
+		pthread_join(threads[i++], NULL);
+	ft_draw_map_seq(data);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img_ptr, 0, 0);
-	return (SUCCESS);
 }
 
 int	ft_process_fdf(t_map *map)
@@ -137,8 +146,7 @@ int	ft_process_fdf(t_map *map)
 	data = ft_init_data(map, &camera, &maths);
 	if (!data)
 		return (ERROR);
-	if (ft_render(data))
-		return (ERROR);
+	ft_render(data);
 	ft_events(data);
 	mlx_loop(data->mlx_ptr);
 	ft_free_data(data);

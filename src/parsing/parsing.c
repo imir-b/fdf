@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:17:30 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 19:41:47 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/02 16:07:10 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,24 @@ int	ft_get_grid(t_map *map, int fd)
 	return (SUCCESS);
 }
 
+int	ft_alloc_coords(t_map *map)
+{
+	int	i;
+
+	map->coords = malloc(sizeof(t_point *) * map->height);
+	if (!map->coords)
+		return (ERROR);
+	i = 0;
+	while (i < map->height)
+	{
+		map->coords[i] = malloc(sizeof(t_point) * map->width);
+		if (!map->coords[i])
+			return (ERROR);
+		i++;
+	}
+	return (SUCCESS);
+}
+
 t_map	*ft_parse_map(const char *filename)
 {
 	int		fd;
@@ -111,10 +129,8 @@ t_map	*ft_parse_map(const char *filename)
 	if (fd == FAIL)
 		return (ft_error(strerror(errno)), ft_free_map(map));
 	map->grid = malloc(sizeof(int *) * map->height);
-	if (!map->grid)
-		return (close(fd), ft_free_map(map));
 	map->colors = malloc(sizeof(int *) * map->height);
-	if (!map->colors)
+	if (!map->grid || !map->colors || ft_alloc_coords(map))
 		return (close(fd), ft_free_map(map));
 	if (ft_get_grid(map, fd))
 		return (close(fd), ft_free_map(map));

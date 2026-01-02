@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 22:45:09 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/02 15:00:09 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/02 16:06:12 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,19 @@ t_bresenham	ft_init_graphics(t_point p1, t_point p2)
 
 void	*ft_free_map(t_map *map)
 {
+	int	i;
+
 	if (map->grid)
 		ft_free_int_tab(map->grid);
 	if (map->colors)
 		ft_free_int_tab(map->colors);
+	if (map->coords)
+	{
+		i = 0;
+		while (map->coords[i])
+			free(map->coords[i++]);
+		free(map->coords);
+	}
 	if (map)
 		free(map);
 	return (NULL);
