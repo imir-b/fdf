@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 22:45:09 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 22:31:31 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/02 15:00:09 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_fdf	*ft_init_data(t_map *map, t_camera *camera, t_maths *maths)
 {
 	t_fdf	*data;
 
-	data = malloc(sizeof(t_fdf));
+	data = ft_calloc(1, sizeof(t_fdf));
 	if (!data)
 		return (NULL);
 	data->mlx_ptr = mlx_init();
@@ -74,5 +74,8 @@ t_fdf	*ft_init_data(t_map *map, t_camera *camera, t_maths *maths)
 	data->map = map;
 	data->camera = camera;
 	data->maths = maths;
+	data->mouse.is_pressed = FALSE;
+	data->mouse.x = 0;
+	data->mouse.y = 0;
 	return (data);
 }

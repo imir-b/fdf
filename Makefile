@@ -6,7 +6,7 @@
 #    By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2026/01/01 22:55:52 by vbleskin         ###   ########.fr        #
+#    Updated: 2026/01/02 01:46:58 by vbleskin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ NAME			=	fdf
 # DEF
 
 CC				=	cc
-CFLAGS			=	-Wall -Werror -Wextra -I includes -I $(LIBFT_DIR)includes -I $(MINLIB_DIR) -g3 -o3
+CFLAGS			=	-Wall -Werror -Wextra -I includes -I $(LIBFT_DIR)includes -I $(MINLIB_DIR) -o3 -pthread
 MAKEFLAGS 		+=	--no-print-directory
 RM				=	rm -rf
 

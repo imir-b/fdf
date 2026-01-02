@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/01/01 22:42:37 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/02 13:51:42 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "mlx.h"
 # include "data.h"
 # include <math.h>
+# include <pthread.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <string.h>
@@ -50,12 +51,11 @@ int					ft_error(char *str);
 //
 int					ft_process_fdf(t_map *map);
 void				ft_transform(t_point *p, t_fdf *data);
-void				ft_render(t_fdf *data);
+int					ft_render(t_fdf *data);
 void				ft_events(t_fdf *data);
 void				ft_iso_project(t_point *p, t_maths *maths);
 void				ft_parallel_project(t_fdf *data, float angle_x, \
 						float angle_y);
-
 
 //
 // ------ PARSING ------

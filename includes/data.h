@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 22:30:49 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/02 15:21:32 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 
 # define WHITE 16777215
 
+# define THREADS_NB 4
+
 typedef struct s_map
 {
 	int	width;
@@ -31,8 +33,6 @@ typedef struct s_map
 	int	**colors;
 	int	**grid;
 }	t_map;
-
-
 
 typedef struct s_camera
 {
@@ -53,6 +53,8 @@ typedef struct s_maths
 	float	sin_y;
 	float	cos_30;
 	float	sin_30;
+	int		divide_x;
+	int		divide_y;
 }	t_maths;
 
 typedef struct s_mouse
@@ -76,6 +78,14 @@ typedef struct s_fdf
 	t_maths		*maths;
 	t_mouse		mouse;
 }	t_fdf;
+
+typedef struct s_thread
+{
+	t_fdf	*data;
+	int		id;
+	int		start;
+	int		end;
+}	t_thread;
 
 typedef struct s_point
 {
