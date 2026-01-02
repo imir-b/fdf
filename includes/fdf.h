@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/01/02 15:47:09 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/02 17:13:55 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ int					ft_error(char *str);
 //
 int					ft_process_fdf(t_map *map);
 void				ft_transform(t_point *p, t_fdf *data);
-void				ft_render(t_fdf *data);
+void				ft_transform_axis_point(t_point *p, t_fdf *data);
+void				ft_render_image(t_fdf *data);
 void				ft_events(t_fdf *data);
 void				ft_iso_project(t_point *p, t_maths *maths);
 void				ft_parallel_project(t_fdf *data, float angle_x, \

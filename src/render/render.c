@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/02 16:08:29 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/02 17:13:28 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,29 @@ void	*ft_calc_transform_thread(void *arg)
 	return (NULL);
 }
 
-void	ft_render(t_fdf *data)
+void	ft_draw_axes(t_fdf *data)
+{
+	t_point	origin;
+	t_point	px;
+	t_point	py;
+	t_point	pz;
+	int		len;
+
+	len = 60;
+	origin = (t_point){0, 0, 0};
+	px = (t_point){len, 0, 0};
+	py = (t_point){0, len, 0};
+	pz = (t_point){0, 0, len};
+	ft_transform_axis_point(&origin, data);
+	ft_transform_axis_point(&px, data);
+	ft_transform_axis_point(&py, data);
+	ft_transform_axis_point(&pz, data);
+	ft_draw_line(data, origin, px, 0xFF0000);
+	ft_draw_line(data, origin, py, 0x00FF00);
+	ft_draw_line(data, origin, pz, 0x0000FF);
+}
+
+void	ft_render_image(t_fdf *data)
 {
 	pthread_t	threads[THREADS_NB];
 	t_thread	args[THREADS_NB];
@@ -130,6 +152,7 @@ void	ft_render(t_fdf *data)
 	while (i < THREADS_NB)
 		pthread_join(threads[i++], NULL);
 	ft_draw_map_seq(data);
+	ft_draw_axes(data);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img_ptr, 0, 0);
 }
 
@@ -146,7 +169,7 @@ int	ft_process_fdf(t_map *map)
 	data = ft_init_data(map, &camera, &maths);
 	if (!data)
 		return (ERROR);
-	ft_render(data);
+	ft_render_image(data);
 	ft_events(data);
 	mlx_loop(data->mlx_ptr);
 	ft_free_data(data);

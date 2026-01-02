@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 22:38:00 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/02 15:10:57 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/02 17:05:22 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	ft_mouse_down(int button, int x, int y, t_fdf *data)
 			data->camera->zoom -= 1;
 	}
 	if (button == WHEEL_UP || button == WHEEL_DOWN)
-		ft_render(data);
+		ft_render_image(data);
 	return (SUCCESS);
 }
 
@@ -54,7 +54,7 @@ static int	ft_mouse_move(int x, int y, t_fdf *data)
 		data->maths->sin_y = sin(data->camera->angle_y);
 		data->mouse.x = x;
 		data->mouse.y = y;
-		ft_render(data);
+		ft_render_image(data);
 	}
 	return (SUCCESS);
 }
@@ -97,15 +97,16 @@ static int	ft_key_hook(int keycode, t_fdf *data)
 	if (keycode == DOWN)
 		data->camera->shift_y -= 10;
 	ft_num_hook(keycode, data);
-	ft_render(data);
+	ft_render_image(data);
 	return (SUCCESS);
 }
 
-int ft_refresh_image(t_fdf *data)
+int	ft_refresh_image(t_fdf *data)
 {
-    if (data->win_ptr && data->img_ptr)
-        mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img_ptr, 0, 0);
-    return (SUCCESS);
+	if (data->win_ptr && data->img_ptr)
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, \
+			data->img_ptr, 0, 0);
+	return (SUCCESS);
 }
 
 void	ft_events(t_fdf *data)

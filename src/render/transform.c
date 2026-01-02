@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 01:40:06 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 22:34:31 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/02 17:13:37 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,16 @@ static void	ft_rotate_y(t_point *p, t_maths *maths)
 	x_copy = p->x;
 	p->x = x_copy * maths->cos_x + p->z * maths->sin_x;
 	p->z = -x_copy * maths->sin_x + p->z * maths->cos_x;
+}
+
+void	ft_transform_axis_point(t_point *p, t_fdf *data)
+{
+	ft_rotate_x(p, data->maths);
+	ft_rotate_y(p, data->maths);
+	if (data->camera->projection == ISOMETRIC)
+		ft_iso_project(p, data->maths);
+	p->x += WIN_WIDTH - 100;
+	p->y += WIN_HEIGHT - 100;
 }
 
 /**

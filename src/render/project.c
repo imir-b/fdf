@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 19:07:20 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 22:42:02 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/02 16:14:38 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void	ft_iso_project(t_point *p, t_maths *maths)
 
 void	ft_parallel_project(t_fdf *data, float angle_x, float angle_y)
 {
+	data->camera->shift_x = WIN_WIDTH / 2;
+	data->camera->shift_y = WIN_HEIGHT / 2;
 	data->camera->projection = PARALLEL;
 	data->camera->angle_x = angle_x;
 	data->maths->cos_x = cos(angle_x);
