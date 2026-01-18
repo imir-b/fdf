@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/02 17:48:30 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/18 02:25:09 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,33 +21,29 @@
  */
 static void	ft_draw_line(t_fdf *data, t_point p1, t_point p2, int color)
 {
-	t_pixel		pixel;
-	t_bresenham	graphics;
+	t_bresenham	bressenham;
 	int			err2;
 
 	if ((p1.x < 0 && p2.x < 0) || (p1.x >= WIN_WIDTH && p2.x >= WIN_WIDTH) || \
 		(p1.y < 0 && p2.y < 0) || (p1.y >= WIN_HEIGHT && p2.y >= WIN_HEIGHT))
 		return ;
-	graphics = ft_init_graphics(p1, p2);
+	bressenham = ft_init_graphics(p1, p2);
 	while (TRUE)
 	{
 		if (p1.x >= 0 && p1.x < WIN_WIDTH && p1.y >= 0 && p1.y < WIN_HEIGHT)
-		{
-			pixel = (t_pixel){p1.x, p1.y};
-			my_mlx_pixel_put(data, pixel, color);
-		}
+			my_mlx_pixel_put(data, p1.x, p1.y, color);
 		if (p1.x == p2.x && p1.y == p2.y)
 			break ;
-		err2 = graphics.err * 2;
-		if (err2 > -graphics.diff_y)
+		err2 = bressenham.err * 2;
+		if (err2 > -bressenham.diff_y)
 		{
-			graphics.err -= graphics.diff_y;
-			p1.x += graphics.step_x;
+			bressenham.err -= bressenham.diff_y;
+			p1.x += bressenham.step_x;
 		}
-		if (err2 < graphics.diff_x)
+		if (err2 < bressenham.diff_x)
 		{
-			graphics.err += graphics.diff_x;
-			p1.y += graphics.step_y;
+			bressenham.err += bressenham.diff_x;
+			p1.y += bressenham.step_y;
 		}
 	}
 }
@@ -60,94 +56,107 @@ static void	ft_draw_line(t_fdf *data, t_point p1, t_point p2, int color)
  */
 static void	ft_draw_map_seq(t_fdf *data)
 {
-	int	x;
-	int	y;
+    int         i;
+    int         j;
+    t_face      face;
+    t_vec3      v1;
+    t_vec3      v2;
 
-	y = 0;
-	while (y < data->map->height)
-	{
-		x = 0;
-		while (x < data->map->width)
-		{
-			if (x < data->map->width - 1)
-				ft_draw_line(data, data->map->coords[y][x], \
-					data->map->coords[y][x + 1], data->map->colors[y][x]);
-			if (y < data->map->height - 1)
-				ft_draw_line(data, data->map->coords[y][x], \
-					data->map->coords[y + 1][x], data->map->colors[y][x]);
-			x++;
-		}
-		y++;
-	}
+    i = 0;
+    while (i < data->object->nb_faces)
+    {
+        face = data->object->faces[i];
+        j = 0;
+        while (j < face.count)
+        {
+            v1 = data->object->vertices[face.indices[j]];
+            v2 = data->object->vertices[face.indices[(j + 1) % face.count]];
+            ft_draw_line(data, 
+                (t_point){v1.sx, v1.sy, 0}, 
+                (t_point){v2.sx, v2.sy, 0}, 
+                v1.color);
+            j++;
+        }
+        i++;
+    }
 }
 
+/**
+ * Fonction du thread, je lui passe une structure 't_thread' en argument car
+ * elle ne peut prendre qu'un argument void *.
+ * J'itere 'start' jusqu'a 'end' pour trouver tous les points 'p' et j
+ */
 void	*ft_calc_transform_thread(void *arg)
 {
 	t_thread	*thread;
 	t_fdf		*data;
-	t_point		p;
-	int			x;
-	int			y;
+	int			start;
 
 	thread = (t_thread *)arg;
 	data = thread->data;
-	y = thread->start;
-	while (y < thread->end)
+	start = thread->start;
+	while (start < thread->end)
 	{
-		x = 0;
-		while (x < data->map->width)
-		{
-			p = (t_point){x, y, data->map->grid[y][x]};
-			ft_transform(&p, data);
-			data->map->coords[y][x] = p;
-			x++;
-		}
-		y++;
+		ft_project_point(&data->object->vertices[start], data);
+		start++;
 	}
 	return (NULL);
 }
 
+/**
+ * Fonction pour afficher les axes de rotation en bas a droite de l'ecran.
+ * (Utile pour se reperer dans l'espace)
+ */
 void	ft_draw_axes(t_fdf *data)
 {
-	t_point	origin;
-	t_point	px;
-	t_point	py;
-	t_point	pz;
+	t_vec3	o;
+	t_vec3	x;
+	t_vec3	y;
+	t_vec3	z;
 	int		len;
 
-	len = 60;
-	origin = (t_point){0, 0, 0};
-	px = (t_point){len, 0, 0};
-	py = (t_point){0, len, 0};
-	pz = (t_point){0, 0, len};
-	ft_transform_axis_point(&origin, data);
-	ft_transform_axis_point(&px, data);
-	ft_transform_axis_point(&py, data);
-	ft_transform_axis_point(&pz, data);
-	ft_draw_line(data, origin, px, 0xFF0000);
-	ft_draw_line(data, origin, py, 0x00FF00);
-	ft_draw_line(data, origin, pz, 0x0000FF);
+	len = 100;
+	o = (t_vec3){0, 0, 0, 0, 0, 0};
+	x = (t_vec3){len, 0, 0, 0, 0, 0};
+	y = (t_vec3){0, len, 0, 0, 0, 0};
+	z = (t_vec3){0, 0, len, 0, 0, 0};
+	ft_project_point(&o, data);
+	ft_project_point(&x, data);
+	ft_project_point(&y, data);
+	ft_project_point(&z, data);
+	ft_draw_line(data, (t_point){o.sx, o.sy, 0}, (t_point){x.sx, x.sy, 0}, 0xFF0000);
+	ft_draw_line(data, (t_point){o.sx, o.sy, 0}, (t_point){y.sx, y.sy, 0}, 0x00FF00);
+	ft_draw_line(data, (t_point){o.sx, o.sy, 0}, (t_point){z.sx, z.sy, 0}, 0x0000FF);
 }
 
+/**
+ * Fonction qui rend l'image en 4 etapes :
+ * - 1 : J'utilise le threading pour faire les calculs des transformations,
+ * - 2 : J'appelle bzero sur 'addr' pour effacer l'ancienne image,
+ * - 3 : j'appelle ft_draw_map_seq pour dessiner la nouvelle image,
+ * - 4 : j'appelle mlx_put_image_to_window pour affichier l'image sur l'ecran.
+ */
 void	ft_render_image(t_fdf *data)
 {
 	pthread_t	threads[THREADS_NB];
 	t_thread	args[THREADS_NB];
 	int			i;
+	int			chunk;
 
-	bzero(data->addr, WIN_WIDTH * WIN_HEIGHT * (data->bits_per_pixel / 8));
+	chunk = data->object->nb_vertices / THREADS_NB;
 	i = 0;
 	while (i < THREADS_NB)
 	{
 		args[i].data = data;
 		args[i].id = i;
-		args[i].start = i * (data->map->height / THREADS_NB);
-		args[i].end = (i + 1) * (data->map->height / THREADS_NB);
+		args[i].start = i * chunk;
+		args[i].end = (i + 1) * chunk;
 		if (i == THREADS_NB - 1)
-			args[i].end = data->map->height;
+			args[i].end = data->object->nb_vertices;
 		pthread_create(&threads[i], NULL, ft_calc_transform_thread, &args[i]);
 		i++;
 	}
+	bzero(data->addr, WIN_WIDTH * WIN_HEIGHT * (data->bits_per_pixel / 8));
 	i = 0;
 	while (i < THREADS_NB)
 		pthread_join(threads[i++], NULL);
@@ -156,17 +165,37 @@ void	ft_render_image(t_fdf *data)
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img_ptr, 0, 0);
 }
 
-int	ft_process_fdf(t_map *map)
+t_camera	*ft_init_camera(t_object *obj)
+{
+	t_camera	*cam;
+
+	cam = malloc(sizeof(t_camera));
+	if (!cam)
+		return (NULL);
+	if (obj->width > 0)
+		cam->zoom = WIN_WIDTH / obj->width / 2;
+	else
+		cam->zoom = 20;
+	if (cam->zoom < 1)
+		cam->zoom = 1;
+	cam->angle_x = RADIAN_30;
+	cam->angle_y = RADIAN_30;
+	cam->z_scale = 1.0;
+	cam->shift_x = WIN_WIDTH / 2;
+	cam->shift_y = WIN_HEIGHT / 2;
+	cam->projection = ISOMETRIC;
+	return (cam);
+}
+
+int	ft_process_fdf(t_object *obj)
 {
 	t_fdf		*data;
-	t_camera	camera;
-	t_maths		maths;
+	t_camera	*cam;
 
-	camera = (t_camera){WIN_WIDTH / 2, WIN_HEIGHT / 2, 10, 1.0, \
-		ISOMETRIC, RADIAN_30, RADIAN_30};
-	maths = (t_maths){0.0, 0.0, 0.0, 0.0, cos(RADIAN_30), sin(RADIAN_30), \
-		map->width / THREADS_NB, map->height / THREADS_NB};
-	data = ft_init_data(map, &camera, &maths);
+	cam = ft_init_camera(obj);
+	if (!cam)
+		return (ERROR);
+	data = ft_init_data(obj, cam);
 	if (!data)
 		return (ERROR);
 	ft_render_image(data);

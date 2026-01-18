@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/02 16:09:46 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/18 00:03:08 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,31 @@ typedef struct s_point
 	int	z;
 }	t_point;
 
-typedef struct s_map
+typedef struct s_vec3
 {
+	double	x;
+	double	y;
+	double	z;
+	int		sx;
+	int		sy;
+	int		color;
+}	t_vec3;
+
+typedef struct s_face
+{
+	int	*indices;
+	int	count;
+}	t_face;
+
+typedef struct s_object
+{
+	t_vec3	*vertices;
+	int		nb_vertices;
+	t_face	*faces;
+	int		nb_faces;
 	int		width;
 	int		height;
-	int		**colors;
-	int		**grid;
-	t_point	**coords;
-}	t_map;
+}	t_object;
 
 typedef struct s_camera
 {
@@ -52,18 +69,6 @@ typedef struct s_camera
 	double	angle_x;
 	double	angle_y;
 }	t_camera;
-
-typedef struct s_maths
-{
-	float	cos_x;
-	float	sin_x;
-	float	cos_y;
-	float	sin_y;
-	float	cos_30;
-	float	sin_30;
-	int		divide_x;
-	int		divide_y;
-}	t_maths;
 
 typedef struct s_mouse
 {
@@ -81,9 +86,8 @@ typedef struct s_fdf
 	int			bits_per_pixel;
 	int			line_length;
 	int			endian;
-	t_map		*map;
+	t_object	*object;
 	t_camera	*camera;
-	t_maths		*maths;
 	t_mouse		mouse;
 }	t_fdf;
 
@@ -94,12 +98,6 @@ typedef struct s_thread
 	int		start;
 	int		end;
 }	t_thread;
-
-typedef struct s_pixel
-{
-	int	x;
-	int	y;
-}	t_pixel;
 
 typedef struct s_bresenham
 {

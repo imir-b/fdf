@@ -6,21 +6,21 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 19:07:20 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/02 17:51:33 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/18 00:04:55 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	ft_iso_project(t_point *p, t_maths *maths)
+void	ft_iso_project(double *x, double *y, double *z)
 {
 	int	x_copy;
 	int	y_copy;
 
-	x_copy = p->x;
-	y_copy = p->y;
-	p->x = (x_copy - y_copy) * maths->cos_30;
-	p->y = (x_copy + y_copy) * maths->sin_30 - p->z;
+	x_copy = *x;
+	y_copy = *y;
+	*x = (x_copy - y_copy) * cos(RADIAN_30);
+	*y = (x_copy + y_copy) * sin(RADIAN_30) - *z;
 }
 
 void	ft_parallel_project(t_fdf *data, float angle_x, float angle_y)
@@ -29,9 +29,5 @@ void	ft_parallel_project(t_fdf *data, float angle_x, float angle_y)
 	data->camera->shift_y = WIN_HEIGHT / 2;
 	data->camera->projection = PARALLEL;
 	data->camera->angle_x = angle_x;
-	data->maths->cos_x = cos(angle_x);
-	data->maths->sin_x = sin(angle_x);
 	data->camera->angle_y = angle_y;
-	data->maths->cos_y = cos(angle_y);
-	data->maths->sin_y = sin(angle_y);
 }

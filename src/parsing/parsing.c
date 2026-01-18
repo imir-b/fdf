@@ -6,11 +6,21 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:17:30 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/02 16:07:10 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/18 00:11:10 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+int	ft_is_extension(const char *filename, const char *extension)
+{
+	char	*filename_end;
+
+	filename_end = ft_strrchr(filename, '.');
+	if (!ft_strncmp(filename_end, extension, 4))
+		return (TRUE);
+	return (FALSE);
+}
 
 int	ft_check_filename(const char *filename)
 {
@@ -23,117 +33,17 @@ int	ft_check_filename(const char *filename)
 		return (ERROR);
 	len = ft_strlen(filename);
 	format_len = ft_strlen((const char *)format);
-	if (!ft_strncmp(format, ".fdf", 4) && format_len == 4 && format_len < len)
+	if ((!ft_strncmp(format, ".fdf", 4) || !ft_strncmp(format, ".obj", 4)) && format_len == 4 && format_len < len)
 		return (SUCCESS);
 	else
 		return (ERROR);
 }
 
-int	ft_get_dimensions(t_map *map, int fd)
+t_object	*ft_parse_dispatch(const char *filename)
 {
-	char	*line;
-	int		count;
-
-	map->height = 0;
-	map->width = 0;
-	while (TRUE)
-	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
-		map->height++;
-		count = ft_count_words_sep(line, ' ');
-		if (count == FAIL)
-			return (free(line), ERROR);
-		if (!map->width)
-			map->width = count;
-		if (map->width != count)
-			return (free(line), ERROR);
-		free(line);
-	}
-	return (SUCCESS);
-}
-
-int	ft_get_grid(t_map *map, int fd)
-{
-	int		height;
-	int		width;
-	char	*line;
-	char	**grid;
-	char	*comma;
-
-	height = 0;
-	while (height < map->height)
-	{
-		line = get_next_line(fd);
-		if (!line)
-			return (ERROR);
-		grid = ft_split(line, ' ');
-		free(line);
-		if (!grid)
-			return (ERROR);
-		map->grid[height] = malloc(sizeof(int) * map->width);
-		map->colors[height] = malloc(sizeof(int) * map->width);
-		if (!map->grid[height] || !map->colors[height])
-			return (ERROR);
-		width = 0;
-		while (width < map->width)
-		{
-			map->grid[height][width] = ft_atoi(grid[width]);
-			comma = ft_strchr(grid[width], ',');
-			if (comma)
-				map->colors[height][width] = ft_atoi_hexa(comma + 1);
-			else
-				map->colors[height][width] = WHITE;
-			width++;
-		}
-		ft_free_tab(grid);
-		height++;
-	}
-	return (SUCCESS);
-}
-
-int	ft_alloc_coords(t_map *map)
-{
-	int	i;
-
-	map->coords = malloc(sizeof(t_point *) * map->height);
-	if (!map->coords)
-		return (ERROR);
-	i = 0;
-	while (i < map->height)
-	{
-		map->coords[i] = malloc(sizeof(t_point) * map->width);
-		if (!map->coords[i])
-			return (ERROR);
-		i++;
-	}
-	return (SUCCESS);
-}
-
-t_map	*ft_parse_map(const char *filename)
-{
-	int		fd;
-	t_map	*map;
-
-	map = malloc(sizeof(t_map));
-	if (!map)
-		return (NULL);
-	fd = open(filename, O_RDONLY);
-	if (fd == FAIL)
-		return (ft_error(strerror(errno)), ft_free_map(map));
-	if (ft_get_dimensions(map, fd))
-		return (close(fd), ft_free_map(map));
-	close(fd);
-	fd = open(filename, O_RDONLY);
-	if (fd == FAIL)
-		return (ft_error(strerror(errno)), ft_free_map(map));
-	map->grid = malloc(sizeof(int *) * map->height);
-	map->colors = malloc(sizeof(int *) * map->height);
-	if (!map->grid || !map->colors || ft_alloc_coords(map))
-		return (close(fd), ft_free_map(map));
-	if (ft_get_grid(map, fd))
-		return (close(fd), ft_free_map(map));
-	close(fd);
-	return (map);
+	if (ft_is_extension(filename, ".fdf"))
+		return (ft_parse_fdf(filename));
+	else if (ft_is_extension(filename, ".obj"))
+		return (ft_parse_obj(filename));
+	return (NULL);
 }

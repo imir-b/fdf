@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 22:45:09 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/02 16:06:12 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/18 00:02:54 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,27 @@ t_bresenham	ft_init_graphics(t_point p1, t_point p2)
 	return (graphics);
 }
 
-void	*ft_free_map(t_map *map)
+void	*ft_free_object(t_object *obj)
 {
 	int	i;
 
-	if (map->grid)
-		ft_free_int_tab(map->grid);
-	if (map->colors)
-		ft_free_int_tab(map->colors);
-	if (map->coords)
+	if (!obj)
+		return (NULL);
+	if (obj->faces)
 	{
 		i = 0;
-		while (map->coords[i])
-			free(map->coords[i++]);
-		free(map->coords);
+		while (i < obj->nb_faces)
+		{
+			if (obj->faces[i].indices)
+				free(obj->faces[i].indices);
+			i++;
+		}
+		free(obj->faces);
 	}
-	if (map)
-		free(map);
+	if (obj->vertices)
+		free(obj->vertices);
+	if (obj)
+		free(obj);
 	return (NULL);
 }
 
@@ -63,7 +67,7 @@ void	*ft_free_data(t_fdf *data)
 	return (NULL);
 }
 
-t_fdf	*ft_init_data(t_map *map, t_camera *camera, t_maths *maths)
+t_fdf	*ft_init_data(t_object *obj, t_camera *camera)
 {
 	t_fdf	*data;
 
@@ -80,9 +84,8 @@ t_fdf	*ft_init_data(t_map *map, t_camera *camera, t_maths *maths)
 	data->img_ptr = mlx_new_image(data->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
 	data->addr = mlx_get_data_addr(data->img_ptr, &data->bits_per_pixel, \
 		&data->line_length, &data->endian);
-	data->map = map;
+	data->object = obj;
 	data->camera = camera;
-	data->maths = maths;
 	data->mouse.is_pressed = FALSE;
 	data->mouse.x = 0;
 	data->mouse.y = 0;

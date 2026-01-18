@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 12:40:09 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 17:59:18 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/06 03:33:58 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # define UP 65362
 # define RIGHT 65363
 # define DOWN 65364
+# define PLUS 65451
+# define MINUS 65453
 
 # define NUM0 65438
 # define NUM1 65436

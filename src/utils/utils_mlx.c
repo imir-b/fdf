@@ -6,19 +6,19 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 18:23:51 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/01 19:46:51 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/17 18:12:53 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	my_mlx_pixel_put(t_fdf *data, t_pixel pxl, int color)
+void	my_mlx_pixel_put(t_fdf *data, int x, int y, int color)
 {
 	char	*dst;
 
-	if (pxl.x >= 0 && pxl.x < WIN_WIDTH && pxl.y >= 0 && pxl.y < WIN_HEIGHT)
+	if (x >= 0 && x < WIN_WIDTH && y >= 0 && y < WIN_HEIGHT)
 	{
-		dst = data->addr + (pxl.y * data->line_length + pxl.x * \
+		dst = data->addr + (y * data->line_length + x * \
 			(data->bits_per_pixel / 8));
 		*(unsigned int *)dst = color;
 	}
