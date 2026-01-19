@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 19:07:20 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/18 00:04:55 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/19 03:08:21 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	ft_iso_project(double *x, double *y, double *z)
 
 	x_copy = *x;
 	y_copy = *y;
-	*x = (x_copy - y_copy) * cos(RADIAN_30);
-	*y = (x_copy + y_copy) * sin(RADIAN_30) - *z;
+	*x = (x_copy - y_copy) * COS_30;
+	*y = (x_copy + y_copy) * SIN_30 - *z;
 }
 
 void	ft_parallel_project(t_fdf *data, float angle_x, float angle_y)

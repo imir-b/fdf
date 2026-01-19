@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/18 02:25:09 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/19 03:49:02 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,39 +46,6 @@ static void	ft_draw_line(t_fdf *data, t_point p1, t_point p2, int color)
 			p1.y += bressenham.step_y;
 		}
 	}
-}
-
-/**
- * Fonction qui dessine la map avant de l'afficher sur la fenetre.
- * On parcourt toute la map, on trace un trait entre le point et son voisin
- * en appelant la fonction ft_draw_line. Si on est au dernier point de la ligne
- * ou de la colone, on ne dessine pas car plus de voisin, la droite est tracee.
- */
-static void	ft_draw_map_seq(t_fdf *data)
-{
-    int         i;
-    int         j;
-    t_face      face;
-    t_vec3      v1;
-    t_vec3      v2;
-
-    i = 0;
-    while (i < data->object->nb_faces)
-    {
-        face = data->object->faces[i];
-        j = 0;
-        while (j < face.count)
-        {
-            v1 = data->object->vertices[face.indices[j]];
-            v2 = data->object->vertices[face.indices[(j + 1) % face.count]];
-            ft_draw_line(data, 
-                (t_point){v1.sx, v1.sy, 0}, 
-                (t_point){v2.sx, v2.sy, 0}, 
-                v1.color);
-            j++;
-        }
-        i++;
-    }
 }
 
 /**
@@ -129,14 +96,47 @@ void	ft_draw_axes(t_fdf *data)
 	ft_draw_line(data, (t_point){o.sx, o.sy, 0}, (t_point){z.sx, z.sy, 0}, 0x0000FF);
 }
 
+static void	ft_process_face(t_fdf *data, t_face *face)
+{
+	int		j;
+	t_vec3	v1;
+	t_vec3	v2;
+
+	j = 0;
+	while (j < face->count)
+	{
+		v1 = data->object->vertices[face->indices[j]];
+		v2 = data->object->vertices[face->indices[(j + 1) % face->count]];
+		ft_draw_line(data, (t_point){v1.sx, v1.sy, 0}, (t_point){v2.sx, v2.sy, 0}, v1.color);
+		j++;
+    }
+}
+
 /**
- * Fonction qui rend l'image en 4 etapes :
- * - 1 : J'utilise le threading pour faire les calculs des transformations,
- * - 2 : J'appelle bzero sur 'addr' pour effacer l'ancienne image,
- * - 3 : j'appelle ft_draw_map_seq pour dessiner la nouvelle image,
- * - 4 : j'appelle mlx_put_image_to_window pour affichier l'image sur l'ecran.
+ * Fonction qui dessine la map avant de l'afficher sur la fenetre.
+ * On parcourt toute la map, on trace un trait entre le point et son voisin
+ * en appelant la fonction ft_draw_line. Si on est au dernier point de la ligne
+ * ou de la colone, on ne dessine pas car plus de voisin, la droite est tracee.
  */
-void	ft_render_image(t_fdf *data)
+void    *ft_draw_faces_thread(void *arg)
+{
+    t_thread    *thread;
+    t_fdf       *data;
+    int         i;
+ 
+
+    thread = (t_thread *)arg;
+    data = thread->data;
+    i = thread->start;
+    while (i < thread->end)
+	{
+		ft_process_face(data, &data->object->faces[i]);
+		i++;
+	}
+    return (NULL);
+}
+
+static void	ft_transform_threads(t_fdf *data)
 {
 	pthread_t	threads[THREADS_NB];
 	t_thread	args[THREADS_NB];
@@ -144,8 +144,8 @@ void	ft_render_image(t_fdf *data)
 	int			chunk;
 
 	chunk = data->object->nb_vertices / THREADS_NB;
-	i = 0;
-	while (i < THREADS_NB)
+	i = -1;
+	while (++i < THREADS_NB)
 	{
 		args[i].data = data;
 		args[i].id = i;
@@ -154,13 +154,52 @@ void	ft_render_image(t_fdf *data)
 		if (i == THREADS_NB - 1)
 			args[i].end = data->object->nb_vertices;
 		pthread_create(&threads[i], NULL, ft_calc_transform_thread, &args[i]);
-		i++;
 	}
-	bzero(data->addr, WIN_WIDTH * WIN_HEIGHT * (data->bits_per_pixel / 8));
-	i = 0;
-	while (i < THREADS_NB)
-		pthread_join(threads[i++], NULL);
-	ft_draw_map_seq(data);
+	i = -1;
+	while (++i < THREADS_NB)
+		pthread_join(threads[i], NULL);
+}
+
+static void	ft_draw_threads(t_fdf *data)
+{
+	pthread_t	threads[THREADS_NB];
+	t_thread	args[THREADS_NB];
+	int			i;
+	int			chunk;
+
+	chunk = data->object->nb_faces / THREADS_NB;
+	i = -1;
+	while (++i < THREADS_NB)
+	{
+		args[i].data = data;
+		args[i].start = i * chunk;
+		args[i].end = (i + 1) * chunk;
+		if (i == THREADS_NB - 1)
+			args[i].end = data->object->nb_faces;
+		pthread_create(&threads[i], NULL, ft_draw_faces_thread, &args[i]);
+	}
+	i = -1;
+	while (++i < THREADS_NB)
+		pthread_join(threads[i], NULL);
+}
+
+/**
+ * Fonction qui rend l'image en 5 etapes :
+ * - 1 Pre-calcul des maths pour eviter de repeter les calculs lourds,
+ * - 2 Projection : J'appelle ft_transform_threads pour faire les calculs des transformations,
+ * - 3 Nettoyage : J'appelle bzero sur 'addr' pour effacer l'ancienne image,
+ * - 4 Rasterization : j'appelle ft_draw_threads pour dessiner la nouvelle image,
+ * - 5 Affichage : j'appelle mlx_put_image_to_window pour affichier l'image sur l'ecran.
+ */
+void	ft_render_image(t_fdf *data)
+{
+	data->trigo.sin_alpha = sin(data->camera->angle_x);
+	data->trigo.cos_alpha = cos(data->camera->angle_x);
+	data->trigo.sin_beta = sin(data->camera->angle_y);
+	data->trigo.cos_beta = cos(data->camera->angle_y);
+	ft_bzero(data->addr, WIN_WIDTH * WIN_HEIGHT * (data->bits_per_pixel / 8));
+	ft_transform_threads(data);
+	ft_draw_threads(data);
 	ft_draw_axes(data);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img_ptr, 0, 0);
 }

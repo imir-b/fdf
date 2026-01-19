@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 01:40:06 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/18 01:45:54 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/19 03:01:47 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,31 @@
 /**
  * Applique la rotation autour de l'axe X.
  */
-static void	ft_rotate_x(double *y, double *z, double alpha)
+static void	ft_rotate_x(double *y, double *z, t_maths trigo)
 {
 	int	y_copy;
 
 	y_copy = *y;
-	*y = y_copy * cos(alpha) - *z * sin(alpha);
-	*z = y_copy * sin(alpha) + *z * cos(alpha);
+	*y = y_copy * trigo.cos_alpha - *z * trigo.sin_alpha;
+	*z = y_copy * trigo.sin_alpha + *z * trigo.cos_alpha;
 }
 
 /**
  * Applique la rotation autour de l'axe Y.
  */
-static void	ft_rotate_y(double *x, double *z, double beta)
+static void	ft_rotate_y(double *x, double *z, t_maths trigo)
 {
 	int	x_copy;
 
 	x_copy = *x;
-	*x = x_copy * cos(beta) + *z * sin(beta);
-	*z = -x_copy * sin(beta) + *z * cos(beta);
+	*x = x_copy * trigo.cos_beta + *z * trigo.sin_beta;
+	*z = -x_copy * trigo.sin_beta + *z * trigo.cos_beta;
 }
 
 void	ft_transform_axis_point(double *x, double *y, double *z, t_fdf *data)
 {
-	ft_rotate_y(x, z, data->camera->angle_x);
-	ft_rotate_x(y, z, data->camera->angle_y);
+	ft_rotate_y(x, z, data->trigo);
+	ft_rotate_x(y, z, data->trigo);
 	if (data->camera->projection == ISOMETRIC)
 		ft_iso_project(x, y, z);
 	*x += WIN_WIDTH - 100;
@@ -67,8 +67,8 @@ void	ft_project_point(t_vec3 *v, t_fdf *data)
 	x *= data->camera->zoom;
 	y *= data->camera->zoom;
 	z *= data->camera->zoom * data->camera->z_scale;
-	ft_rotate_y(&x, &z, data->camera->angle_x);
-	ft_rotate_x(&y, &z, data->camera->angle_y);
+	ft_rotate_y(&x, &z, data->trigo);
+	ft_rotate_x(&y, &z, data->trigo);
 	x += data->camera->shift_x;
 	y += data->camera->shift_y;
 	v->sx = x;
