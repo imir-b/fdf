@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 01:40:06 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/19 03:01:47 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/19 06:38:00 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	ft_project_point(t_vec3 *v, t_fdf *data)
 	x = v->x;
 	y = v->y;
 	z = v->z;
-	if (data->object->width > 0) 
+	if (data->object->width > 0)
 	{
 		x -= data->object->width / 2;
 		y -= data->object->height / 2;

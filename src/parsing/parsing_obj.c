@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 18:13:46 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/18 02:25:48 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/19 06:29:54 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,21 @@
 /**
  * Premiere lecture pour recuperer le nombre de sommets et de faces.
  */
-static int ft_get_count_elems(t_object *obj, const char *filename)
+static int	ft_get_count_elems(t_object *obj, const char *filename)
 {
-    int     fd;
-    char    *line;
+	int		fd;
+	char	*line;
 
-    fd = open(filename, O_RDONLY);
-    if (fd == FAIL)
+	fd = open(filename, O_RDONLY);
+	if (fd == FAIL)
 		return (ERROR);
-    obj->nb_vertices = 0;
-    obj->nb_faces = 0;
-    while ((line = get_next_line(fd)))
-    {
+	obj->nb_vertices = 0;
+	obj->nb_faces = 0;
+	while (TRUE)
+	{
+		line = get_next_line(fd);
+		if (!line)
+			break ;
 		if (line[0] == 'v' && line[1] == ' ')
 			obj->nb_vertices++;
 		else if (line[0] == 'f' && line[1] == ' ')
@@ -54,7 +57,7 @@ static void	ft_parse_vertex(t_object *obj, char *line, int index)
 	}
 }
 
-static int ft_parse_face(t_object *obj, char *line, int index)
+static int	ft_parse_face(t_object *obj, char *line, int index)
 {
 	char	**split;
 	int		count;
@@ -113,7 +116,7 @@ static int	ft_fill_obj_data(t_object *obj, const char *filename)
 t_object	*ft_parse_obj(const char *filename)
 {
 	t_object	*obj;
-	
+
 	obj = malloc(sizeof(t_object));
 	if (!obj)
 		return (NULL);

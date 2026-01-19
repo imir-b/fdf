@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:20:18 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/18 01:52:34 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/19 06:41:43 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,28 +77,28 @@ int	ft_direction(int pos1, int pos2)
 	return (-1);
 }
 
-double ft_atof(const char *str)
+double	ft_atof(const char *s)
 {
-    double  res = 0.0;
-    double  fact = 1.0;
-    int     i = 0;
-    int     sign = 1;
+	double	res;
+	double	fact;
+	int		sign;
 
-    if (str[i] == '-') { sign = -1; i++; }
-    while (str[i] && str[i] != '.')
-    {
-        res = res * 10.0 + (str[i] - '0');
-        i++;
-    }
-    if (str[i] == '.')
-    {
-        i++;
-        while (str[i])
-        {
-            fact /= 10.0;
-            res += (str[i] - '0') * fact;
-            i++;
-        }
-    }
-    return (res * sign);
+	res = 0.0;
+	fact = 1.0;
+	sign = 1;
+	if (*s == '-')
+	{
+		sign = -1;
+		s++;
+	}
+	while (*s && *s != '.')
+		res = res * 10.0 + (*s++ - '0');
+	if (*s == '.')
+		s++;
+	while (*s)
+	{
+		fact /= 10.0;
+		res += (*s++ - '0') * fact;
+	}
+	return (res * sign);
 }

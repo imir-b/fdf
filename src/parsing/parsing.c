@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:17:30 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/18 00:11:10 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/19 06:27:45 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ int	ft_check_filename(const char *filename)
 		return (ERROR);
 	len = ft_strlen(filename);
 	format_len = ft_strlen((const char *)format);
-	if ((!ft_strncmp(format, ".fdf", 4) || !ft_strncmp(format, ".obj", 4)) && format_len == 4 && format_len < len)
+	if ((!ft_strncmp(format, ".fdf", 4) || \
+		!ft_strncmp(format, ".obj", 4)) && format_len == 4 && format_len < len)
 		return (SUCCESS);
 	else
 		return (ERROR);

@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/19 03:49:02 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/19 06:37:37 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,15 @@ void	ft_draw_axes(t_fdf *data)
 	ft_project_point(&x, data);
 	ft_project_point(&y, data);
 	ft_project_point(&z, data);
-	ft_draw_line(data, (t_point){o.sx, o.sy, 0}, (t_point){x.sx, x.sy, 0}, 0xFF0000);
-	ft_draw_line(data, (t_point){o.sx, o.sy, 0}, (t_point){y.sx, y.sy, 0}, 0x00FF00);
-	ft_draw_line(data, (t_point){o.sx, o.sy, 0}, (t_point){z.sx, z.sy, 0}, 0x0000FF);
+	ft_draw_line(data, \
+		(t_point){o.sx, o.sy, 0}, \
+		(t_point){x.sx, x.sy, 0}, 0xFF0000);
+	ft_draw_line(data, \
+		(t_point){o.sx, o.sy, 0}, \
+		(t_point){y.sx, y.sy, 0}, 0x00FF00);
+	ft_draw_line(data, \
+		(t_point){o.sx, o.sy, 0}, \
+		(t_point){z.sx, z.sy, 0}, 0x0000FF);
 }
 
 static void	ft_process_face(t_fdf *data, t_face *face)
@@ -107,9 +113,11 @@ static void	ft_process_face(t_fdf *data, t_face *face)
 	{
 		v1 = data->object->vertices[face->indices[j]];
 		v2 = data->object->vertices[face->indices[(j + 1) % face->count]];
-		ft_draw_line(data, (t_point){v1.sx, v1.sy, 0}, (t_point){v2.sx, v2.sy, 0}, v1.color);
+		ft_draw_line(data, \
+			(t_point){v1.sx, v1.sy, 0}, \
+			(t_point){v2.sx, v2.sy, 0}, v1.color);
 		j++;
-    }
+	}
 }
 
 /**
@@ -118,22 +126,21 @@ static void	ft_process_face(t_fdf *data, t_face *face)
  * en appelant la fonction ft_draw_line. Si on est au dernier point de la ligne
  * ou de la colone, on ne dessine pas car plus de voisin, la droite est tracee.
  */
-void    *ft_draw_faces_thread(void *arg)
+void	*ft_draw_faces_thread(void *arg)
 {
-    t_thread    *thread;
-    t_fdf       *data;
-    int         i;
- 
+	t_thread	*thread;
+	t_fdf		*data;
+	int			i;
 
-    thread = (t_thread *)arg;
-    data = thread->data;
-    i = thread->start;
-    while (i < thread->end)
+	thread = (t_thread *)arg;
+	data = thread->data;
+	i = thread->start;
+	while (i < thread->end)
 	{
 		ft_process_face(data, &data->object->faces[i]);
 		i++;
 	}
-    return (NULL);
+	return (NULL);
 }
 
 static void	ft_transform_threads(t_fdf *data)
@@ -186,10 +193,12 @@ static void	ft_draw_threads(t_fdf *data)
 /**
  * Fonction qui rend l'image en 5 etapes :
  * - 1 Pre-calcul des maths pour eviter de repeter les calculs lourds,
- * - 2 Projection : J'appelle ft_transform_threads pour faire les calculs des transformations,
+ * - 2 Projection : J'appelle ft_transform_threads pour faire les calculs des 
+ * transformations,
  * - 3 Nettoyage : J'appelle bzero sur 'addr' pour effacer l'ancienne image,
  * - 4 Rasterization : j'appelle ft_draw_threads pour dessiner la nouvelle image,
- * - 5 Affichage : j'appelle mlx_put_image_to_window pour affichier l'image sur l'ecran.
+ * - 5 Affichage : j'appelle mlx_put_image_to_window pour affichier l'image sur 
+ * l'ecran.
  */
 void	ft_render_image(t_fdf *data)
 {

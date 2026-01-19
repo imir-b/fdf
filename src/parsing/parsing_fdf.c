@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 20:37:36 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/18 01:03:02 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/19 06:34:27 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,36 @@ t_vec3	ft_get_verticies(int x, int y, char *split)
 	return (verticies);
 }
 
+static int	ft_parse_row(t_object *obj, char **split, int y)
+{
+	int		x;
+	int		idx;
+	int		f_idx;
+
+	x = 0;
+	while (x < obj->width)
+	{
+		idx = (y * obj->width) + x;
+		obj->vertices[idx] = ft_get_verticies(x, y, split[x]);
+		if (x < obj->width - 1 && y < obj->height - 1)
+		{
+			f_idx = (y * (obj->width - 1)) + x;
+			if (ft_get_face(&obj->faces[f_idx], idx, obj->width))
+				return (1);
+		}
+		x++;
+	}
+	return (0);
+}
+
 /**
  * Deuxieme lecture pour remplir les tableaux de donnees.
  */
 int	ft_fill_fdf_data(t_object *obj, int fd)
 {
-	int		index;
-	int		f_idx;
-	int		y;
-	int		x;
 	char	*line;
 	char	**split;
+	int		y;
 
 	y = 0;
 	while (y < obj->height)
@@ -96,19 +115,8 @@ int	ft_fill_fdf_data(t_object *obj, int fd)
 		free(line);
 		if (!split)
 			return (ERROR);
-		x = 0;
-		while (x < obj->width)
-		{
-			index = (y * obj->width) + x;
-			obj->vertices[index] = ft_get_verticies(x, y, split[x]);
-			if (x < obj->width - 1 && y < obj->height - 1)
-			{				
-				f_idx = (y * (obj->width - 1)) + x;
-				if (ft_get_face(&obj->faces[f_idx], index, obj->width))
-					return (ft_free_tab(split), ERROR);
-			}
-			x++;
-		}
+		if (ft_parse_row(obj, split, y))
+			return (ft_free_tab(split), ERROR);
 		ft_free_tab(split);
 		y++;
 	}
