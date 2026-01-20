@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 20:37:36 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/19 06:34:27 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/20 04:43:50 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,10 @@ int	ft_get_dimensions(t_object *obj, int fd)
 	return (SUCCESS);
 }
 
+/**
+ * On regarde s'il y a une virgule apres la valeur dans le .fdf,
+ * si oui on recupere la couleur en hexa, sinon on dessine en blanc.
+ */
 int	ft_extract_color(char *s)
 {
 	char	*comma;

@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/01/18 02:08:30 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/20 05:02:21 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 // -----------------------------------------------------------------------------
 int					ft_count_words_sep(char *str, char sep);
 int					ft_atoi_hexa(char *str);
-double 				ft_atof(const char *str);
+double				ft_atof(const char *str);
 int					ft_absolute(int n);
 int					ft_direction(int x1, int x2);
 void				my_mlx_pixel_put(t_fdf *data, int x, int y, int color);
@@ -52,12 +52,23 @@ int					ft_error(char *str);
 // -----------------------------------------------------------------------------
 int					ft_process_fdf(t_object *obj);
 void				ft_project_point(t_vec3 *v, t_fdf *data);
-void				ft_transform_axis_point(double *x, double *y, double *z, t_fdf *data);
+void				ft_transform_axis_point(double *x, double *y, double *z, \
+						t_fdf *data);
 void				ft_render_image(t_fdf *data);
-void				ft_events(t_fdf *data);
 void				ft_iso_project(double *x, double *y, double *z);
 void				ft_parallel_project(t_fdf *data, float angle_x, \
 						float angle_y);
+void				ft_draw_axes(t_fdf *data);
+void				ft_draw_threads(t_fdf *data);
+void				ft_draw_line(t_fdf *data, t_point p1, t_point p2, int color);
+
+// -----------------------------------------------------------------------------
+// EVENTS
+// -----------------------------------------------------------------------------
+void				ft_events(t_fdf *data);
+int					ft_mouse_down(int button, int x, int y, t_fdf *data);
+int					ft_mouse_up(int button, int x, int y, t_fdf *data);
+int					ft_mouse_move(int x, int y, t_fdf *data);
 
 // -----------------------------------------------------------------------------
 // PARSING

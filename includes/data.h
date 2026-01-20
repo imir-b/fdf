@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/19 03:08:58 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/20 04:35:43 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # define RADIAN_30 0.523599
 # define RADIAN_90 1.5708
 
-#define COS_30 0.8660254
-#define SIN_30 0.5
+# define COS_30 0.8660254
+# define SIN_30 0.5
 
 # define ISOMETRIC 0
 # define PARALLEL 1
