@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 20:37:36 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/20 04:43:50 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/21 02:32:54 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ t_object	*ft_parse_fdf(const char *filename)
 	int			fd;
 	t_object	*object;
 
-	object = malloc(sizeof(t_object));
+	object = ft_calloc(1, sizeof(t_object));
 	if (!object)
 		return (NULL);
 	fd = open(filename, O_RDONLY);

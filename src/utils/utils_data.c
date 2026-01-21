@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 22:45:09 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/18 00:02:54 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/21 02:12:06 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ void	*ft_free_object(t_object *obj)
 
 void	*ft_free_data(t_fdf *data)
 {
+	if (data->camera)
+		free(data->camera);
 	if (data->img_ptr)
 		mlx_destroy_image(data->mlx_ptr, data->img_ptr);
 	if (data->win_ptr)
