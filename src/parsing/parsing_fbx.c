@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 22:36:04 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/22 07:26:51 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/22 08:13:43 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ t_geometry	*ft_get_geometry(char *line, t_object *obj, int fd)
 	obj->height = 0;
 	obj->width = 0;
 	geo->obj = obj;
+	geo->next = NULL;
 	return (geo);
 }
 
@@ -184,6 +185,10 @@ t_model	*ft_get_model(char *line, int fd)
 	model->parent = NULL;
 }
 
+/**
+ * Fonction de parsing pour recuperer les donnees dans la partie 'Objects'
+ * d'un fichier .fbx
+ */
 int	ft_parse_objects(t_fbx *fbx_data, t_object *obj, int fd)
 {
 	char	*line;
@@ -206,6 +211,10 @@ int	ft_parse_objects(t_fbx *fbx_data, t_object *obj, int fd)
 	return (SUCCESS);
 }
 
+/**
+ * Fonction de parsing pour recuperer les donnes dans la partie 'Connections'
+ * d'un fichier .fbx
+ */
 int	ft_parse_connections(t_fbx *fbx_data, int fd)
 {
 	return (SUCCESS);

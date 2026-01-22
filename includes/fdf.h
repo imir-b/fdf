@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/01/20 05:02:21 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/21 22:49:17 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ int					ft_mouse_move(int x, int y, t_fdf *data);
 // -----------------------------------------------------------------------------
 int					ft_check_filename(const char *filename);
 t_object			*ft_parse_dispatch(const char *filename);
-t_object			*ft_parse_fdf(const char *filename);
-t_object			*ft_parse_obj(const char *filename);
+t_object			*ft_parse_fdf(const char *filename, t_object *obj);
+t_object			*ft_parse_obj(const char *filename, t_object *obj);
+t_object			*ft_parse_fbx(const char *filename, t_object *obj);
 
 #endif
