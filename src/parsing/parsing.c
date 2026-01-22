@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:17:30 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/19 06:27:45 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/22 00:14:02 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,17 @@ int	ft_check_filename(const char *filename)
 
 t_object	*ft_parse_dispatch(const char *filename)
 {
+	t_object	*object;
+
+	object = ft_calloc(1, sizeof(t_object));
+	if (!object)
+		return (NULL);
 	if (ft_is_extension(filename, ".fdf"))
-		return (ft_parse_fdf(filename));
+		return (ft_parse_fdf(filename, object));
 	else if (ft_is_extension(filename, ".obj"))
-		return (ft_parse_obj(filename));
+		return (ft_parse_obj(filename, object));
+	// else if (ft_is_extension(filename, ".fbx"))
+	// 	return (ft_parse_fbx(filename, object));
+	ft_free_object(object);
 	return (NULL);
 }

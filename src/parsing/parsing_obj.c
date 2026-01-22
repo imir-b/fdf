@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 18:13:46 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/21 02:33:09 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/21 22:47:44 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,13 +113,8 @@ static int	ft_fill_obj_data(t_object *obj, const char *filename)
 	return (close(fd), SUCCESS);
 }
 
-t_object	*ft_parse_obj(const char *filename)
+t_object	*ft_parse_obj(const char *filename, t_object *obj)
 {
-	t_object	*obj;
-
-	obj = ft_calloc(1, sizeof(t_object));
-	if (!obj)
-		return (NULL);
 	if (ft_get_count_elems(obj, filename))
 		return (ft_free_object(obj), NULL);
 	obj->vertices = malloc(sizeof(t_vec3) * obj->nb_vertices);
