@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 04:36:22 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/21 01:56:44 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/25 18:06:22 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,9 +129,6 @@ void	ft_draw_line(t_fdf *data, t_point p1, t_point p2, int color)
 	t_bresenham	bressenham;
 	int			err2;
 
-	// if ((p1.x < 0 && p2.x < 0) || (p1.x >= WIN_WIDTH && p2.x >= WIN_WIDTH) || \
-	// 	(p1.y < 0 && p2.y < 0) || (p1.y >= WIN_HEIGHT && p2.y >= WIN_HEIGHT))
-	// 	return ;
 	bressenham = ft_init_graphics(p1, p2);
 	while (TRUE)
 	{

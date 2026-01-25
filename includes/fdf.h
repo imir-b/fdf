@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/01/21 22:49:17 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/25 17:05:52 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "libft.h"
 # include "mlx.h"
 # include "data.h"
+# include "fbx.h"
 # include <math.h>
 # include <pthread.h>
 # include <unistd.h>
