@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_fbx.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 22:36:04 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/24 15:11:04 by vlad             ###   ########.fr       */
+/*   Updated: 2026/01/25 15:22:08 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ typedef struct s_geometry
 
 typedef struct s_properties
 {
-	char	type; // (T, R, S, V....)
+	char	type;
 	double	x;
 	double	y;
 	double	z;
@@ -97,30 +97,99 @@ char	*ft_skip_spaces(char *str)
 	return (str);
 }
 
-static int	ft_parse_vertex(t_object *obj, char *line)
+static int	ft_parse_vertex(t_object *obj, char *cursor, int fd)
 {
 	int		index;
-	char	**split;
+	char	*line;
 
-	obj->nb_vertices = ft_atoi(line[10]);
-	split = ft_split(line, ',');
+	cursor = ft_strchr(cursor, '*') + 1;
+	obj->nb_vertices = ft_atoi(cursor);
+	obj->vertices = malloc(sizeof(t_vec3) * obj->nb_vertices);
+	if (!obj->vertices)
+		return (ERROR);
+	cursor = ft_strchr(cursor, '{');
 	index = 0;
-	if (split)
+	while (index < obj->nb_vertices)
 	{
-		obj->vertices[index].x = ft_atof(split[1]);
-		obj->vertices[index].y = ft_atof(split[2]);
-		obj->vertices[index].z = ft_atof(split[3]);
+		cursor = ft_skip_spaces(cursor);
+		if (*cursor == '\0' || *cursor == '\n' || *cursor == '}')
+		{
+			if (line)
+				free(line);
+			line = get_next_line(fd);
+			if (!line)
+				return (ERROR);
+			cursor = line;
+			while (*cursor && !ft_isdigit(*cursor) && *cursor != '-')
+				cursor++;
+		}
+		if (*cursor == ',')
+			cursor++;
+		obj->vertices[index].x = ft_atof(cursor);
+		cursor = ft_strchr(cursor, ',');
+		if (cursor)
+			cursor++;
+		obj->vertices[index].y = ft_atof(cursor);
+		cursor = ft_strchr(cursor, ',');
+		if (cursor)
+			cursor++;
+		obj->vertices[index].z = ft_atof(cursor);
 		obj->vertices[index].color = WHITE;
-		obj->vertices[index].sx = 0;
-		obj->vertices[index].sy = 0;
+		cursor = ft_strchr(cursor, ',');
 		index++;
 	}
-	ft_free_tab(split);
+	if (line)
+		free(line);
+	return (SUCCESS);
 }
 
-static int	ft_parse_face(t_object *obj, char *line)
+/**
+ * Trouver les indices et free raw_indices
+ */
+t_face	*ft_extract_indices(int *raw_indices, t_object *obj)
 {
-	obj->nb_faces = ft_atoi(line[19]);
+	t_face	*indices;
+
+	return (indices);
+}
+
+static int	ft_parse_face(t_object *obj, char *cursor, int fd)
+{
+	int		index;
+	char	*line;
+	int		*raw_indices;
+
+	cursor = ft_strchr(cursor, '*') + 1;
+	obj->nb_faces = ft_atoi(cursor);
+	raw_indices = malloc(sizeof(int *) * obj->nb_faces);
+	if (!raw_indices)
+		return (ERROR);
+
+	line = NULL;
+	index = 0;
+	while (index < obj->nb_faces)
+	{
+		cursor = ft_skip_spaces(cursor);
+		if (*cursor == '\0' || *cursor == '\n' || *cursor == '}')
+		{
+			if (line)
+				free(line);
+			line = get_next_line(fd);
+			if (!line)
+				return (ERROR);
+			cursor = line;
+			while (*cursor && !ft_isdigit(*cursor) && *cursor != '-')
+				cursor++;
+		}
+		raw_indices[index] = ft_atoi(cursor);
+		index++;
+		cursor = ft_strchr(cursor, ',');
+		cursor++;
+	}
+	obj->faces = ft_extract_indices(raw_indices, obj);
+	if (line)
+		free(line);
+	return (SUCCESS);
 }
 
 t_geometry	*ft_get_geometry(char *cursor, t_object *obj, int fd)
@@ -136,13 +205,18 @@ t_geometry	*ft_get_geometry(char *cursor, t_object *obj, int fd)
 	while (TRUE)
 	{
 		line = get_next_line(fd);
-		if (!line || *line == '}')
+		if (!line)
 			break ;
 		cursor = ft_skip_spaces(line);
-		if (IS_TAG(cursor, "Verticies:"))
-			ft_parse_vertex(obj, cursor);
+		if (*line == '}')
+		{
+			free(line);
+			break ;
+		}
+		if (IS_TAG(cursor, "Vertices:"))
+			ft_parse_vertex(obj, cursor, fd);
 		else if (IS_TAG(cursor, "PolygonVertexIndex:"))
-			ft_parse_face(obj, cursor);
+			ft_parse_face(obj, cursor, fd);
 		free(line);
 	}
 	obj->height = 0;
@@ -162,10 +236,34 @@ int	ft_parse_keytime(t_anim_curve *anim_curve, char *cursor, int fd)
 	anim_curve->time = malloc(sizeof(long long) * anim_curve->n_keys);
 	if (!anim_curve->time)
 		return (ERROR);
-	index = 0;
 	cursor = ft_strchr(cursor, '{') + 1;
+	line = NULL;
+	index = 0;
 	while (index < anim_curve->n_keys)
+	{
+		cursor = ft_skip_spaces(cursor);
+		if (*cursor == '\0' || *cursor == '\n' || *cursor == '}')
+		{
+			if (line)
+				free(line);
+			line = get_next_line(fd);
+			if (!line)
+				return (ERROR);
+			cursor = line;
+			while (*cursor && !(ft_isdigit(cursor)) && *cursor != '-')
+				cursor++;
+		}
+		if (*cursor == ',')
+			cursor++;
 		anim_curve->time[index++] = ft_atoll(cursor);
+		cursor = ft_strchr(cursor, ',');
+		if (!cursor)
+			cursor = "";
+		else
+			cursor++;
+	}
+	if (line)
+		free(line);
 	return (SUCCESS);
 }
 
@@ -181,12 +279,29 @@ int	ft_parse_keyvalue(t_anim_curve *anim_curve, char *cursor, int fd)
 	cursor = ft_strchr(cursor, '{') + 1;
 	while (index < anim_curve->n_keys)
 	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
-		//incrementer cursor ici dans une boucle tant que cursor est pas fin de ligne ou acolade de fin
-			anim_curve->value[index++] = ft_atof(cursor);
+		cursor = ft_skip_spaces(cursor);
+		if (*cursor == '\0' || *cursor == '\n' || *cursor == '}')
+		{
+			if (line)
+				free(line);
+			line = get_next_line(fd);
+			if (!line)
+				return (ERROR);
+			cursor = line;
+			while (*cursor && !(ft_isdigit(cursor)) && *cursor != '-')
+				cursor++;
+		}
+		if (*cursor == ',')
+			cursor++;
+		anim_curve->value[index++] = ft_atof(cursor);
+		cursor = ft_strchr(cursor, ',');
+		if (!cursor)
+			cursor = "";
+		else
+			cursor++;
 	}
+	if (line)
+		free(line);
 	return (SUCCESS);
 }
 
@@ -205,6 +320,11 @@ t_anim_curve	*ft_get_anim_curve(char *cursor, int fd)
 		if (!line)
 			break ;
 		cursor = ft_skip_spaces(line);
+		if (*cursor == '}')
+		{
+			free(line);
+			break ;
+		}
 		if (IS_TAG(cursor, "KeyTime:"))
 			ft_parse_keytime(anim_curve, cursor, fd);
 		else if (IS_TAG(cursor, "KeyValueFloat:"))
@@ -214,13 +334,17 @@ t_anim_curve	*ft_get_anim_curve(char *cursor, int fd)
 	return (anim_curve);
 }
 
-void	ft_extract_type(char **cursor)
+char	ft_extract_type(char *line)
 {
-	*cursor = ft_strrchr(*cursor, ',');
-	*cursor = ft_skip_spaces(*cursor);
-	if (*cursor)
-		*cursor++;
-	return (*cursor);
+	char	*cursor;
+
+	cursor = ft_strrchr(line, ',');
+	if (!cursor)
+		return (0);
+	cursor = ft_strchr(cursor, '\"');
+	if (!cursor)
+		return (0);
+	return (cursor[1]);
 }
 
 t_anim_node	*ft_get_anim_node(char *cursor, int fd)
@@ -232,16 +356,18 @@ t_anim_node	*ft_get_anim_node(char *cursor, int fd)
 	if (!anim_node)
 		return (NULL);
 	anim_node->id = ft_atoi(cursor);
-	cursor = ft_extract_type(&cursor);
-	anim_node->type = *cursor;
+	anim_node->type = ft_extract_type(cursor);
 	while (TRUE)
 	{
 		line = get_next_line(fd);
 		if (!line)
 			break ;
 		cursor = ft_skip_spaces(line);
-		if (IS_TAG(cursor, "Properties70:"))
-			//parsing
+		if (*cursor == '}')
+		{
+			free(line);
+			break ;
+		}
 		free(line);
 	}
 	return (anim_node);
@@ -329,12 +455,56 @@ t_model	*ft_get_model(char *cursor, int fd)
 		if (!line)
 			break ;
 		cursor = ft_skip_spaces(line);
-		if (*cursor == '}');
+		if (*cursor == '}')
 			return (free(line), model);
 		if (IS_TAG(cursor, "Properties70:"))
 			ft_parse_properties(model, fd);
 		free(line);
 	}
+}
+
+void	ft_add_new_geo(t_fbx *data, char *cursor, int fd)
+{
+	t_geometry	*new;
+
+	new = ft_get_geometry(cursor, NULL, fd);
+	if (!new)
+		return ;
+	new->next = data->geo;
+	data->geo = new;
+}
+
+void	ft_add_new_model(t_fbx *data, char *cursor, int fd)
+{
+	t_model	*new;
+
+	new = ft_get_model(cursor, fd);
+	if (!new)
+		return ;
+	new->next = data->model;
+	data->model = new;
+}
+
+void	ft_add_new_anim_curve(t_fbx *data, char *cursor, int fd)
+{
+	t_anim_curve	*new;
+
+	new = ft_get_anim_curve(cursor, fd);
+	if (!new)
+		return ;
+	new->next = data->anim_curve;
+	data->anim_curve = new;
+}
+
+void	ft_add_new_anim_node(t_fbx *data, char *cursor, int fd)
+{
+	t_anim_node	*new;
+
+	new = ft_get_anim_node(cursor, fd);
+	if (!new)
+		return ;
+	new->next = data->anim_node;
+	data->anim_node = new;
 }
 
 /**
@@ -353,13 +523,13 @@ int	ft_parse_objects(t_fbx *fbx_data, t_object *obj, int fd)
 			break ;
 		cursor = ft_skip_spaces(line);
 		if (IS_TAG(cursor, "Geometry:"))
-			fbx_data->geo = ft_get_geometry(cursor + 9, obj, fd);
+			ft_add_new_geo(fbx_data, cursor + 9, fd);
 		else if (IS_TAG(cursor, "Model:"))
-			fbx_data->model = ft_get_model(cursor + 6, fd);
+			ft_add_new_model(fbx_data, cursor + 6, fd);
 		else if (IS_TAG(cursor, "AnimationCurve:"))
-			fbx_data->anim_curve = ft_get_anim_curve(cursor + 15, fd);
+			ft_add_new_anim_curve(fbx_data, cursor + 15, fd);
 		else if (IS_TAG(cursor, "AnimationCurveNode:"))
-			fbx_data->anim_node = ft_get_anim_node(cursor + 19, fd);
+			ft_add_new_anim_node(fbx_data, cursor + 19, fd);
 		free(line);
 	}
 	return (SUCCESS);
@@ -380,6 +550,7 @@ t_object	*ft_parse_fbx(const char *filename, t_object *obj)
 	char	*line;
 	t_fbx	*fbx_data;
 
+	fbx_data = malloc(sizeof(t_fbx));
 	fd = open(filename, O_RDONLY);
 	if (fd == FAIL)
 		return (ft_free_object(obj));
