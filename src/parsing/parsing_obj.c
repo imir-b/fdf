@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_obj.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 18:13:46 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/21 22:47:44 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/27 10:28:40 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ static int	ft_parse_face(t_object *obj, char *line, int index)
 		count++;
 	count--;
 	obj->faces[index].count = count;
+	if (count < 3)
+		return (ERROR);
 	obj->faces[index].indices = malloc(sizeof(int) * count);
 	if (!obj->faces[index].indices)
 		return (ft_free_tab(split), ERROR);
