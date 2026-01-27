@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_fbx.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 22:36:04 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/25 17:14:14 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/27 10:37:33 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_object	*ft_parse_fbx(const char *filename, t_object *obj)
+t_fbx	*ft_parse_fbx(const char *filename, t_object *obj)
 {
 	int		fd;
 	char	*line;
@@ -33,5 +33,5 @@ t_object	*ft_parse_fbx(const char *filename, t_object *obj)
 			ft_parse_connections(fbx_data, fd);
 		free(line);
 	}
-	return (obj);
+	return (fbx_data);
 }

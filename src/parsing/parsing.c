@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:17:30 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/22 00:14:02 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/27 10:38:41 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ t_object	*ft_parse_dispatch(const char *filename)
 		return (ft_parse_fdf(filename, object));
 	else if (ft_is_extension(filename, ".obj"))
 		return (ft_parse_obj(filename, object));
-	// else if (ft_is_extension(filename, ".fbx"))
-	// 	return (ft_parse_fbx(filename, object));
+	else if (ft_is_extension(filename, ".fbx"))
+		return (ft_parse_fbx(filename, object));
 	ft_free_object(object);
 	return (NULL);
 }
