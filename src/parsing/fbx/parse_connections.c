@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:14:16 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/27 21:34:38 by vlad             ###   ########.fr       */
+/*   Updated: 2026/01/27 21:52:07 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,8 @@ t_model	*ft_find_model_by_id(int id, t_model *node)
 	return (NULL);
 }
 
-int	*ft_read_ids(char *line)
+int	*ft_read_ids(char *line, long *ids)
 {
-	int	ids[2];
-
 	line = ft_strchr(line, ',');
 	if (*line)
 		line++;
@@ -74,29 +72,32 @@ int	*ft_read_ids(char *line)
 // pseudo code :
 static void	ft_extract_connection(t_fbx *fbx_data, char *line)
 {
-	int	ids[2];
+	long	ids[2];
 
 	line = ft_strchr(line, '\"') + 1;
-	ids = ft_read_ids(line);
+	ft_read_ids(line, ids);
 	if (IS_TAG(line, "OO"))
 	{
-		fbx_data->model; //get by id 1
-		fbx_data->geo; //get by id 2
+		ft_find_model_by_id(ids[0], fbx_data->model);
+		ft_find_model_by_id(ids[1], fbx_data->model);
+		ft_find_geo_by_id(ids[1], fbx_data->geo);
 		//connecter model->model ou geo->model
 	}
 	else if (IS_TAG(line, "OP"))
 	{
-		//avancer line jusqu au 4e arg
+		line = ft_strrchr(line, ',');
+		while (*line && (*line == ' ' || *line == '\"' || *line == ','))
+			line++;
 		if (IS_TAG(line, "Lcl"))
 		{
-			fbx_data->anim_node; //get by id 1
-			fbx_data->model; //get by id 2
+			ft_find_anim_node_by_id(ids[0], fbx_data->anim_node);
+			ft_find_model_by_id(ids[1], fbx_data->model);
 			//connecter anim_node->model
 		}
 		else if (IS_TAG(line, "d|"))
 		{
-			fbx_data->anim_curve; //get by id 1
-			fbx_data->anim_node; //get by id 2
+			ft_find_anim_curve_by_id(ids[0], fbx_data->anim_curve);
+			ft_find_anim_node_by_id(ids[1], fbx_data->anim_node);
 			//connecter anim_curve->anim_node (x, y ou z)
 		}
 	}
