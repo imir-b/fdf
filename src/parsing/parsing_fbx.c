@@ -3,15 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_fbx.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 22:36:04 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/27 10:37:33 by vlad             ###   ########.fr       */
+/*   Updated: 2026/01/28 05:27:25 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+/**
+ * Lit le fichier 'filename'.fbx pour remplir la structure 'fbx_data'.
+ * 
+ * On separe la lecture en deux parties :
+ * 
+ * 	Objects:	{
+ * 		...
+ * 	}
+ * 
+ * et :
+ * 
+ * 	Connections:  {
+ * 		...
+ * 	}
+ * 
+ */
 t_fbx	*ft_parse_fbx(const char *filename, t_object *obj)
 {
 	int		fd;
@@ -28,7 +44,7 @@ t_fbx	*ft_parse_fbx(const char *filename, t_object *obj)
 		if (!line)
 			break ;
 		else if (IS_TAG(line, "Objects:"))
-			ft_parse_objects(fbx_data, obj, fd);
+			ft_parse_objects(fbx_data, fd);
 		else if (IS_TAG(line, "Connections:"))
 			ft_parse_connections(fbx_data, fd);
 		free(line);

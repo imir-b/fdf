@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:01:45 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/25 17:05:33 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/28 05:37:11 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,53 +14,65 @@
 
 static void	ft_add_new_geo(t_fbx *data, char *cursor, int fd)
 {
-	t_geometry	*new;
+	t_geometry	*geo;
+	t_list		*new;
 
-	new = ft_get_geometry(cursor, NULL, fd);
+	geo = ft_get_geometry(cursor, fd);
+	if (!geo)
+		return ;
+	new = ft_lstnew(geo);
 	if (!new)
 		return ;
-	new->next = data->geo;
-	data->geo = new;
+	ft_lstadd_front(&data->geo, new);
 }
 
 static void	ft_add_new_model(t_fbx *data, char *cursor, int fd)
 {
-	t_model	*new;
+	t_model	*model;
+	t_list	*new;
 
-	new = ft_get_model(cursor, fd);
+	model = ft_get_model(cursor, fd);
+	if (!model)
+		return ;
+	new = ft_lstnew(model);
 	if (!new)
 		return ;
-	new->next = data->model;
-	data->model = new;
+	ft_lstadd_front(&data->model, new);
 }
 
 static void	ft_add_new_anim_curve(t_fbx *data, char *cursor, int fd)
 {
-	t_anim_curve	*new;
+	t_anim_curve	*anim_curve;
+	t_list			*new;
 
-	new = ft_get_anim_curve(cursor, fd);
+	anim_curve = ft_get_anim_curve(cursor, fd);
+	if (!anim_curve)
+		return ;
+	new = ft_lstnew(anim_curve);
 	if (!new)
 		return ;
-	new->next = data->anim_curve;
-	data->anim_curve = new;
+	ft_lstadd_front(&data->anim_curve, new);
 }
 
 static void	ft_add_new_anim_node(t_fbx *data, char *cursor, int fd)
 {
-	t_anim_node	*new;
+	t_anim_node	*anim_node;
+	t_list		*new;
 
-	new = ft_get_anim_node(cursor, fd);
+	anim_node = ft_get_anim_node(cursor, fd);
+	if (!anim_node)
+		return ;
+	new = ft_lstnew(anim_node);
 	if (!new)
 		return ;
-	new->next = data->anim_node;
-	data->anim_node = new;
+	ft_lstadd_front(&data->anim_node, new);
 }
 
 /**
  * Fonction de parsing pour recuperer les donnees dans la partie 'Objects'
  * d'un fichier .fbx
  */
-int	ft_parse_objects(t_fbx *fbx_data, t_object *obj, int fd)
+int	ft_parse_objects(t_fbx *fbx_data, int fd)
 {
 	char	*line;
 	char	*cursor;

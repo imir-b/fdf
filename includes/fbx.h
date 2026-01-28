@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fbx.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:03:24 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/27 10:18:20 by vlad             ###   ########.fr       */
+/*   Updated: 2026/01/28 04:20:16 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ struct s_geometry
 {
 	long		id;
 	t_object	*obj;
-	t_geometry	*next;
 };
 
 struct s_properties
@@ -50,7 +49,6 @@ struct s_model
 	t_anim_node		*anim_scale;
 	t_geometry		*geo;
 	t_model			*parent;
-	t_model			*next;
 };
 
 struct s_anim_curve
@@ -59,7 +57,6 @@ struct s_anim_curve
 	int				n_keys;
 	long long		*time;
 	double			*value;
-	t_anim_curve	*next;
 };
 
 struct s_anim_node
@@ -69,15 +66,14 @@ struct s_anim_node
 	t_anim_curve	*x;
 	t_anim_curve	*y;
 	t_anim_curve	*z;
-	t_anim_node		*next;
 };
 
 struct s_fbx
 {
-	t_geometry		*geo;
-	t_model			*model;
-	t_anim_curve	*anim_curve;
-	t_anim_node		*anim_node;
+	t_list	*geo;
+	t_list	*model;
+	t_list	*anim_curve;
+	t_list	*anim_node;
 };
 
 #endif

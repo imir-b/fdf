@@ -3,73 +3,112 @@
 /*                                                        :::      ::::::::   */
 /*   parse_connections.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:14:16 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/27 21:52:07 by vlad             ###   ########.fr       */
+/*   Updated: 2026/01/28 04:35:39 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_anim_curve	*ft_find_anim_curve_by_id(int id, t_anim_curve *node)
+void	*ft_get_by_id(t_list *list, long id)
 {
-	while (node)
+	long	*ptr_id;
+
+	while (list)
 	{
-		if (node->id == id)
-			return (node);
-		node = node->next;
+		ptr_id = (long *)list->content;
+		if (*ptr_id == id)
+			return (list->content);
+		list = list->next;
 	}
 	return (NULL);
 }
 
-t_anim_node	*ft_find_anim_node_by_id(int id, t_anim_node *node)
-{
-	while (node)
-	{
-		if (node->id == id)
-			return (node);
-		node = node->next;
-	}
-	return (NULL);
-}
-
-t_geometry	*ft_find_geo_by_id(int id, t_geometry *node)
-{
-	while (node)
-	{
-		if (node->id == id)
-			return (node);
-		node = node->next;
-	}
-	return (NULL);
-}
-
-t_model	*ft_find_model_by_id(int id, t_model *node)
-{
-	while (node)
-	{
-		if (node->id == id)
-			return (node);
-		node = node->next;
-	}
-	return (NULL);
-}
-
-int	*ft_read_ids(char *line, long *ids)
+long	*ft_read_ids(char *line, long *ids)
 {
 	line = ft_strchr(line, ',');
 	if (*line)
 		line++;
 	ids[0] = ft_atoi(line);
 	line = ft_strchr(line, ',');
-	if (*line)
+	if (line && *line)
 		line++;
 	ids[1] = ft_atoi(line);
 	return (ids);
 }
 
-// pseudo code :
+void	ft_connect_obj_to_obj(t_fbx *data, long *ids)
+{
+	t_geometry	*geo;
+	t_model		*parent;
+	t_model		*child;
+
+	geo = (t_geometry *)ft_get_by_id(data->geo, ids[0]);
+	if (geo)
+	{
+		child = NULL;
+		parent = (t_model *)ft_get_by_id(data->model, ids[1]);
+		if (parent)
+			parent->geo = geo;
+	}
+	else
+	{
+		child = (t_model *)ft_get_by_id(data->model, ids[0]);
+		if (child)
+		{
+			parent = (t_model *)ft_get_by_id(data->model, ids[1]);
+			if (parent)
+				child->parent = parent;
+		}
+	}
+}
+
+void	ft_connect_anim_to_model(t_fbx *data, char *line, long *ids)
+{
+	t_anim_node	*anim;
+	t_model		*model;
+
+	anim = (t_anim_node *)ft_get_by_id(data->anim_node, ids[0]);
+	if (anim)
+	{
+		model = (t_model *)ft_get_by_id(data->model, ids[1]);
+		if (model)
+		{
+			line += 4;
+			if (IS_TAG(line, "Translation"))
+				model->anim_pos = anim;
+			else if (IS_TAG(line, "Rotation"))
+				model->anim_rot = anim;
+			else if (IS_TAG(line, "Scaling"))
+				model->anim_scale = anim;
+		}
+	}
+}
+
+void	ft_connect_anim_to_anim(t_fbx *data, char *line, long *ids)
+{
+	t_anim_curve	*anim_curve;
+	t_anim_node		*anim_node;
+
+	anim_curve = (t_anim_curve *)ft_get_by_id(data->anim_curve, ids[0]);
+	if (anim_curve)
+	{
+		anim_node = (t_anim_node *)ft_get_by_id(data->anim_node, ids[1]);
+		if (anim_node)
+		{
+			line += 3;
+			if (IS_TAG(line, "X"))
+				anim_node->x = anim_curve;
+			else if (IS_TAG(line, "Y"))
+				anim_node->y = anim_curve;
+			else if (IS_TAG(line, "Z"))
+				anim_node->z = anim_curve;
+		}
+	}
+}
+
 static void	ft_extract_connection(t_fbx *fbx_data, char *line)
 {
 	long	ids[2];
@@ -77,31 +116,17 @@ static void	ft_extract_connection(t_fbx *fbx_data, char *line)
 	line = ft_strchr(line, '\"') + 1;
 	ft_read_ids(line, ids);
 	if (IS_TAG(line, "OO"))
-	{
-		ft_find_model_by_id(ids[0], fbx_data->model);
-		ft_find_model_by_id(ids[1], fbx_data->model);
-		ft_find_geo_by_id(ids[1], fbx_data->geo);
-		//connecter model->model ou geo->model
-	}
+		ft_connect_obj_to_obj(fbx_data, ids);
 	else if (IS_TAG(line, "OP"))
 	{
 		line = ft_strrchr(line, ',');
 		while (*line && (*line == ' ' || *line == '\"' || *line == ','))
 			line++;
 		if (IS_TAG(line, "Lcl"))
-		{
-			ft_find_anim_node_by_id(ids[0], fbx_data->anim_node);
-			ft_find_model_by_id(ids[1], fbx_data->model);
-			//connecter anim_node->model
-		}
+			ft_connect_anim_to_model(fbx_data, line, ids);
 		else if (IS_TAG(line, "d|"))
-		{
-			ft_find_anim_curve_by_id(ids[0], fbx_data->anim_curve);
-			ft_find_anim_node_by_id(ids[1], fbx_data->anim_node);
-			//connecter anim_curve->anim_node (x, y ou z)
-		}
+			ft_connect_anim_to_anim(fbx_data, line, ids);
 	}
-		
 }
 
 /**
@@ -123,5 +148,5 @@ int	ft_parse_connections(t_fbx *fbx_data, int fd)
 			ft_extract_connection(fbx_data, cursor);
 		free(line);
 	}
-	return (SUCCESS);cursor + 9
+	return (SUCCESS);
 }

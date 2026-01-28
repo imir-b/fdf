@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:20:18 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/19 06:41:43 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/28 04:42:06 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,27 @@ double	ft_atof(const char *s)
 		res += (*s++ - '0') * fact;
 	}
 	return (res * sign);
+}
+
+long long	ft_atoll(const char *s)
+{
+	long long	ret;
+	int			sign;
+
+	ret = 0;
+	sign = 1;
+	while (*s == ' ' || (*s >= 9 && *s <= 13))
+		s++;
+	if (*s == '-' || *s == '+')
+	{
+		if (*s == '-')
+			sign = -1;
+		s++;
+	}
+	while (*s >= '0' && *s <= '9')
+	{
+		ret = ret * 10 + (*s - '0');
+		s++;
+	}
+	return (ret * sign);
 }

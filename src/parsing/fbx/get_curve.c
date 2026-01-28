@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:39 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/25 17:10:25 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/28 06:20:15 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ static int	ft_parse_keytime(t_anim_curve *anim_curve, char *cursor, int fd)
 	while (index < anim_curve->n_keys)
 	{
 		cursor = ft_skip_spaces(cursor);
-		line = ft_extract_line(&cursor, fd);
+		if (ft_extract_line(&cursor, &line, fd))
+			break ;
 		if (*cursor == ',')
 			cursor++;
 		anim_curve->time[index++] = ft_atoll(cursor);
@@ -53,7 +54,8 @@ static int	ft_parse_keyvalue(t_anim_curve *anim_curve, char *cursor, int fd)
 	while (index < anim_curve->n_keys)
 	{
 		cursor = ft_skip_spaces(cursor);
-		line = ft_extract_line(&cursor, fd);
+		if (ft_extract_line(&cursor, &line, fd))
+			break ;
 		if (*cursor == ',')
 			cursor++;
 		anim_curve->value[index++] = ft_atof(cursor);

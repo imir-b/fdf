@@ -6,19 +6,22 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:41 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/25 18:32:08 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/28 06:18:32 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static double	ft_extract_vertex(char **cursor)
+static double	ft_extract_val(char **cursor)
 {
 	double	ret;
 
+	if (!*cursor)
+		return (0);
 	*cursor = ft_strchr(*cursor, ',');
-	if (*cursor)
-		(*cursor)++;
+	if (!*cursor)
+		return (0);
+	(*cursor)++;
 	ret = ft_atof(*cursor);
 	return (ret);
 }
@@ -33,19 +36,22 @@ static int	ft_parse_vertex(t_object *obj, char *cursor, int fd)
 	obj->vertices = malloc(sizeof(t_vec3) * obj->nb_vertices);
 	if (!obj->vertices)
 		return (ERROR);
-	cursor = ft_strchr(cursor, '{');
+	cursor = ft_strchr(cursor, '{') + 1;
 	index = 0;
 	while (index < obj->nb_vertices)
 	{
 		cursor = ft_skip_spaces(cursor);
-		line = ft_extract_line(&cursor, fd);
+		if (ft_extract_line(&cursor, &line, fd))
+			break ;
 		if (*cursor == ',')
 			cursor++;
 		obj->vertices[index].x = ft_atof(cursor);
-		obj->vertices[index].y = ft_extract_vertex(&cursor);
-		obj->vertices[index].z = ft_extract_vertex(&cursor);
+		obj->vertices[index].y = ft_extract_val(&cursor);
+		obj->vertices[index].z = ft_extract_val(&cursor);
 		obj->vertices[index++].color = WHITE;
-		cursor = ft_strchr(cursor, ',');
+		if (cursor)
+			cursor = ft_strchr(cursor, ',');
+		index++;
 	}
 	if (line)
 		free(line);
@@ -135,7 +141,8 @@ static int	ft_parse_face(t_object *obj, char *cursor, int fd)
 	while (index < obj->nb_faces)
 	{
 		cursor = ft_skip_spaces(cursor);
-		line = ft_extract_line(&cursor, fd);
+		if (ft_extract_line(&cursor, &line, fd))
+			break ;
 		if (!cursor)
 			return (free(raw_indices), ERROR);
 		raw_indices[index] = ft_atoi(cursor);
@@ -147,16 +154,11 @@ static int	ft_parse_face(t_object *obj, char *cursor, int fd)
 	return (free(raw_indices), SUCCESS);
 }
 
-t_geometry	*ft_get_geometry(char *cursor, t_object *obj, int fd)
+t_object	*ft_get_obj(t_object *obj, int fd)
 {
-	char		*line;
-	char		*cursor;
-	t_geometry	*geo;
+	char	*line;
+	char	*cursor;
 
-	geo = malloc(sizeof(t_geometry));
-	if (!geo)
-		return (NULL);
-	geo->id = ft_atoi(cursor);
 	while (TRUE)
 	{
 		line = get_next_line(fd);
@@ -176,7 +178,33 @@ t_geometry	*ft_get_geometry(char *cursor, t_object *obj, int fd)
 	}
 	obj->height = 0;
 	obj->width = 0;
+	return (obj);
+}
+
+void	*ft_free_geo(t_geometry *geo)
+{
+	if (geo->obj)
+		ft_free_object(geo->obj);
+	if (geo)
+		free(geo);
+	return (NULL);
+}
+
+t_geometry	*ft_get_geometry(char *cursor, int fd)
+{
+	t_geometry	*geo;
+	t_object	*obj;
+
+	obj = malloc(sizeof(t_object));
+	if (!obj)
+		return (NULL);
+	geo = malloc(sizeof(t_geometry));
+	if (!geo)
+		return (ft_free_object(obj));
+	geo->id = ft_atoi(cursor);
+	obj = ft_get_obj(obj, fd);
+	if (!obj)
+		return (ft_free_geo(geo));
 	geo->obj = obj;
-	geo->next = NULL;
 	return (geo);
 }
