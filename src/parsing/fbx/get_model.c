@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:46 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/28 04:36:26 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 04:36:23 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,13 @@ static void	ft_parse_properties(t_model *model, int fd)
 	}
 }
 
+/**
+ *	Model: 200, "Model::MonCube", "Mesh" {
+ *		Properties70:  {
+ *			P: "Lcl Translation", "Lcl Translation", "", "A", 0, 10, 0
+ *		}
+ *	}
+ */
 t_model	*ft_get_model(char *cursor, int fd)
 {
 	char	*line;

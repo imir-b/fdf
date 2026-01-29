@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/01/28 06:18:52 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 03:47:42 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,10 @@ t_model				*ft_get_model(char *cursor, int fd);
 t_anim_curve		*ft_get_anim_curve(char *cursor, int fd);
 t_anim_node			*ft_get_anim_node(char *cursor, int fd);
 char				*ft_skip_spaces(char *str);
+void				ft_skip_to_content(char **cursor);
 void				ft_move_cursor(char **cursor);
 int					ft_extract_line(char **cursor, char **line, int fd);
 void				*ft_free_fbx_data(t_fbx *data);
+void				*ft_free_geo(t_geometry *geo);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 22:36:04 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/28 05:27:25 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 05:15:27 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 /**
  * Lit le fichier 'filename'.fbx pour remplir la structure 'fbx_data'.
- * 
  * On separe la lecture en deux parties :
  * 
  * 	Objects:	{
@@ -34,10 +33,12 @@ t_fbx	*ft_parse_fbx(const char *filename, t_object *obj)
 	char	*line;
 	t_fbx	*fbx_data;
 
-	fbx_data = malloc(sizeof(t_fbx));
+	fbx_data = ft_calloc(1, sizeof(t_fbx));
+	if (!fbx_data)
+		return (NULL);
 	fd = open(filename, O_RDONLY);
 	if (fd == FAIL)
-		return (ft_free_object(obj));
+		return (free(fbx_data), ft_free_object(obj));
 	while (TRUE)
 	{
 		line = get_next_line(fd);
@@ -49,5 +50,7 @@ t_fbx	*ft_parse_fbx(const char *filename, t_object *obj)
 			ft_parse_connections(fbx_data, fd);
 		free(line);
 	}
+	close(fd);
+	printf("parsing de fbx carre\n"); //debug
 	return (fbx_data);
 }

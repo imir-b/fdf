@@ -6,7 +6,7 @@
 #    By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2026/01/28 05:30:55 by vbleskin         ###   ########.fr        #
+#    Updated: 2026/01/29 03:39:37 by vbleskin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,7 @@ SRC_PARS		=	$(PARS_DIR)parsing.c \
 					$(FBX_DIR)parse_objects.c \
 					$(FBX_DIR)parse_connections.c \
 					$(FBX_DIR)parse_fbx_utils.c \
+					$(FBX_DIR)free_fbx_data.c \
 					$(FBX_DIR)get_node.c \
 					$(FBX_DIR)get_model.c \
 					$(FBX_DIR)get_geo.c \

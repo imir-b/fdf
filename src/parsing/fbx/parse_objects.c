@@ -6,66 +6,70 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:01:45 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/28 05:37:11 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 03:57:13 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void	ft_add_new_geo(t_fbx *data, char *cursor, int fd)
+static int	ft_add_new_geo(t_fbx *data, char *cursor, int fd)
 {
 	t_geometry	*geo;
 	t_list		*new;
 
 	geo = ft_get_geometry(cursor, fd);
 	if (!geo)
-		return ;
+		return (ERROR);
 	new = ft_lstnew(geo);
 	if (!new)
-		return ;
+		return (ERROR);
 	ft_lstadd_front(&data->geo, new);
+	return (SUCCESS);
 }
 
-static void	ft_add_new_model(t_fbx *data, char *cursor, int fd)
+static int	ft_add_new_model(t_fbx *data, char *cursor, int fd)
 {
 	t_model	*model;
 	t_list	*new;
 
 	model = ft_get_model(cursor, fd);
 	if (!model)
-		return ;
+		return (ERROR);
 	new = ft_lstnew(model);
 	if (!new)
-		return ;
+		return (ERROR);
 	ft_lstadd_front(&data->model, new);
+	return (SUCCESS);
 }
 
-static void	ft_add_new_anim_curve(t_fbx *data, char *cursor, int fd)
+static int	ft_add_new_anim_curve(t_fbx *data, char *cursor, int fd)
 {
 	t_anim_curve	*anim_curve;
 	t_list			*new;
 
 	anim_curve = ft_get_anim_curve(cursor, fd);
 	if (!anim_curve)
-		return ;
+		return (ERROR);
 	new = ft_lstnew(anim_curve);
 	if (!new)
-		return ;
+		return (ERROR);
 	ft_lstadd_front(&data->anim_curve, new);
+	return (SUCCESS);
 }
 
-static void	ft_add_new_anim_node(t_fbx *data, char *cursor, int fd)
+static int	ft_add_new_anim_node(t_fbx *data, char *cursor, int fd)
 {
 	t_anim_node	*anim_node;
 	t_list		*new;
 
 	anim_node = ft_get_anim_node(cursor, fd);
 	if (!anim_node)
-		return ;
+		return (ERROR);
 	new = ft_lstnew(anim_node);
 	if (!new)
-		return ;
+		return (ERROR);
 	ft_lstadd_front(&data->anim_node, new);
+	return (SUCCESS);
 }
 
 /**
@@ -84,13 +88,25 @@ int	ft_parse_objects(t_fbx *fbx_data, int fd)
 			break ;
 		cursor = ft_skip_spaces(line);
 		if (IS_TAG(cursor, "Geometry:"))
-			ft_add_new_geo(fbx_data, cursor + 9, fd);
+		{
+			if (ft_add_new_geo(fbx_data, cursor + 9, fd))
+				printf("Can't get geometry"); //debug
+		}
 		else if (IS_TAG(cursor, "Model:"))
-			ft_add_new_model(fbx_data, cursor + 6, fd);
+		{
+			if (ft_add_new_model(fbx_data, cursor + 6, fd))
+				printf("Can't get model"); //debug
+		}
 		else if (IS_TAG(cursor, "AnimationCurve:"))
-			ft_add_new_anim_curve(fbx_data, cursor + 15, fd);
+		{
+			if (ft_add_new_anim_curve(fbx_data, cursor + 15, fd))
+				printf("Can't get animation curve"); //debug
+		}
 		else if (IS_TAG(cursor, "AnimationCurveNode:"))
-			ft_add_new_anim_node(fbx_data, cursor + 19, fd);
+		{
+			if (ft_add_new_anim_node(fbx_data, cursor + 19, fd))
+				printf("Can't get animation curve node"); //debug
+		}
 		free(line);
 	}
 	return (SUCCESS);

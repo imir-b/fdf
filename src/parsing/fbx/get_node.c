@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:44 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/25 17:18:14 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 04:37:17 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@ static char	ft_extract_type(char *line)
 	return (cursor[1]);
 }
 
+/**
+ *	AnimationCurveNode: 400, "Node::T", "T" {
+ *		Properties70: {
+ *			P: ...
+ *		}
+ *	}
+ */
 t_anim_node	*ft_get_anim_node(char *cursor, int fd)
 {
 	t_anim_node	*anim_node;

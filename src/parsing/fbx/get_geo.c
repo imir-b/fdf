@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:41 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/28 06:18:32 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 05:36:11 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,24 +31,29 @@ static int	ft_parse_vertex(t_object *obj, char *cursor, int fd)
 	int		index;
 	char	*line;
 
-	cursor = ft_strchr(cursor, '*') + 1;
+	cursor = ft_strchr(cursor, '*');
+	if (!cursor)
+		return (ERROR);
+	cursor++;
 	obj->nb_vertices = ft_atoi(cursor);
 	obj->vertices = malloc(sizeof(t_vec3) * obj->nb_vertices);
 	if (!obj->vertices)
 		return (ERROR);
 	cursor = ft_strchr(cursor, '{') + 1;
 	index = 0;
+	line = NULL;
 	while (index < obj->nb_vertices)
 	{
 		cursor = ft_skip_spaces(cursor);
 		if (ft_extract_line(&cursor, &line, fd))
 			break ;
+		ft_skip_to_content(&cursor);
 		if (*cursor == ',')
 			cursor++;
 		obj->vertices[index].x = ft_atof(cursor);
 		obj->vertices[index].y = ft_extract_val(&cursor);
 		obj->vertices[index].z = ft_extract_val(&cursor);
-		obj->vertices[index++].color = WHITE;
+		obj->vertices[index].color = WHITE;
 		if (cursor)
 			cursor = ft_strchr(cursor, ',');
 		index++;
@@ -105,7 +110,7 @@ static t_face	*ft_extract_faces(int *raw, int total, \
 
 	obj->nb_faces = ft_count_faces(raw, total);
 	faces = malloc(sizeof(t_face) * obj->nb_faces);
-	if (faces)
+	if (!faces)
 		return (NULL);
 	index = 0;
 	f_id = 0;
@@ -131,20 +136,24 @@ static int	ft_parse_face(t_object *obj, char *cursor, int fd)
 	int		*raw_indices;
 	char	*line;
 
-	cursor = ft_strchr(cursor, '*') + 1;
+	cursor = ft_strchr(cursor, '*');
+	if (!cursor)
+		return (ERROR);
+	cursor++;
 	nb_indices = ft_atoi(cursor);
 	raw_indices = malloc(sizeof(int) * nb_indices);
 	if (!raw_indices)
 		return (ERROR);
 	index = 0;
 	line = NULL;
-	while (index < obj->nb_faces)
+	while (index < nb_indices)
 	{
 		cursor = ft_skip_spaces(cursor);
 		if (ft_extract_line(&cursor, &line, fd))
 			break ;
-		if (!cursor)
-			return (free(raw_indices), ERROR);
+		ft_skip_to_content(&cursor);
+		if (!*cursor)
+			continue ;
 		raw_indices[index] = ft_atoi(cursor);
 		index++;
 		cursor = ft_strchr(cursor, ',');
@@ -173,7 +182,10 @@ t_object	*ft_get_obj(t_object *obj, int fd)
 		if (IS_TAG(cursor, "Vertices:"))
 			ft_parse_vertex(obj, cursor, fd);
 		else if (IS_TAG(cursor, "PolygonVertexIndex:"))
-			ft_parse_face(obj, cursor, fd);
+		{
+			if (ft_parse_face(obj, cursor, fd))
+				printf("failed parsing face\n");
+		}
 		free(line);
 	}
 	obj->height = 0;
@@ -181,21 +193,18 @@ t_object	*ft_get_obj(t_object *obj, int fd)
 	return (obj);
 }
 
-void	*ft_free_geo(t_geometry *geo)
-{
-	if (geo->obj)
-		ft_free_object(geo->obj);
-	if (geo)
-		free(geo);
-	return (NULL);
-}
-
+/**
+ *	Geometry: 100, "Geometry::MonCube", "Mesh" {
+ *		Vertices: ... { ... }
+ *		PolygonVertexIndex: ... { ... }
+ *	}
+ */
 t_geometry	*ft_get_geometry(char *cursor, int fd)
 {
 	t_geometry	*geo;
 	t_object	*obj;
 
-	obj = malloc(sizeof(t_object));
+	obj = ft_calloc(1, sizeof(t_object));
 	if (!obj)
 		return (NULL);
 	geo = malloc(sizeof(t_geometry));

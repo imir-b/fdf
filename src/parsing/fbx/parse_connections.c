@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:14:16 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/28 04:35:39 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 03:21:51 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,9 @@ static void	ft_extract_connection(t_fbx *fbx_data, char *line)
 {
 	long	ids[2];
 
-	line = ft_strchr(line, '\"') + 1;
+	line = ft_strchr(line, '\"');
+	if (*line)
+		line++;
 	ft_read_ids(line, ids);
 	if (IS_TAG(line, "OO"))
 		ft_connect_obj_to_obj(fbx_data, ids);
