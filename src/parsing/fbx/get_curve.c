@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:39 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/29 05:08:15 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 07:06:48 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,9 @@ t_anim_curve	*ft_get_anim_curve(char *cursor, int fd)
 			free(line);
 			break ;
 		}
-		if (IS_TAG(cursor, "KeyTime:"))
+		if (IS_TAG(cursor, "KeyTime"))
 			ft_parse_keytime(anim_curve, cursor, fd);
-		else if (IS_TAG(cursor, "KeyValueFloat:"))
+		else if (IS_TAG(cursor, "KeyValueFloat"))
 			ft_parse_keyvalue(anim_curve, cursor, fd);
 		free(line);
 	}

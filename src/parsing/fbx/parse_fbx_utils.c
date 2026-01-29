@@ -6,11 +6,25 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:10:52 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/29 04:39:59 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 07:15:04 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+void	*ft_get_by_id(t_list *list, long id)
+{
+	long	*ptr_id;
+
+	while (list)
+	{
+		ptr_id = (long *)list->content;
+		if (*ptr_id == id)
+			return (list->content);
+		list = list->next;
+	}
+	return (NULL);
+}
 
 void	ft_skip_to_content(char **cursor)
 {
@@ -22,7 +36,7 @@ void	ft_skip_to_content(char **cursor)
 
 /**
  * Defini 'line_ptr' sur la prochaine ligne si 'cursor' est
- * nul '\0', a la fin du parsing ('}') ou en fin de ligne '\n'
+ * nul '\0', a la fin de la partie '}' ou en fin de ligne '\n'.
  */
 int	ft_extract_line(char **cursor, char **line_ptr, int fd)
 {

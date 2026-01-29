@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:01:45 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/29 03:57:13 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 07:07:18 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,22 +87,22 @@ int	ft_parse_objects(t_fbx *fbx_data, int fd)
 		if (!line || line[0] == '}')
 			break ;
 		cursor = ft_skip_spaces(line);
-		if (IS_TAG(cursor, "Geometry:"))
+		if (IS_TAG(cursor, "Geometry"))
 		{
 			if (ft_add_new_geo(fbx_data, cursor + 9, fd))
 				printf("Can't get geometry"); //debug
 		}
-		else if (IS_TAG(cursor, "Model:"))
+		else if (IS_TAG(cursor, "Model"))
 		{
 			if (ft_add_new_model(fbx_data, cursor + 6, fd))
 				printf("Can't get model"); //debug
 		}
-		else if (IS_TAG(cursor, "AnimationCurve:"))
+		else if (IS_TAG(cursor, "AnimationCurve"))
 		{
 			if (ft_add_new_anim_curve(fbx_data, cursor + 15, fd))
 				printf("Can't get animation curve"); //debug
 		}
-		else if (IS_TAG(cursor, "AnimationCurveNode:"))
+		else if (IS_TAG(cursor, "AnimationCurveNode"))
 		{
 			if (ft_add_new_anim_node(fbx_data, cursor + 19, fd))
 				printf("Can't get animation curve node"); //debug

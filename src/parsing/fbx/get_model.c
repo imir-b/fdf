@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:46 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/29 04:36:23 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 07:06:56 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ t_model	*ft_get_model(char *cursor, int fd)
 		cursor = ft_skip_spaces(line);
 		if (*cursor == '}')
 			return (free(line), model);
-		if (IS_TAG(cursor, "Properties70:"))
+		if (IS_TAG(cursor, "Properties70"))
 			ft_parse_properties(model, fd);
 		free(line);
 	}

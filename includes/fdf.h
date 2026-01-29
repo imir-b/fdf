@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/01/29 03:47:42 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 07:21:43 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <string.h>
 # include <errno.h>
 
-// **************** DEBUG *****************-------------------------------------
+// **************** DEBUG ****************
 # include <stdio.h>
 
 # define SUCCESS 0
@@ -65,7 +65,8 @@ void				ft_parallel_project(t_fdf *data, float angle_x, \
 						float angle_y);
 void				ft_draw_axes(t_fdf *data);
 void				ft_draw_threads(t_fdf *data);
-void				ft_draw_line(t_fdf *data, t_point p1, t_point p2, int color);
+void				ft_draw_line(t_fdf *data, t_point p1, t_point p2, \
+									int color);
 
 // -----------------------------------------------------------------------------
 // EVENTS
@@ -85,7 +86,10 @@ t_object			*ft_parse_obj(const char *filename, t_object *obj);
 t_fbx				*ft_parse_fbx(const char *filename, t_object *obj);
 int					ft_parse_objects(t_fbx *fbx_data, int fd);
 int					ft_parse_connections(t_fbx *fbx_data, int fd);
+void				*ft_free_fbx_data(t_fbx *data);
 t_geometry			*ft_get_geometry(char *cursor, int fd);
+int					ft_parse_face(t_object *obj, char *cursor, int fd);
+void				*ft_free_geo(t_geometry *geo);
 t_model				*ft_get_model(char *cursor, int fd);
 t_anim_curve		*ft_get_anim_curve(char *cursor, int fd);
 t_anim_node			*ft_get_anim_node(char *cursor, int fd);
@@ -93,7 +97,5 @@ char				*ft_skip_spaces(char *str);
 void				ft_skip_to_content(char **cursor);
 void				ft_move_cursor(char **cursor);
 int					ft_extract_line(char **cursor, char **line, int fd);
-void				*ft_free_fbx_data(t_fbx *data);
-void				*ft_free_geo(t_geometry *geo);
 
 #endif

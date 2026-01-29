@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 22:36:04 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/29 05:15:27 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 07:07:23 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ t_fbx	*ft_parse_fbx(const char *filename, t_object *obj)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		else if (IS_TAG(line, "Objects:"))
+		else if (IS_TAG(line, "Objects"))
 			ft_parse_objects(fbx_data, fd);
-		else if (IS_TAG(line, "Connections:"))
+		else if (IS_TAG(line, "Connections"))
 			ft_parse_connections(fbx_data, fd);
 		free(line);
 	}

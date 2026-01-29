@@ -6,25 +6,11 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:14:16 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/29 03:21:51 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 07:15:12 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-void	*ft_get_by_id(t_list *list, long id)
-{
-	long	*ptr_id;
-
-	while (list)
-	{
-		ptr_id = (long *)list->content;
-		if (*ptr_id == id)
-			return (list->content);
-		list = list->next;
-	}
-	return (NULL);
-}
 
 long	*ft_read_ids(char *line, long *ids)
 {
