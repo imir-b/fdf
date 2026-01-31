@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:17:30 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/31 00:42:44 by vlad             ###   ########.fr       */
+/*   Updated: 2026/01/31 21:08:18 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,26 +58,6 @@ t_object	*ft_parse_dispatch(const char *filename)
 		object = ft_parse_fbx(filename, object);
 		if (!object)
 			return (NULL);
-		printf("nb_vertices = %d\n", object->nb_vertices);
-		printf("nb_faces = %d\n", object->nb_faces);
-		printf("height = %d\n", object->height);
-		printf("width = %d\n", object->width);
-		if (object->faces)
-		{
-			printf("faces->count = %d\n", object->faces[0].count);
-			printf("faces->idx 0 = %d\n", object->faces[0].indices[0]);
-		}
-		else
-			printf("WARNING: faces is NULL\n");
-		if (object->vertices)
-		{
-			printf("vertices->x = %f\n", object->vertices[0].x);
-			printf("vertices->y = %f\n", object->vertices->y);
-			printf("vertices->z = %f\n", object->vertices->z);
-			printf("vertices->color = %d\n", object->vertices->color);
-			printf("vertices->sx = %d\n", object->vertices->sx);
-			printf("vertices->sy = %d\n", object->vertices->sy);
-		}
 		return (object);
 	}
 	ft_free_object(object);

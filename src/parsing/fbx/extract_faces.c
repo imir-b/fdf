@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 07:12:12 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/30 22:05:59 by vlad             ###   ########.fr       */
+/*   Updated: 2026/01/31 21:07:14 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,43 +78,40 @@ static t_face	*ft_extract_faces(int *raw, int total, \
 	return (faces);
 }
 
-int	ft_parse_face(t_object *obj, char *cursor, int fd)
+int	ft_parse_face(t_object *obj, char **line, char *cursor, int fd)
 {
 	int		index;
 	int		nb_indices;
 	int		*raw_indices;
-	char	*line;
 
 	cursor = ft_strchr(cursor, '*');
 	if (!cursor)
 		return (ERROR);
 	cursor++;
 	nb_indices = ft_atoi(cursor);
-	printf("DEBUG: nb_indices lu = %d\n", nb_indices); //debug
 	raw_indices = malloc(sizeof(int) * nb_indices);
 	if (!raw_indices)
 		return (ERROR);
 	cursor = ft_strchr(cursor, '{');
+	if (cursor)
+		cursor++;
 	index = 0;
-	line = NULL;
 	while (index < nb_indices)
 	{
-		cursor = ft_skip_spaces(cursor);
-		if (ft_extract_line(&cursor, &line, fd))
+		ft_jump_to_next_value(&cursor, line, fd);
+		if (*cursor == '}')
 			break ;
-		ft_skip_to_content(&cursor);
-		while (*cursor && !ft_isdigit(*cursor) && *cursor != '-')
-            cursor++;
-		if (!*cursor)
-			continue ;
 		raw_indices[index] = ft_atoi(cursor);
+		if (*cursor == '-')
+			cursor++;
+		while (*cursor && ft_isdigit(*cursor) && *cursor != '-')
+			cursor++;
 		index++;
-		cursor = ft_strchr(cursor, ',');
-		ft_move_cursor(&cursor);
 	}
 	obj->faces = ft_extract_faces(raw_indices, nb_indices, obj);
-	ft_skip_closing_brace(&cursor, &line, fd);
+	ft_skip_closing_brace(&cursor, line, fd);
+	free(raw_indices);
 	if (!obj->faces)
-		return (free(raw_indices), ERROR);
-	return (free(raw_indices), SUCCESS);
+		return (ERROR);
+	return (SUCCESS);
 }

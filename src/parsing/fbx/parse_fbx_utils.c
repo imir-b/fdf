@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:10:52 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/30 21:50:56 by vlad             ###   ########.fr       */
+/*   Updated: 2026/01/31 20:37:29 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,6 @@ void	*ft_get_by_id(t_list *list, long id)
 	return (NULL);
 }
 
-void	ft_skip_to_content(char **cursor)
-{
-	if (!cursor || !*cursor)
-		return ;
-	while (**cursor && !ft_isdigit(**cursor) && **cursor != '-')
-		(*cursor)++;
-}
-
 /**
  * Defini 'line_ptr' sur la prochaine ligne si 'cursor' est
  * nul '\0', a la fin de la partie '}' ou en fin de ligne '\n'.
@@ -50,14 +42,6 @@ int	ft_extract_line(char **cursor, char **line_ptr, int fd)
 		return (ERROR);
 	*cursor = *line_ptr;
 	return (SUCCESS);
-}
-
-void	ft_move_cursor(char **cursor)
-{
-	if (*cursor)
-		(*cursor)++;
-	else
-		*cursor = "";
 }
 
 char	*ft_skip_spaces(char *str)
@@ -87,5 +71,29 @@ void	ft_skip_closing_brace(char **cursor, char **line, int fd)
 		*cursor = *line;
 		if (*cursor && ft_strchr(*cursor, '}'))
 			break ;
+	}
+}
+
+void	ft_jump_to_next_value(char **cursor, char **line, int fd)
+{
+	while (TRUE)
+	{
+		*cursor = ft_skip_spaces(*cursor);
+		if (**cursor == ',')
+		{
+			(*cursor)++;
+			continue ;
+		}
+		if (!**cursor)
+		{
+			if (ft_extract_line(cursor, line, fd))
+				return ;
+			continue ;
+		}
+		if (ft_isdigit(**cursor) || **cursor == '-')
+			break ;
+		if (**cursor == '}')
+			break ;
+		(*cursor)++;
 	}
 }

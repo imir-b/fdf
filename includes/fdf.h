@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/01/31 00:39:36 by vlad             ###   ########.fr       */
+/*   Updated: 2026/01/31 20:28:43 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ t_object			*ft_parse_fdf(const char *filename, t_object *obj);
 t_object			*ft_parse_obj(const char *filename, t_object *obj);
 t_object			*ft_parse_fbx(const char *filename, t_object *obj);
 char				*ft_skip_spaces(char *str);
+void				ft_jump_to_next_value(char **cursor, char **line, int fd);
 void				ft_skip_to_content(char **cursor);
 void				ft_skip_closing_brace(char **cursor, char **line, int fd);
 void				ft_move_cursor(char **cursor);
@@ -94,7 +95,7 @@ void				*ft_get_by_id(t_list *list, long id);
 int					ft_parse_objects(t_fbx *fbx_data, int fd);
 int					ft_parse_connections(t_fbx *fbx_data, int fd);
 void				*ft_free_fbx_data(t_fbx *data);
-int					ft_parse_face(t_object *obj, char *cursor, int fd);
+int					ft_parse_face(t_object *obj, char **line, char *cursor, int fd);
 t_geometry			*ft_get_geometry(char *cursor, int fd);
 void				*ft_free_geo(t_geometry *geo);
 t_model				*ft_get_model(char *cursor, int fd);
