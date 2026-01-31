@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extract_faces.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 07:12:12 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/29 07:33:31 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/30 22:05:59 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int	ft_parse_face(t_object *obj, char *cursor, int fd)
 	raw_indices = malloc(sizeof(int) * nb_indices);
 	if (!raw_indices)
 		return (ERROR);
+	cursor = ft_strchr(cursor, '{');
 	index = 0;
 	line = NULL;
 	while (index < nb_indices)
@@ -102,6 +103,8 @@ int	ft_parse_face(t_object *obj, char *cursor, int fd)
 		if (ft_extract_line(&cursor, &line, fd))
 			break ;
 		ft_skip_to_content(&cursor);
+		while (*cursor && !ft_isdigit(*cursor) && *cursor != '-')
+            cursor++;
 		if (!*cursor)
 			continue ;
 		raw_indices[index] = ft_atoi(cursor);

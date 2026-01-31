@@ -6,7 +6,7 @@
 #    By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2026/01/29 03:39:37 by vbleskin         ###   ########.fr        #
+#    Updated: 2026/01/29 17:36:33 by vbleskin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,8 @@ SRC_PARS		=	$(PARS_DIR)parsing.c \
 					$(FBX_DIR)get_node.c \
 					$(FBX_DIR)get_model.c \
 					$(FBX_DIR)get_geo.c \
-					$(FBX_DIR)get_curve.c
+					$(FBX_DIR)get_curve.c \
+					$(FBX_DIR)extract_faces.c
 
 SRC_REND		=	$(REND_DIR)render.c \
 					$(REND_DIR)transform.c \

@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:20:18 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/28 04:42:06 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 17:31:10 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,29 @@ long long	ft_atoll(const char *s)
 {
 	long long	ret;
 	int			sign;
+
+	ret = 0;
+	sign = 1;
+	while (*s == ' ' || (*s >= 9 && *s <= 13))
+		s++;
+	if (*s == '-' || *s == '+')
+	{
+		if (*s == '-')
+			sign = -1;
+		s++;
+	}
+	while (*s >= '0' && *s <= '9')
+	{
+		ret = ret * 10 + (*s - '0');
+		s++;
+	}
+	return (ret * sign);
+}
+
+long	ft_atol(const char *s)
+{
+	long	ret;
+	int		sign;
 
 	ret = 0;
 	sign = 1;

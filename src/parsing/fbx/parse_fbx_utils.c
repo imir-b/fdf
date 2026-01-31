@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_fbx_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:10:52 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/29 07:15:04 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/30 21:50:56 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,21 @@ char	*ft_skip_spaces(char *str)
 			break ;
 	}
 	return (str);
+}
+
+void	ft_skip_closing_brace(char **cursor, char **line, int fd)
+{
+	if (*cursor && ft_strchr(*cursor, '}'))
+		return ;
+	while (TRUE)
+	{
+		if (*line)
+			free(*line);
+		*line = get_next_line(fd);
+		if (!*line)
+			break ;
+		*cursor = *line;
+		if (*cursor && ft_strchr(*cursor, '}'))
+			break ;
+	}
 }

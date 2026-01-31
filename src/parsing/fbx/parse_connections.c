@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:14:16 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/29 07:15:12 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/29 17:26:44 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ long	*ft_read_ids(char *line, long *ids)
 	line = ft_strchr(line, ',');
 	if (*line)
 		line++;
-	ids[0] = ft_atoi(line);
+	ids[0] = ft_atol(line);
 	line = ft_strchr(line, ',');
 	if (line && *line)
 		line++;

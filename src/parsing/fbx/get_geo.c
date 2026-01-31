@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_geo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:41 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/29 07:31:34 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/30 21:58:10 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,41 +26,26 @@ static double	ft_extract_val(char **cursor)
 	return (ret);
 }
 
-void	ft_skip_closing_brace(char **cursor, char **line, int fd)
-{
-	while (TRUE)
-	{
-		if (*cursor && ft_strchr(*cursor, '}'))
-			break ;
-		if (*line)
-			free(*line);
-		*line = get_next_line(fd);
-		if (!*line)
-			break ;
-		*cursor = *line;
-	}
-}
-
-static int	ft_parse_vertex(t_object *obj, char *cursor, int fd)
+static char	*ft_parse_vertex(t_object *obj, char **line, char *cursor, int fd)
 {
 	int		index;
-	char	*line;
+	int 	nb_floats;
 
 	cursor = ft_strchr(cursor, '*');
 	if (!cursor)
-		return (ERROR);
+		return (NULL);
 	cursor++;
-	obj->nb_vertices = ft_atoi(cursor);
+	nb_floats = ft_atoi(cursor);
+	obj->nb_vertices = nb_floats / 3;
 	obj->vertices = malloc(sizeof(t_vec3) * obj->nb_vertices);
 	if (!obj->vertices)
-		return (ERROR);
+		return (NULL);
 	cursor = ft_strchr(cursor, '{') + 1;
 	index = 0;
-	line = NULL;
 	while (index < obj->nb_vertices)
 	{
 		cursor = ft_skip_spaces(cursor);
-		if (ft_extract_line(&cursor, &line, fd))
+		if (ft_extract_line(&cursor, line, fd))
 			break ;
 		ft_skip_to_content(&cursor);
 		if (*cursor == ',')
@@ -73,10 +58,9 @@ static int	ft_parse_vertex(t_object *obj, char *cursor, int fd)
 			cursor = ft_strchr(cursor, ',');
 		index++;
 	}
-	ft_skip_closing_brace(&cursor, &line, fd);
-	if (line)
-		free(line);
-	return (SUCCESS);
+	printf("DEBUG : line before skip closing brace : %s\n", *line);
+	ft_skip_closing_brace(&cursor, line, fd);
+	return (*line);
 }
 
 t_object	*ft_get_obj(t_object *obj, int fd)
@@ -96,9 +80,17 @@ t_object	*ft_get_obj(t_object *obj, int fd)
 			break ;
 		}
 		if (IS_TAG(cursor, "Vertices"))
-			ft_parse_vertex(obj, cursor, fd);
-		else if (ft_strnstr(cursor, "PolygonVertexIndex", 20))
+		{
+			printf("DEBUG : line before parsing : %s\n", line);
+			ft_parse_vertex(obj, &line, cursor, fd);
+			printf("DEBUG : line after parse vertex : %s\n", line);
+		}
+		else if (IS_TAG(cursor, "PolygonVertexIndex"))
+		{
+			printf("DEBUG : line before parsing : %s\n", line);
 			ft_parse_face(obj, cursor, fd);
+			printf("DEBUG : line after parse face : %s\n", line);
+		}
 		free(line);
 	}
 	obj->height = 0;

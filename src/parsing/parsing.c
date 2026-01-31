@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:17:30 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/29 05:25:40 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/01/31 00:42:44 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,7 @@ int	ft_check_filename(const char *filename)
 t_object	*ft_parse_dispatch(const char *filename)
 {
 	t_object	*object;
-	t_fbx		*fbx_data;
-	t_geometry	*geo;
 
-	fbx_data = NULL;
 	object = ft_calloc(1, sizeof(t_object));
 	if (!object)
 		return (NULL);
@@ -58,31 +55,30 @@ t_object	*ft_parse_dispatch(const char *filename)
 		return (ft_parse_obj(filename, object));
 	else if (ft_is_extension(filename, ".fbx"))
 	{
-		fbx_data = ft_parse_fbx(filename, object);
-		if (!fbx_data || !fbx_data->geo)
+		object = ft_parse_fbx(filename, object);
+		if (!object)
 			return (NULL);
-		geo = (t_geometry *)fbx_data->geo->content;
-		printf("nb_vertices = %d\n", geo->obj->nb_vertices);
-		printf("nb_faces = %d\n", geo->obj->nb_faces);
-		printf("height = %d\n", geo->obj->height);
-		printf("width = %d\n", geo->obj->width);
-		if (geo->obj->faces)
+		printf("nb_vertices = %d\n", object->nb_vertices);
+		printf("nb_faces = %d\n", object->nb_faces);
+		printf("height = %d\n", object->height);
+		printf("width = %d\n", object->width);
+		if (object->faces)
 		{
-			printf("faces->count = %d\n", geo->obj->faces[0].count);
-			printf("faces->idx 0 = %d\n", geo->obj->faces[0].indices[0]);
+			printf("faces->count = %d\n", object->faces[0].count);
+			printf("faces->idx 0 = %d\n", object->faces[0].indices[0]);
 		}
 		else
 			printf("WARNING: faces is NULL\n");
-		if (geo->obj->vertices)
+		if (object->vertices)
 		{
-			printf("vertices->x = %f\n", geo->obj->vertices[0].x);
-			printf("vertices->y = %f\n", geo->obj->vertices->y);
-			printf("vertices->z = %f\n", geo->obj->vertices->z);
-			printf("vertices->color = %d\n", geo->obj->vertices->color);
-			printf("vertices->sx = %d\n", geo->obj->vertices->sx);
-			printf("vertices->sy = %d\n", geo->obj->vertices->sy);
+			printf("vertices->x = %f\n", object->vertices[0].x);
+			printf("vertices->y = %f\n", object->vertices->y);
+			printf("vertices->z = %f\n", object->vertices->z);
+			printf("vertices->color = %d\n", object->vertices->color);
+			printf("vertices->sx = %d\n", object->vertices->sx);
+			printf("vertices->sy = %d\n", object->vertices->sy);
 		}
-		return (geo->obj);
+		return (object);
 	}
 	ft_free_object(object);
 	return (NULL);

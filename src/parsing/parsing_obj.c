@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_obj.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 18:13:46 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/27 10:28:40 by vlad             ###   ########.fr       */
+/*   Updated: 2026/01/29 17:21:10 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	ft_get_count_elems(t_object *obj, const char *filename)
 	return (SUCCESS);
 }
 
-static void	ft_parse_vertex(t_object *obj, char *line, int index)
+static void	ft_get_vertex(t_object *obj, char *line, int index)
 {
 	char	**split;
 
@@ -57,7 +57,7 @@ static void	ft_parse_vertex(t_object *obj, char *line, int index)
 	}
 }
 
-static int	ft_parse_face(t_object *obj, char *line, int index)
+static int	ft_get_face(t_object *obj, char *line, int index)
 {
 	char	**split;
 	int		count;
@@ -104,10 +104,10 @@ static int	ft_fill_obj_data(t_object *obj, const char *filename)
 		if (!line)
 			break ;
 		if (line[0] == 'v' && line[1] == ' ')
-			ft_parse_vertex(obj, line, v_idx++);
+			ft_get_vertex(obj, line, v_idx++);
 		else if (line[0] == 'f' && line[1] == ' ')
 		{
-			if (ft_parse_face(obj, line, f_idx++))
+			if (ft_get_face(obj, line, f_idx++))
 				return (free(line), close(fd), ERROR);
 		}
 		free(line);
