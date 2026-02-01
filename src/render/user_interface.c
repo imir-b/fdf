@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/01 22:27:27 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/01 23:25:01 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/02 00:07:20 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,47 @@ int	ft_display_fps(t_fdf *data)
 	return (SUCCESS);
 }
 
-int ft_display_anim_menu(t_fdf *data)
+void	ft_next_anim(t_fdf *data)
 {
-    (void)data;
-    return (SUCCESS);
+	t_list	*current_node;
+
+    current_node = ft_find_node(data->fbx->anim_stack, data->fbx->current_anim);
+    if (current_node->next != NULL)
+        data->fbx->current_anim = (t_anim_stack *)(current_node->next->content);
+    else
+        data->fbx->current_anim = (t_anim_stack *)(data->fbx->anim_stack->content);
+}
+
+void	ft_prev_anim(t_fdf *data)
+{
+	t_list	*current_node;
+	t_list	*temp;
+
+	if (data->fbx->current_anim == (t_anim_stack *)data->fbx->anim_stack->content)
+	{
+		t_list *last = ft_lstlast(data->fbx->anim_stack);
+		data->fbx->current_anim = (t_anim_stack *)last->content;
+		return ;
+	}
+	temp = data->fbx->anim_stack;
+	while (temp->next)
+	{
+		if ((t_anim_stack *)temp->next->content == data->fbx->current_anim)
+		{
+			data->fbx->current_anim = (t_anim_stack *)temp->content;
+			return ;
+		}
+		temp = temp->next;
+	}
+}
+
+int	ft_display_anim_menu(t_fdf *data)
+{
+	t_list			*anims;
+	t_anim_stack	*current;
+
+	anims = data->fbx->anim_stack;
+	current = (t_anim_stack *)anims->content;
+	mlx_string_put(data->mlx_ptr, data->win_ptr, 50, 100, 0xFFFFFF, current->name);
+	return (SUCCESS);
 }

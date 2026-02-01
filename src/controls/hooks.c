@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 22:38:00 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/01 19:20:24 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/02 00:01:56 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,16 @@ static int	ft_num_hook(int keycode, t_fdf *data)
 	return (SUCCESS);
 }
 
+static int	ft_anim_hook(int keycode, t_fdf *data)
+{
+	if (keycode == N)
+		ft_next_anim(data);
+	if (keycode == P)
+		ft_prev_anim(data);
+	if (keycode == SPACE)
+		ft_pause(data);
+}
+
 static int	ft_key_hook(int keycode, t_fdf *data)
 {
 	if (keycode == PLUS)
@@ -55,6 +65,8 @@ static int	ft_key_hook(int keycode, t_fdf *data)
 	if (keycode == DOWN)
 		data->camera->shift_y -= 10;
 	ft_num_hook(keycode, data);
+	if (data->fbx)
+		ft_anim_hook(keycode, data);
 	ft_render_image(data);
 	return (SUCCESS);
 }

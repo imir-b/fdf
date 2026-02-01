@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   transform.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 01:40:06 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/19 06:38:00 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/01 23:48:37 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	ft_project_point(t_vec3 *v, t_fdf *data)
 	x = v->x;
 	y = v->y;
 	z = v->z;
+	v->sy = y;
 	if (data->object->width > 0)
 	{
 		x -= data->object->width / 2;

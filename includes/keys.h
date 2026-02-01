@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keys.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 12:40:09 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/06 03:33:58 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/01 23:55:35 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@
 # define DOWN 65364
 # define PLUS 65451
 # define MINUS 65453
+
+# define N 110
+# define P 112
+# define SPACE 32
 
 # define NUM0 65438
 # define NUM1 65436
