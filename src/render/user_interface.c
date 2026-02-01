@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/01 22:27:27 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/02 00:07:20 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/02 00:16:29 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ int	ft_display_fps(t_fdf *data)
 	if (final_str)
 		mlx_string_put(data->mlx_ptr, data->win_ptr, 50, 20, 0xFFFFFF, final_str);
 	return (SUCCESS);
+}
+
+t_list	*ft_find_node()
+{
+
 }
 
 void	ft_next_anim(t_fdf *data)
