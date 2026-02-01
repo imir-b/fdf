@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/01 17:31:21 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/01 20:07:07 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void				ft_draw_axes(t_fdf *data);
 void				ft_draw_threads(t_fdf *data);
 void				ft_draw_line(t_fdf *data, t_point p1, t_point p2, \
 									int color);
+long 				ft_get_time_ms(void);
 
 // -----------------------------------------------------------------------------
 // EVENTS

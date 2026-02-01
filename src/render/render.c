@@ -3,14 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/20 04:41:10 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/01 20:17:27 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+int	ft_display_fps(t_fdf *data)
+{
+	static long		last_check = 0;
+	static int		frames = 0;
+	static char		*final_str = NULL;
+	char			*fps_str;
+	long			current_time;
+
+	current_time = ft_get_time_ms();
+	frames++;
+	if (current_time - last_check >= 1000)
+	{
+		if (final_str)
+			free(final_str);
+		fps_str = ft_itoa(frames);
+		if (!fps_str)
+			return (ERROR);
+		final_str = ft_strjoin("FPS : ", fps_str);
+		free(fps_str);
+		if (!final_str)
+			return (ERROR);
+		frames = 0;
+		last_check = current_time;
+	}
+	if (final_str)
+		mlx_string_put(data->mlx_ptr, data->win_ptr, 50, 20, 0xFFFFFF, final_str);
+	return (SUCCESS);
+}
 
 /**
  * Fonction du thread, je lui passe une structure 't_thread' en argument car
@@ -78,9 +107,10 @@ void	ft_render_image(t_fdf *data)
 	data->trigo.cos_alpha = cos(data->camera->angle_x);
 	data->trigo.sin_beta = sin(data->camera->angle_y);
 	data->trigo.cos_beta = cos(data->camera->angle_y);
-	ft_bzero(data->addr, WIN_WIDTH * WIN_HEIGHT * (data->bits_per_pixel / 8));
+	ft_bzero(data->img.addr, WIN_WIDTH * WIN_HEIGHT * (data->img.bits_per_pixel / 8));
 	ft_transform_threads(data);
 	ft_draw_threads(data);
 	ft_draw_axes(data);
-	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img_ptr, 0, 0);
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.ptr, 0, 0);
+	ft_display_fps(data);
 }

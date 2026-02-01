@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 04:36:22 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/25 18:06:22 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/01 19:16:36 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ static inline void	fast_pixel_put(t_fdf *data, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = data->addr + (y * data->line_length + x * \
-		(data->bits_per_pixel >> 3));
+	dst = data->img.addr + (y * data->img.line_length + x * \
+		(data->img.bits_per_pixel >> 3));
 	*(unsigned int *)dst = color;
 }
 

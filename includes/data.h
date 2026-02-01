@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/20 04:35:43 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/01 19:16:10 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,19 +88,33 @@ typedef struct s_mouse
 	int	is_pressed;
 }	t_mouse;
 
+typedef struct s_timer {
+    long    start_time;    // Temps au lancement (en ms)
+    long    last_frame;    // Temps de la frame précédente (en ms)
+    double  delta_time;    // Temps écoulé entre 2 frames (en secondes)
+    double	weighted_value;
+    double  duration;
+} t_timer;
+
+typedef struct s_img
+{
+	void	*ptr;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}	t_img;
+
 typedef struct s_fdf
 {
 	void		*mlx_ptr;
 	void		*win_ptr;
-	void		*img_ptr;
-	char		*addr;
-	int			bits_per_pixel;
-	int			line_length;
-	int			endian;
+	t_img		img;
 	t_maths		trigo;
 	t_object	*object;
 	t_camera	*camera;
 	t_mouse		mouse;
+	t_timer		timer;
 }	t_fdf;
 
 typedef struct s_thread

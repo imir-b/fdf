@@ -6,7 +6,7 @@
 #    By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2026/02/01 17:50:21 by vlad             ###   ########.fr        #
+#    Updated: 2026/02/01 19:40:19 by vlad             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,7 +76,7 @@ SRC_UTIL		=	$(UTIL_DIR)utils.c \
 SRC_EVENT		=	$(EVENT_DIR)mouse_controls.c \
 					$(EVENT_DIR)hooks.c
 
-SRC_FILES		=	main.c $(SRC_PARS) $(SRC_REND) $(SRC_UTIL) $(SRC_EVENT)
+SRC_FILES		=	main.c $(SRC_PARS) $(SRC_REND) $(SRC_UTIL) $(SRC_EVENT) $(SRC_ANIM)
 SRCS			=	$(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJS			=	$(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))
 

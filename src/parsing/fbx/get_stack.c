@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/01 17:28:35 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/01 17:52:26 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/01 19:04:21 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,19 @@ static char	*ft_extract_name(char *cursor)
 	int		i;
 
 	i = 0;
-	name = NULL;
+	while (cursor[i] && cursor[i] != '\"')
+		i++;
+	name = malloc(sizeof(char) * (i + 1));
+	if (!name)
+		return (NULL);
+	i = 0;
 	while (*cursor && *cursor != '\"')
 	{
 		name[i] = *cursor;
 		i++;
 		cursor++;
 	}
+	name[i] = '\0';
 	return (name);
 }
 

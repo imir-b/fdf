@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 22:38:00 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/20 00:43:47 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/01 19:20:24 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ static int	ft_key_hook(int keycode, t_fdf *data)
 
 int	ft_refresh_image(t_fdf *data)
 {
-	if (data->win_ptr && data->img_ptr)
+	if (data->win_ptr && data->img.ptr)
 		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, \
-			data->img_ptr, 0, 0);
+			data->img.ptr, 0, 0);
 	return (SUCCESS);
 }
 

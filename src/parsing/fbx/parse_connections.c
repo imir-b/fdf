@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_connections.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:14:16 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/29 17:26:44 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/01 18:53:52 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,27 +27,26 @@ long	*ft_read_ids(char *line, long *ids)
 
 void	ft_connect_obj_to_obj(t_fbx *data, long *ids)
 {
-	t_geometry	*geo;
-	t_model		*parent;
-	t_model		*child;
+	void	*src;
+	void	*dst;
 
-	geo = (t_geometry *)ft_get_by_id(data->geo, ids[0]);
-	if (geo)
+	src = ft_get_by_id(data->geo, ids[0]);
+	dst = ft_get_by_id(data->model, ids[1]);
+	if (src && dst)
+		((t_model *)dst)->geo = (t_geometry *)src;
+	else if ((src = ft_get_by_id(data->model, ids[0])) && dst)
+		((t_model *)src)->parent = (t_model *)dst;
+	else if ((src = ft_get_by_id(data->anim_layer, ids[0])))
 	{
-		child = NULL;
-		parent = (t_model *)ft_get_by_id(data->model, ids[1]);
-		if (parent)
-			parent->geo = geo;
+		dst = ft_get_by_id(data->anim_stack, ids[1]);
+		if (dst)
+			ft_lstadd_front(&((t_anim_stack *)dst)->layers, ft_lstnew(src));
 	}
-	else
+	else if ((src = ft_get_by_id(data->anim_node, ids[0])))
 	{
-		child = (t_model *)ft_get_by_id(data->model, ids[0]);
-		if (child)
-		{
-			parent = (t_model *)ft_get_by_id(data->model, ids[1]);
-			if (parent)
-				child->parent = parent;
-		}
+		dst = ft_get_by_id(data->anim_layer, ids[1]);
+		if (dst)
+			ft_lstadd_front(&((t_anim_layer *)dst)->nodes, ft_lstnew(src));
 	}
 }
 
