@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:17:30 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/31 21:08:18 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/01 23:15:40 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	ft_check_filename(const char *filename)
 		return (ERROR);
 }
 
-t_object	*ft_parse_dispatch(const char *filename)
+t_object	*ft_parse_dispatch(const char *filename, t_fbx **fbx)
 {
 	t_object	*object;
 
@@ -55,7 +55,8 @@ t_object	*ft_parse_dispatch(const char *filename)
 		return (ft_parse_obj(filename, object));
 	else if (ft_is_extension(filename, ".fbx"))
 	{
-		object = ft_parse_fbx(filename, object);
+		*fbx = ft_parse_fbx(filename);
+		object = ft_convert_fbx_to_object(*fbx);
 		if (!object)
 			return (NULL);
 		return (object);

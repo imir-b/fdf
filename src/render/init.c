@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 04:36:29 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/01 19:51:01 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/01 22:58:12 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_camera	*ft_init_camera(t_object *obj)
 	return (cam);
 }
 
-int	ft_process_fdf(t_object *obj)
+int	ft_process_fdf(t_object *obj, t_fbx *fbx)
 {
 	t_fdf		*data;
 	t_camera	*cam;
@@ -42,7 +42,7 @@ int	ft_process_fdf(t_object *obj)
 	cam = ft_init_camera(obj);
 	if (!cam)
 		return (ERROR);
-	data = ft_init_data(obj, cam);
+	data = ft_init_data(obj, cam, fbx);
 	if (!data)
 		return (ERROR);
 	ft_render_image(data);

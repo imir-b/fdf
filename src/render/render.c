@@ -6,40 +6,11 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/01 20:17:27 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/01 22:44:39 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-int	ft_display_fps(t_fdf *data)
-{
-	static long		last_check = 0;
-	static int		frames = 0;
-	static char		*final_str = NULL;
-	char			*fps_str;
-	long			current_time;
-
-	current_time = ft_get_time_ms();
-	frames++;
-	if (current_time - last_check >= 1000)
-	{
-		if (final_str)
-			free(final_str);
-		fps_str = ft_itoa(frames);
-		if (!fps_str)
-			return (ERROR);
-		final_str = ft_strjoin("FPS : ", fps_str);
-		free(fps_str);
-		if (!final_str)
-			return (ERROR);
-		frames = 0;
-		last_check = current_time;
-	}
-	if (final_str)
-		mlx_string_put(data->mlx_ptr, data->win_ptr, 50, 20, 0xFFFFFF, final_str);
-	return (SUCCESS);
-}
 
 /**
  * Fonction du thread, je lui passe une structure 't_thread' en argument car
@@ -92,7 +63,7 @@ static void	ft_transform_threads(t_fdf *data)
 }
 
 /**
- * Fonction qui rend l'image en 5 etapes :
+ * Fonction qui rend l'image en 6 etapes :
  * - 1 Pre-calcul des maths pour eviter de repeter les calculs lourds,
  * - 2 Projection : J'appelle ft_transform_threads pour faire les calculs des 
  * transformations,
@@ -100,6 +71,8 @@ static void	ft_transform_threads(t_fdf *data)
  * - 4 Rasterization : j'appelle ft_draw_threads pour dessiner la nouvelle image,
  * - 5 Affichage : j'appelle mlx_put_image_to_window pour affichier l'image sur 
  * l'ecran.
+ * - 6 User interface : j'appelle les fonctions qui affichent les éléments de
+ * l'interface.
  */
 void	ft_render_image(t_fdf *data)
 {
@@ -113,4 +86,6 @@ void	ft_render_image(t_fdf *data)
 	ft_draw_axes(data);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.ptr, 0, 0);
 	ft_display_fps(data);
+	if (data->fbx)
+		ft_display_anim_menu(data);
 }

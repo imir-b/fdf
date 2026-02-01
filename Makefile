@@ -6,7 +6,7 @@
 #    By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2026/02/01 19:40:19 by vlad             ###   ########.fr        #
+#    Updated: 2026/02/01 23:24:38 by vlad             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,13 +60,15 @@ SRC_PARS		=	$(PARS_DIR)parsing.c \
 					$(FBX_DIR)get_stack.c \
 					$(FBX_DIR)extract_faces.c
 
-SRC_ANIM		=	$(ANIM_DIR)animation.c
+SRC_ANIM		=	$(ANIM_DIR)animation.c \
+					$(ANIM_DIR)timer.c
 
 SRC_REND		=	$(REND_DIR)render.c \
 					$(REND_DIR)transform.c \
 					$(REND_DIR)project.c \
 					$(REND_DIR)draw.c \
-					$(REND_DIR)init.c
+					$(REND_DIR)init.c \
+					$(REND_DIR)user_interface.c
 
 SRC_UTIL		=	$(UTIL_DIR)utils.c \
 					$(UTIL_DIR)error.c \

@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 22:36:04 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/31 21:08:03 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/01 22:53:36 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ t_object *ft_convert_fbx_to_object(t_fbx *fbx)
  * 	}
  * 
  */
-t_object	*ft_parse_fbx(const char *filename, t_object *obj)
+t_fbx	*ft_parse_fbx(const char *filename)
 {
 	int		fd;
 	char	*line;
@@ -104,7 +104,7 @@ t_object	*ft_parse_fbx(const char *filename, t_object *obj)
 		return (NULL);
 	fd = open(filename, O_RDONLY);
 	if (fd == FAIL)
-		return (free(fbx_data), ft_free_object(obj));
+		return (free(fbx_data), NULL);
 	while (TRUE)
 	{
 		line = get_next_line(fd);
@@ -117,6 +117,5 @@ t_object	*ft_parse_fbx(const char *filename, t_object *obj)
 		free(line);
 	}
 	close(fd);
-	obj = ft_convert_fbx_to_object(fbx_data);
-	return (obj);
+	return (fbx_data);
 }

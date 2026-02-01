@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/01 20:07:07 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/01 23:23:06 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "libft.h"
 # include "mlx.h"
 # include "data.h"
-# include "fbx.h"
 # include <math.h>
 # include <pthread.h>
 # include <unistd.h>
@@ -24,6 +23,7 @@
 # include <string.h>
 # include <errno.h>
 # include <sys/time.h>
+# include <stdbool.h>
 
 // **************** DEBUG ****************
 # include <stdio.h>
@@ -46,7 +46,7 @@ int					ft_absolute(int n);
 int					ft_direction(int x1, int x2);
 void				my_mlx_pixel_put(t_fdf *data, int x, int y, int color);
 int					ft_close_window(t_fdf *data);
-t_fdf				*ft_init_data(t_object *obj, t_camera *camera);
+t_fdf				*ft_init_data(t_object *obj, t_camera *camera, t_fbx *fbx);
 t_bresenham			ft_init_graphics(t_point p1, t_point p2);
 void				*ft_free_tab(char **tab);
 void				*ft_free_int_tab(int **tab);
@@ -55,9 +55,9 @@ void				*ft_free_data(t_fdf *data);
 int					ft_error(char *str);
 
 // -----------------------------------------------------------------------------
-// RENDER
+// *** RENDER ***
 // -----------------------------------------------------------------------------
-int					ft_process_fdf(t_object *obj);
+int					ft_process_fdf(t_object *obj, t_fbx *fbx);
 void				ft_project_point(t_vec3 *v, t_fdf *data);
 void				ft_transform_axis_point(double *x, double *y, double *z, \
 						t_fdf *data);
@@ -72,7 +72,13 @@ void				ft_draw_line(t_fdf *data, t_point p1, t_point p2, \
 long 				ft_get_time_ms(void);
 
 // -----------------------------------------------------------------------------
-// EVENTS
+// *** USER INTERFACE ***
+// -----------------------------------------------------------------------------
+int					ft_display_fps(t_fdf *data);
+int					ft_display_anim_menu(t_fdf *data);
+
+// -----------------------------------------------------------------------------
+// *** EVENTS ***
 // -----------------------------------------------------------------------------
 void				ft_events(t_fdf *data);
 int					ft_mouse_down(int button, int x, int y, t_fdf *data);
@@ -80,13 +86,14 @@ int					ft_mouse_up(int button, int x, int y, t_fdf *data);
 int					ft_mouse_move(int x, int y, t_fdf *data);
 
 // -----------------------------------------------------------------------------
-// PARSING
+// *** PARSING ***
 // -----------------------------------------------------------------------------
 int					ft_check_filename(const char *filename);
-t_object			*ft_parse_dispatch(const char *filename);
+t_object			*ft_parse_dispatch(const char *filename, t_fbx **fbx);
 t_object			*ft_parse_fdf(const char *filename, t_object *obj);
 t_object			*ft_parse_obj(const char *filename, t_object *obj);
-t_object			*ft_parse_fbx(const char *filename, t_object *obj);
+t_fbx				*ft_parse_fbx(const char *filename);
+t_object			*ft_convert_fbx_to_object(t_fbx *fbx);
 char				*ft_skip_spaces(char *str);
 void				ft_jump_to_next_value(char **cursor, char **line, int fd);
 void				ft_skip_to_content(char **cursor);
