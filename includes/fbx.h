@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:03:24 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/01 04:28:09 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/01 17:16:30 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ typedef struct s_properties		t_properties;
 typedef struct s_model			t_model;
 typedef struct s_anim_curve		t_anim_curve;
 typedef struct s_anim_node		t_anim_node;
+typedef struct s_anim_layer		t_anim_layer;
+typedef struct s_anim_stack		t_anim_stack;
 typedef struct s_fbx			t_fbx;
 
 struct s_geometry
@@ -68,6 +70,12 @@ struct s_anim_node
 	t_anim_curve	*z;
 };
 
+struct s_anim_layer
+{
+	long	id;
+	t_list	*nodes;
+};
+
 struct s_anim_stack
 {
 	long	id;
@@ -82,6 +90,7 @@ struct s_fbx
 	t_list	*anim_curve;
 	t_list	*anim_node;
 	t_list	*anim_stack;
+	t_list	*anim_layer;
 };
 
 #endif

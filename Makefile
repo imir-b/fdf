@@ -6,7 +6,7 @@
 #    By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2026/01/31 21:28:59 by vlad             ###   ########.fr        #
+#    Updated: 2026/02/01 17:50:21 by vlad             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ SRC_PARS		=	$(PARS_DIR)parsing.c \
 					$(FBX_DIR)get_model.c \
 					$(FBX_DIR)get_geo.c \
 					$(FBX_DIR)get_curve.c \
+					$(FBX_DIR)get_stack.c \
 					$(FBX_DIR)extract_faces.c
 
 SRC_ANIM		=	$(ANIM_DIR)animation.c
