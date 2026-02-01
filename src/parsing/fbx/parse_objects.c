@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_objects.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:01:45 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/29 07:07:18 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/01 04:35:35 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,25 +88,16 @@ int	ft_parse_objects(t_fbx *fbx_data, int fd)
 			break ;
 		cursor = ft_skip_spaces(line);
 		if (IS_TAG(cursor, "Geometry"))
-		{
-			if (ft_add_new_geo(fbx_data, cursor + 9, fd))
-				printf("Can't get geometry"); //debug
-		}
+			ft_add_new_geo(fbx_data, cursor + 9, fd);
 		else if (IS_TAG(cursor, "Model"))
-		{
-			if (ft_add_new_model(fbx_data, cursor + 6, fd))
-				printf("Can't get model"); //debug
-		}
+			ft_add_new_model(fbx_data, cursor + 6, fd);
 		else if (IS_TAG(cursor, "AnimationCurve"))
-		{
-			if (ft_add_new_anim_curve(fbx_data, cursor + 15, fd))
-				printf("Can't get animation curve"); //debug
-		}
+			ft_add_new_anim_curve(fbx_data, cursor + 15, fd);
 		else if (IS_TAG(cursor, "AnimationCurveNode"))
-		{
-			if (ft_add_new_anim_node(fbx_data, cursor + 19, fd))
-				printf("Can't get animation curve node"); //debug
-		}
+			ft_add_new_anim_node(fbx_data, cursor + 19, fd);
+		else if (IS_TAG(cursor, "AnimationStack"))
+			ft_add_new_anim_stack();
+		else if (IS_TAG(cursor, "AnimationLayer"))
 		free(line);
 	}
 	return (SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/01/31 20:28:43 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/01 03:30:53 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <fcntl.h>
 # include <string.h>
 # include <errno.h>
+# include <sys/time.h>
 
 // **************** DEBUG ****************
 # include <stdio.h>

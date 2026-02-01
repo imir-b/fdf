@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:03:24 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/31 00:27:23 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/01 04:28:09 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,20 @@ struct s_anim_node
 	t_anim_curve	*z;
 };
 
+struct s_anim_stack
+{
+	long	id;
+	char	*name;
+	t_list	*layers;
+};
+
 struct s_fbx
 {
 	t_list	*geo;
 	t_list	*model;
 	t_list	*anim_curve;
 	t_list	*anim_node;
+	t_list	*anim_stack;
 };
 
 #endif
