@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 22:38:00 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/02 00:01:56 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/02 02:01:09 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static int	ft_anim_hook(int keycode, t_fdf *data)
 		ft_prev_anim(data);
 	if (keycode == SPACE)
 		ft_pause(data);
+	return (SUCCESS);
 }
 
 static int	ft_key_hook(int keycode, t_fdf *data)

@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/01 22:44:39 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/03 01:55:17 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,9 @@ void	ft_render_image(t_fdf *data)
 	data->trigo.cos_alpha = cos(data->camera->angle_x);
 	data->trigo.sin_beta = sin(data->camera->angle_y);
 	data->trigo.cos_beta = cos(data->camera->angle_y);
+	ft_update_time(&data->timer);
+	if (data->fbx)
+		ft_animate(data);
 	ft_bzero(data->img.addr, WIN_WIDTH * WIN_HEIGHT * (data->img.bits_per_pixel / 8));
 	ft_transform_threads(data);
 	ft_draw_threads(data);

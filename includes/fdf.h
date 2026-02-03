@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/01 23:54:45 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/03 01:54:58 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,14 @@ void				ft_draw_threads(t_fdf *data);
 void				ft_draw_line(t_fdf *data, t_point p1, t_point p2, \
 									int color);
 long 				ft_get_time_ms(void);
+
+// *** ANIMATE ***
+
+void				ft_animate(t_fdf *data);
+int					ft_pause(t_fdf *data);
+void				ft_next_anim(t_fdf *data);
+void				ft_prev_anim(t_fdf *data);
+void				ft_update_time(t_timer *t);
 
 // -----------------------------------------------------------------------------
 // *** USER INTERFACE ***

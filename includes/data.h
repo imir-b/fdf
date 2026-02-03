@@ -6,12 +6,14 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/02 00:10:49 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/03 01:03:22 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DATA_H
 # define DATA_H
+
+# include <stdbool.h>
 
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
@@ -111,13 +113,13 @@ struct s_anim_stack
 
 struct s_fbx
 {
-	t_list	*geo;
-	t_list	*model;
-	t_list	*anim_curve;
-	t_list	*anim_node;
-	t_anim_stack *current_anim;
-	t_list	*anim_stack;
-	t_list	*anim_layer;
+	t_list			*geo;
+	t_list			*model;
+	t_list			*anim_curve;
+	t_list			*anim_node;
+	t_list			*anim_stack;
+	t_anim_stack	*current_anim;
+	t_list			*anim_layer;
 };
 
 struct s_point
@@ -194,6 +196,7 @@ struct s_timer {
     double  delta_time;    // Temps écoulé entre 2 frames (en secondes)
     double	weighted_value;
     double  duration;
+	bool	is_paused;
 };
 
 struct s_img
