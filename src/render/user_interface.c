@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/01 22:27:27 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/03 01:07:02 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/03 02:53:51 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,63 @@ int	ft_pause(t_fdf *data)
 	return (SUCCESS);
 }
 
+double	ft_get_anim_duration(t_anim_stack *anim)
+{
+t_list          *layers;
+    t_list          *nodes;
+    t_anim_layer    *layer;
+    t_anim_node     *node;
+    double          max_duration;
+    double          current_end;
+
+    max_duration = 0.0;
+    if (!anim)
+        return (0.0);
+    layers = anim->layers;
+    while (layers)
+    {
+        layer = (t_anim_layer *)layers->content;
+        nodes = layer->nodes;
+        while (nodes)
+        {
+            node = (t_anim_node *)nodes->content;
+            if (node->x && node->x->n_keys > 0)
+            {
+                current_end = node->x->time[node->x->n_keys - 1];
+                if (current_end > max_duration) max_duration = current_end;
+            }
+            if (node->y && node->y->n_keys > 0)
+            {
+                current_end = node->y->time[node->y->n_keys - 1];
+                if (current_end > max_duration) max_duration = current_end;
+            }
+            if (node->z && node->z->n_keys > 0)
+            {
+                current_end = node->z->time[node->z->n_keys - 1];
+                if (current_end > max_duration) max_duration = current_end;
+            }
+            nodes = nodes->next;
+        }
+        layers = layers->next;
+    }
+    return (max_duration);
+}
+
 void	ft_next_anim(t_fdf *data)
 {
 	t_list	*current_node;
 
+	if (!data->fbx || !data->fbx->anim_stack)
+		return ;
     current_node = ft_find_node(data->fbx->anim_stack, data->fbx->current_anim);
     if (current_node && current_node->next)
 		data->fbx->current_anim = (t_anim_stack *)(current_node->next->content);
-    else
+    else if (data->fbx->anim_stack)
 		data->fbx->current_anim = (t_anim_stack *)(data->fbx->anim_stack->content);
 	data->timer.weighted_value = 0;
+	data->timer.duration = ft_get_anim_duration(data->fbx->current_anim);
+	if (data->timer.duration == 0)
+		data->timer.duration = 1.0;
 }
 
 void	ft_prev_anim(t_fdf *data)

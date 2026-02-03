@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 21:27:49 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/03 02:08:38 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/03 02:52:47 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static double	ft_get_value_at_time(t_anim_curve *curve, double current_time_sec)
 	double		t_start;
 	double		t_end;
     
-	if (!curve || curve->n_keys == 0)
+	if (!curve || curve->n_keys == 0 || !curve->time || !curve->value)
 		return (0.0);
 	if (curve->n_keys == 1)
 		return (curve->value[0]);
@@ -45,7 +45,7 @@ static double	ft_get_value_at_time(t_anim_curve *curve, double current_time_sec)
  */
 static t_properties	ft_transform_frame(t_anim_node *anim, t_fdf *data)
 {
-	t_properties	prop;
+	t_properties	prop = (t_properties){0};
 
 	if (anim->x)
 		prop.x = ft_get_value_at_time(anim->x, data->timer.weighted_value);
@@ -63,9 +63,9 @@ static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
 	t_model			*model_target;
 
 	nodes = layer->nodes;
-	node = (t_anim_node *)nodes->content;
 	while (nodes)
 	{
+		node = (t_anim_node *)nodes->content;
 		model_target = ft_get_by_id(data->fbx->model, node->id);
 		if (model_target)
 		{
