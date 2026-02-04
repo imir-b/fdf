@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/01 22:27:27 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/03 02:53:51 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/04 15:42:10 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,37 @@ int	ft_pause(t_fdf *data)
 	return (SUCCESS);
 }
 
+static double	ft_get_max_duration(t_anim_node *node, double max_duration)
+{
+	double	end;
+
+	if (node->x && node->x->n_keys > 0)
+	{
+		end = node->x->time[node->x->n_keys - 1];
+		if (end > max_duration)
+			max_duration = end;
+	}
+	if (node->y && node->y->n_keys > 0)
+	{
+		end = node->y->time[node->y->n_keys - 1];
+		if (end > max_duration)
+			max_duration = end;
+	}
+	if (node->z && node->z->n_keys > 0)
+	{
+		end = node->z->time[node->z->n_keys - 1];
+		if (end > max_duration)
+			max_duration = end;
+	}
+	return (max_duration);
+}
+
 double	ft_get_anim_duration(t_anim_stack *anim)
 {
-t_list          *layers;
+	t_list          *layers;
     t_list          *nodes;
     t_anim_layer    *layer;
-    t_anim_node     *node;
     double          max_duration;
-    double          current_end;
 
     max_duration = 0.0;
     if (!anim)
@@ -81,22 +104,7 @@ t_list          *layers;
         nodes = layer->nodes;
         while (nodes)
         {
-            node = (t_anim_node *)nodes->content;
-            if (node->x && node->x->n_keys > 0)
-            {
-                current_end = node->x->time[node->x->n_keys - 1];
-                if (current_end > max_duration) max_duration = current_end;
-            }
-            if (node->y && node->y->n_keys > 0)
-            {
-                current_end = node->y->time[node->y->n_keys - 1];
-                if (current_end > max_duration) max_duration = current_end;
-            }
-            if (node->z && node->z->n_keys > 0)
-            {
-                current_end = node->z->time[node->z->n_keys - 1];
-                if (current_end > max_duration) max_duration = current_end;
-            }
+			max_duration = ft_get_max_duration((t_anim_node *)nodes->content, max_duration);
             nodes = nodes->next;
         }
         layers = layers->next;
@@ -124,23 +132,33 @@ void	ft_next_anim(t_fdf *data)
 void	ft_prev_anim(t_fdf *data)
 {
 	t_list	*temp;
-
-	if (data->fbx->current_anim == (t_anim_stack *)data->fbx->anim_stack->content)
-	{
-		t_list *last = ft_lstlast(data->fbx->anim_stack);
-		data->fbx->current_anim = (t_anim_stack *)last->content;
+	t_list	*last;
+	
+	if (!data->fbx || !data->fbx->anim_stack)
 		return ;
-	}
-	temp = data->fbx->anim_stack;
-	while (temp->next)
+	else if (data->fbx->current_anim == NULL || (data->fbx->current_anim == (t_anim_stack *)data->fbx->anim_stack->content))
 	{
-		if ((t_anim_stack *)temp->next->content == data->fbx->current_anim)
-		{
-			data->fbx->current_anim = (t_anim_stack *)temp->content;
-			return ;
-		}
-		temp = temp->next;
+		last = ft_lstlast(data->fbx->anim_stack);
+		if (last)
+			data->fbx->current_anim = (t_anim_stack *)last->content;
 	}
+	else
+	{
+		temp = data->fbx->anim_stack;
+		while (temp->next)
+		{
+			if ((t_anim_stack *)temp->next->content == data->fbx->current_anim)
+			{
+				data->fbx->current_anim = (t_anim_stack *)temp->content;
+				break ;
+			}
+			temp = temp->next;
+		}
+	}
+	data->timer.weighted_value = 0;
+	data->timer.duration = ft_get_anim_duration(data->fbx->current_anim);
+	if (data->timer.duration == 0)
+		data->timer.duration = 1.0;
 }
 
 int	ft_display_anim_menu(t_fdf *data)
@@ -148,11 +166,16 @@ int	ft_display_anim_menu(t_fdf *data)
 	t_list			*anims;
 	t_anim_stack	*current;
 
+	if (!data->fbx || !data->fbx->anim_stack)
+		return (SUCCESS);
 	anims = data->fbx->anim_stack;
 	if (data->fbx->current_anim)
 		current = data->fbx->current_anim;
-	else
+	else if (anims && anims->content)
 		current = (t_anim_stack *)anims->content;
-	mlx_string_put(data->mlx_ptr, data->win_ptr, 50, 100, 0xFFFFFF, current->name);
+	else
+		return (SUCCESS);
+	if (current && current->name)
+		mlx_string_put(data->mlx_ptr, data->win_ptr, 50, 100, 0xFFFFFF, current->name);
 	return (SUCCESS);
 }

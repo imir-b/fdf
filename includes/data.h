@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/03 01:03:22 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/04 00:36:29 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,25 +33,130 @@
 
 # define IS_TAG(str, tag) (!ft_strncmp(str, tag, sizeof(tag) - 1))
 
+/*
+ * Structure simple représentant un point avec des coordonnées
+ * entières en 3D (souvent utilisé pour les coordonnées grille).
+ */
 typedef struct s_point			t_point;
+
+/*
+ * Vecteur 3D de haute précision (double) utilisé pour les calculs.
+ * Contient aussi les coordonnées projetées à l'écran (sx, sy) et la couleur.
+ */
 typedef struct s_vec3			t_vec3;
+
+/*
+ * Définit la topologie d'une face (polygone) via une liste d'indices
+ * renvoyant vers le tableau de sommets de l'objet.
+ */
 typedef struct s_face			t_face;
+
+/*
+ * Représente un objet 3D complet (Mesh) : contient le tableau
+ * de sommets (vertices) et le tableau de faces.
+ */
 typedef struct s_object			t_object;
+
+/*
+ * Gère les paramètres de la vue et de la caméra : décalages (pan),
+ * zoom, écrasement Z (z_scale), type de projection et rotations.
+ */
 typedef struct s_camera			t_camera;
+
+/*
+ * Cache pour les valeurs trigonométriques précalculées (sin/cos)
+ * afin d'optimiser les performances lors des rotations répétées.
+ */
 typedef struct s_maths			t_maths;
-typedef struct s_mouse			t_mouse;
-typedef struct s_timer			t_timer;
-typedef struct s_img			t_img;
-typedef struct s_fdf			t_fdf;
-typedef struct s_thread			t_thread;
+
+/*
+ * Variables de travail pour l'algorithme de tracé de ligne de Bresenham
+ * (différences, pas, erreur cumulée).
+ */
 typedef struct s_bresenham		t_bresenham;
+
+/*
+ * Stocke l'état actuel de la souris : position (x, y)
+ * et état du bouton (enfoncé ou non).
+ */
+typedef struct s_mouse			t_mouse;
+
+/*
+ * Gestion du temps pour assurer une animation fluide indépendante du framerate.
+ * Calcule le Delta Time et stocke les temps de référence.
+ */
+typedef struct s_timer			t_timer;
+
+/*
+ * Wrapper pour les images de la MiniLibX (MLX).
+ * Contient le pointeur d'image, l'adresse des pixels et les métadonnées.
+ */
+typedef struct s_img			t_img;
+
+/*
+ * Structure principale (God Struct) regroupant tout l'état de l'application :
+ * pointeurs MLX, image, modèle mathématique, objet, caméra, FBX, inputs, etc.
+ */
+typedef struct s_fdf			t_fdf;
+
+/*
+ * Contexte pour le multithreading.
+ * Définit la portion de travail (start/end) attribuée à un thread spécifique.
+ */
+typedef struct s_thread			t_thread;
+
+
+// -----------------------------------------------------------------------------
+// ****** Data parsing fbx ******
+// -----------------------------------------------------------------------------
+/*
+ * Associe un identifiant unique à un objet 3D (maillage)
+ * utilisé dans le parsing FBX.
+ */
 typedef struct s_geometry		t_geometry;
+
+/*
+ * Stocke les propriétés de transformation (Position, Rotation, Scale)
+ * sous forme de coordonnées 3D génériques.
+ */
 typedef struct s_properties		t_properties;
+
+/*
+ * Représente un nœud dans le graphe de scène (Scene Graph).
+ * Contient les transformations locales, les liens vers les animations,
+ * la géométrie associée et la référence vers le parent hiérarchique.
+ */
 typedef struct s_model			t_model;
+
+/*
+ * Courbe d'animation brute définissant l'évolution d'une valeur
+ * au fil du temps via des keyframes (temps et valeur).
+ */
 typedef struct s_anim_curve		t_anim_curve;
+
+/*
+ * Nœud d'animation regroupant les courbes indépendantes
+ * pour les axes X, Y et Z d'une propriété donnée.
+ */
 typedef struct s_anim_node		t_anim_node;
+
+/*
+ * Couche d'animation contenant une liste de nœuds animés,
+ * permettant de grouper plusieurs animations ensemble.
+ */
 typedef struct s_anim_layer		t_anim_layer;
+
+/*
+ * Pile d'animation (ou 'Take') représentant une séquence complète
+ * (par exemple : "Idle", "Walk", "Run").
+ */
 typedef struct s_anim_stack		t_anim_stack;
+
+/*
+ * Structure racine pour les données importées via FBX.
+ * Contient toutes les listes chaînées des éléments parsés
+ * (géométries, modèles, courbes, stacks, etc.).
+ */
 typedef struct s_fbx			t_fbx;
 
 struct s_geometry
