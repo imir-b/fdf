@@ -43,6 +43,20 @@ static double	ft_get_value_at_time(t_anim_curve *curve, double current_time_sec)
 	return (curve->value[i] * (1.0 - t) + curve->value[i + 1] * t);
 }
 
+static void	ft_get_anim_at_time(t_properties *transformed, t_anim_node *current, t_timer timer)
+{
+		printf("before animation\n");
+		printf("x : %f, y : %f, z : %f\n", transformed->x, transformed->y, transformed->z);
+		if (current->x)
+			transformed->x = ft_get_value_at_time(current->x, timer.weighted_value);
+		if (current->y)
+			transformed->y = ft_get_value_at_time(current->y, timer.weighted_value);
+		if (current->z)
+			transformed->z = ft_get_value_at_time(current->z, timer.weighted_value);
+		printf("after animation\n");
+		printf("x : %f, y : %f, z : %f\n", transformed->x, transformed->y, transformed->z);
+}
+
 static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
 {
 	t_anim_node		*node;
@@ -52,38 +66,18 @@ static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
 	nodes = layer->nodes;
 	while (nodes)
 	{
+		printf("get new node\n");
 		node = (t_anim_node *)nodes->content;
-		model_target = ft_get_by_id(data->fbx->model, node->id);
+		model_target = node->target;
 		if (model_target)
 		{
+			printf("get model_target\n");
 			if (node->type == 'S')
-			{
-				if (node->x)
-					model_target->scale.x = ft_get_value_at_time(node->x, data->timer.weighted_value);
-				if (node->y)
-					model_target->scale.y = ft_get_value_at_time(node->y, data->timer.weighted_value);
-				if (node->z)
-					model_target->scale.z = ft_get_value_at_time(node->z, data->timer.weighted_value);
-
-			}
+				ft_get_anim_at_time(&model_target->scale, node, data->timer);
 			else if (node->type == 'R')
-			{
-				if (node->x)
-					model_target->rot.x = ft_get_value_at_time(node->x, data->timer.weighted_value);
-				if (node->y)
-					model_target->rot.y = ft_get_value_at_time(node->y, data->timer.weighted_value);
-				if (node->z)
-					model_target->rot.z = ft_get_value_at_time(node->z, data->timer.weighted_value);
-			}
+				ft_get_anim_at_time(&model_target->rot, node, data->timer);
 			else if (node->type == 'T')
-			{
-				if (node->x)
-					model_target->pos.x = ft_get_value_at_time(node->x, data->timer.weighted_value);
-				if (node->y)
-					model_target->pos.y = ft_get_value_at_time(node->y, data->timer.weighted_value);
-				if (node->z)
-					model_target->pos.z = ft_get_value_at_time(node->z, data->timer.weighted_value);
-			}
+				ft_get_anim_at_time(&model_target->pos, node, data->timer);
 		}
 		nodes = nodes->next;
 	}
@@ -101,18 +95,15 @@ static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
  */
 void	ft_animate(t_fdf *data)
 {
-	t_anim_stack	*anim;
 	t_anim_layer	*layer;
 	t_list			*layers;
-	
-	if (!data->fbx || !data->fbx->current_anim)
-		return ;
-	anim = data->fbx->current_anim;
-	layers = anim->layers;
+
+	layers = data->fbx->current_anim->layers;
 	while (layers)
 	{
+		printf("get layer\n");
 		layer = (t_anim_layer *)layers->content;
-			ft_animate_nodes(layer, data);
+		ft_animate_nodes(layer, data);
 		layers = layers->next;
 	}
 }

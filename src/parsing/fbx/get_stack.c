@@ -52,7 +52,7 @@ t_anim_stack	*ft_get_anim_stack(char *cursor, int fd)
 	anim_stack = malloc(sizeof(t_anim_stack));
 	if (!anim_stack)
 		return (NULL);
-	anim_stack->id = ft_atoi(cursor);
+	anim_stack->id = ft_atol(cursor);
 	cursor = ft_strrchr(cursor, ':');
 	if (*cursor)
 		cursor++;
@@ -72,6 +72,6 @@ t_anim_layer	*ft_get_anim_layer(char *cursor, int fd)
 	anim_layer = malloc(sizeof(t_anim_layer));
 	if (!anim_layer)
 		return (NULL);
-	anim_layer->id = ft_atoi(cursor);
+	anim_layer->id = ft_atol(cursor);
 	return (anim_layer);
 }

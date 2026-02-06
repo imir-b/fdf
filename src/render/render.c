@@ -82,7 +82,12 @@ void	ft_render_image(t_fdf *data)
 	data->trigo.cos_beta = cos(data->camera->angle_y);
 	ft_update_time(&data->timer);
 	if (data->fbx)
+	{
+		if (!data->fbx->current_anim)
+			data->fbx->current_anim = data->fbx->anim_stack->content;
+		printf("animate %s\n", data->fbx->current_anim->name);
 		ft_animate(data);
+	}
 	ft_bzero(data->img.addr, WIN_WIDTH * WIN_HEIGHT * (data->img.bits_per_pixel / 8));
 	ft_transform_threads(data);
 	ft_draw_threads(data);

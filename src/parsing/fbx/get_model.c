@@ -94,7 +94,7 @@ t_model	*ft_get_model(char *cursor, int fd)
 	model = malloc(sizeof(t_model));
 	if (!model)
 		return (NULL);
-	model->id = ft_atoi(cursor);
+	model->id = ft_atol(cursor);
 	model->parent = NULL;
 	while (TRUE)
 	{
