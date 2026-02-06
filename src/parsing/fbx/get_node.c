@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_node.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:44 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/01 17:42:12 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/06 20:38:00 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,19 @@
 
 static char	ft_extract_type(char *line)
 {
-	char	*cursor;
-
-	cursor = ft_strrchr(line, ',');
-	if (!cursor)
-		return (0);
-	cursor = ft_strchr(cursor, '\"');
-	if (!cursor)
-		return (0);
-	return (cursor[1]);
+	if (ft_strnstr(line, "\"T\"", ft_strlen(line)))
+		return ('T');
+	if (ft_strnstr(line, "\"R\"", ft_strlen(line)))
+		return ('R');
+	if (ft_strnstr(line, "\"S\"", ft_strlen(line)))
+		return ('S');
+	if (ft_strnstr(line, "::T\"", ft_strlen(line)))
+		return ('T');
+	if (ft_strnstr(line, "::R\"", ft_strlen(line)))
+		return ('R');
+	if (ft_strnstr(line, "::S\"", ft_strlen(line)))
+		return ('S');
+	return (0);
 }
 
 /**

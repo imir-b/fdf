@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_connections.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:14:16 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/01 18:53:52 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/06 20:14:46 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,11 @@ void	ft_connect_obj_to_obj(t_fbx *data, long *ids)
 		else //debug
 		{
 			static int printed = 0;
-    	    if (!printed)
-        	{
-        	    printf("Taille liste AnimNodes: %d\n", ft_lstsize(data->anim_node));
-        	    printed = 1;
-        	}
+			if (!printed)
+			{
+				printf("Taille liste AnimNodes: %d\n", ft_lstsize(data->anim_node));
+				printed = 1;
+			}
 		}
 	}
 }

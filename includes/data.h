@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/04 00:36:29 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/06 20:14:16 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,7 @@ struct s_anim_node
 {
 	long			id;
 	char			type;
+	t_model			*target;
 	t_anim_curve	*x;
 	t_anim_curve	*y;
 	t_anim_curve	*z;

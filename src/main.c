@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:11:10 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/01 23:13:19 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/06 20:35:28 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ void	ft_print_curve(t_anim_curve *curve)
 	int i = 0;
 	while (i < curve->n_keys)
 	{
+		if (!curve->time)
+		{
+			printf("no value %d for time !\n", i);
+			return ;
+		}
 		printf("- time : %lli\n", curve->time[i]);
 		i++;
 	}

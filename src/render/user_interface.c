@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/01 22:27:27 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/04 23:33:53 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/06 20:21:00 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ int	ft_display_fps(t_fdf *data)
 	return (SUCCESS);
 }
 
-<<<<<<< HEAD
 // *** DEBUG ***
 void	ft_print_anim_stack(t_list *list)
 {
@@ -69,8 +68,6 @@ t_list	*ft_find_node(t_list *list, void *content_to_find)
 	return (NULL);
 }
 
-=======
->>>>>>> f9b592b2f60f1fa7ecf0d72b267bd7b6f6ed7d35
 int	ft_pause(t_fdf *data)
 {
 	if (!data || !data->fbx)
@@ -85,13 +82,9 @@ static double	ft_get_max_duration(t_anim_node *node, double max_duration)
 {
 	double	end;
 
-<<<<<<< HEAD
-	if (node->x && node->x->n_keys > 0 && node->y->time)
-=======
 	if (!node)
 		return (max_duration);
 	if (node->x && node->x->n_keys > 0)
->>>>>>> f9b592b2f60f1fa7ecf0d72b267bd7b6f6ed7d35
 	{
 		printf("1\n"); // debug
 		end = node->x->time[node->x->n_keys - 1];
@@ -112,7 +105,7 @@ static double	ft_get_max_duration(t_anim_node *node, double max_duration)
 		if (end > max_duration)
 			max_duration = end;
 	}
-	printf("return\n"); // debug
+	printf("return\n"); // debugsdf
 	return (max_duration);
 }
 
@@ -159,13 +152,11 @@ void	ft_next_anim(t_fdf *data)
 
 	if (!data->fbx || !data->fbx->anim_stack)
 		return ;
-<<<<<<< HEAD
-	current_node = ft_find_node(data->fbx->anim_stack, data->fbx->current_anim);
-	if (current_node && current_node->next)
-		data->fbx->current_anim = (t_anim_stack *)(current_node->next->content);
+	current_in_list = ft_find_node(data->fbx->anim_stack, data->fbx->current_anim);
+	if (current_in_list && current_in_list->next)
+		data->fbx->current_anim = (t_anim_stack *)(current_in_list->next->content);
 	else if (data->fbx->anim_stack)
 		data->fbx->current_anim = (t_anim_stack *)(data->fbx->anim_stack->content);
-=======
 	anims = data->fbx->anim_stack;
 	printf("*N : NEXT ANIMATION : \n"); // debug
 	printf("- Current : %s\n", data->fbx->current_anim->name); // debug
@@ -189,7 +180,6 @@ void	ft_next_anim(t_fdf *data)
 		printf("- New current : %s\n", data->fbx->current_anim->name); // debug
 	}
 	printf("- weight value before : %f\n", data->timer.weighted_value); // debug
->>>>>>> f9b592b2f60f1fa7ecf0d72b267bd7b6f6ed7d35
 	data->timer.weighted_value = 0;
 	printf("- weight value after : %f\n", data->timer.weighted_value); // debug
 	printf("- duration before : %f\n", data->timer.duration); // debug
@@ -202,21 +192,6 @@ void	ft_next_anim(t_fdf *data)
 
 void	ft_prev_anim(t_fdf *data)
 {
-<<<<<<< HEAD
-	t_list	*temp;
-	t_list	*last;
-
-	if (!data->fbx || !data->fbx->anim_stack)
-		return ;
-	ft_print_anim_stack(data->fbx->anim_stack);
-	if (data->fbx->current_anim == NULL)
-	{
-		last = ft_lstlast(data->fbx->anim_stack);
-		if (last)
-			data->fbx->current_anim = (t_anim_stack *)last->content;
-	}
-	else if (data->fbx->current_anim == (t_anim_stack *)data->fbx->anim_stack->content)
-=======
 	t_list			*anims;
 	t_list			*last;
 	
@@ -226,7 +201,6 @@ void	ft_prev_anim(t_fdf *data)
 	printf("*P : PREV ANIMATION : \n"); //debug
 	printf("- Current : %s\n", data->fbx->current_anim->name); // debug
 	if (data->fbx->current_anim == anims->content)
->>>>>>> f9b592b2f60f1fa7ecf0d72b267bd7b6f6ed7d35
 	{
 		last = ft_lstlast(anims);
 		if (last)
