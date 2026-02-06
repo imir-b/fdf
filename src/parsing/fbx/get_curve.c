@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_curve.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:39 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/31 20:36:20 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/06 22:15:00 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ t_anim_curve	*ft_get_anim_curve(char *cursor, int fd)
 	t_anim_curve	*anim_curve;
 	char			*line;
 
-	anim_curve = malloc(sizeof(t_anim_curve));
+	anim_curve = ft_calloc(1, sizeof(t_anim_curve));
 	if (!anim_curve)
 		return (NULL);
 	anim_curve->id = ft_atol(cursor);

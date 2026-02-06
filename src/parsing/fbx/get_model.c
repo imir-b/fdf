@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:46 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/29 07:06:56 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/06 22:15:24 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ t_model	*ft_get_model(char *cursor, int fd)
 	char	*line;
 	t_model	*model;
 
-	model = malloc(sizeof(t_model));
+	model = ft_calloc(1, sizeof(t_model));
 	if (!model)
 		return (NULL);
 	model->id = ft_atol(cursor);

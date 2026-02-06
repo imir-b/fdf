@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:11:10 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/06 20:35:28 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/06 22:20:56 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,15 @@ void	ft_print_curve(t_anim_curve *curve)
 {
 	printf("- Curve id : %li\n", curve->id);
 	printf("- n keys : %d\n", curve->n_keys);
+	if (!curve->time || !curve->value) 
+	{
+		printf("  [!] WARNING: Tableaux NULL pour la courbe %li\n", curve->id);
+		return ;
+	}
 	int i = 0;
 	while (i < curve->n_keys)
 	{
-		if (!curve->time)
+		if (!curve->time[i])
 		{
 			printf("no value %d for time !\n", i);
 			return ;
@@ -35,6 +40,11 @@ void	ft_print_curve(t_anim_curve *curve)
 	i = 0;
 	while (i < curve->n_keys)
 	{
+		if (!curve->value[i])
+		{
+			printf("no value %d for value !\n", i);
+			return ;
+		}
 		printf("- value %d : %f\n", i, curve->value[i]);
 		i++;
 	}
@@ -69,10 +79,16 @@ void	ft_print_anims(t_fbx *fbx)
 				ft_print_model(node->target);
 				if (node->x)
 					ft_print_curve(node->x);
+				else
+					printf("!node->x\n");
 				if (node->y)
 					ft_print_curve(node->y);
+				else
+					printf("!node->y\n");
 				if (node->z)
 					ft_print_curve(node->z);
+				else
+					printf("!node->z\n");
 				nodes = nodes->next;
 			}
 			layers = layers->next;

@@ -3,23 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   animation.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 21:27:49 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/04 15:46:50 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/06 22:19:46 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
 
-static double	ft_get_value_at_time(t_anim_curve *curve, double current_time_sec)
+static double	ft_get_value_at_time(t_anim_curve *curve, \
+										double current_time_sec)
 {
-	int         i;
-    double      t;
+	int			i;
+	double		t;
 	double		t_start;
 	double		t_end;
-    
+
 	if (!curve)
 		return (0.0);
 	if (curve->n_keys == 0 || !curve->time || !curve->value)
@@ -43,18 +44,22 @@ static double	ft_get_value_at_time(t_anim_curve *curve, double current_time_sec)
 	return (curve->value[i] * (1.0 - t) + curve->value[i + 1] * t);
 }
 
-static void	ft_get_anim_at_time(t_properties *transformed, t_anim_node *current, t_timer timer)
+static void	ft_get_anim_at_time(t_properties *transformed, \
+								t_anim_node *current, \
+								t_timer timer)
 {
-		printf("before animation\n");
-		printf("x : %f, y : %f, z : %f\n", transformed->x, transformed->y, transformed->z);
-		if (current->x)
-			transformed->x = ft_get_value_at_time(current->x, timer.weighted_value);
-		if (current->y)
-			transformed->y = ft_get_value_at_time(current->y, timer.weighted_value);
-		if (current->z)
-			transformed->z = ft_get_value_at_time(current->z, timer.weighted_value);
-		printf("after animation\n");
-		printf("x : %f, y : %f, z : %f\n", transformed->x, transformed->y, transformed->z);
+	printf("before animation\n");
+	printf("x : %f, y : %f, z : %f\n", transformed->x, transformed->y, \
+										transformed->z);
+	if (current->x)
+		transformed->x = ft_get_value_at_time(current->x, timer.weighted_value);
+	if (current->y)
+		transformed->y = ft_get_value_at_time(current->y, timer.weighted_value);
+	if (current->z)
+		transformed->z = ft_get_value_at_time(current->z, timer.weighted_value);
+	printf("after animation\n");
+	printf("x : %f, y : %f, z : %f\n", transformed->x, transformed->y, \
+										transformed->z);
 }
 
 static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
