@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/01 22:27:27 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/06 20:21:00 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/06 22:29:47 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ void	ft_prev_anim(t_fdf *data)
 {
 	t_list			*anims;
 	t_list			*last;
-	
+
 	if (!data->fbx || !data->fbx->anim_stack)
 		return ;
 	anims = data->fbx->anim_stack;
@@ -250,6 +250,10 @@ int	ft_display_anim_menu(t_fdf *data)
 	else
 		return (SUCCESS);
 	if (current && current->name)
-		mlx_string_put(data->mlx_ptr, data->win_ptr, 50, 100, 0xFFFFFF, current->name);
+		mlx_string_put(data->mlx_ptr, data->win_ptr, 50, 100, 0xFFFFFF, \
+							current->name);
+	if (data->timer.is_paused)
+		mlx_string_put(data->mlx_ptr, data->win_ptr, 80, 200, 0xFFFFFF, \
+						"PAUSED");
 	return (SUCCESS);
 }
