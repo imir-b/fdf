@@ -21,7 +21,7 @@ long	*ft_read_ids(char *line, long *ids)
 	line = ft_strchr(line, ',');
 	if (line && *line)
 		line++;
-	ids[1] = ft_atoi(line);
+	ids[1] = ft_atol(line);
 	return (ids);
 }
 
@@ -40,13 +40,30 @@ void	ft_connect_obj_to_obj(t_fbx *data, long *ids)
 	{
 		dst = ft_get_by_id(data->anim_stack, ids[1]);
 		if (dst)
+		{
+			printf("STACK CONNEXION : Layer %ld -> Stack %ld\n", ids[0], ids[1]); //debug
 			ft_lstadd_front(&((t_anim_stack *)dst)->layers, ft_lstnew(src));
+		}
+		else //debug
+			printf("FAIL STACK : Layer %ld veut se connecter à %ld (Introuvable)\n", ids[0], ids[1]);
 	}
 	else if ((src = ft_get_by_id(data->anim_node, ids[0])))
 	{
 		dst = ft_get_by_id(data->anim_layer, ids[1]);
 		if (dst)
+		{
+			printf("LAYER CONNEXION : Layer %ld \n", ids[1]); //debug
 			ft_lstadd_front(&((t_anim_layer *)dst)->nodes, ft_lstnew(src));
+		}
+		else //debug
+		{
+			static int printed = 0;
+    	    if (!printed)
+        	{
+        	    printf("Taille liste AnimNodes: %d\n", ft_lstsize(data->anim_node));
+        	    printed = 1;
+        	}
+		}
 	}
 }
 
@@ -61,6 +78,7 @@ void	ft_connect_anim_to_model(t_fbx *data, char *line, long *ids)
 		model = (t_model *)ft_get_by_id(data->model, ids[1]);
 		if (model)
 		{
+			anim->target = model;
 			line += 4;
 			if (IS_TAG(line, "Translation"))
 				model->anim_pos = anim;

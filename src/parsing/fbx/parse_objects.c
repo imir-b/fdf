@@ -48,10 +48,10 @@ int	ft_parse_objects(t_fbx *data, int fd)
 			ft_add_element(cursor + 9, fd, &data->geo, (t_get_func)ft_get_geometry);
 		else if (IS_TAG(cursor, "Model"))
 			ft_add_element(cursor + 6, fd, &data->model, (t_get_func)ft_get_model);
-		else if (IS_TAG(cursor, "AnimationCurve"))
-			ft_add_element(cursor + 15, fd, &data->anim_curve, (t_get_func)ft_get_anim_curve);
 		else if (IS_TAG(cursor, "AnimationCurveNode"))
 			ft_add_element(cursor + 19, fd, &data->anim_node, (t_get_func)ft_get_anim_node);
+		else if (IS_TAG(cursor, "AnimationCurve"))
+			ft_add_element(cursor + 15, fd, &data->anim_curve, (t_get_func)ft_get_anim_curve);
 		else if (IS_TAG(cursor, "AnimationStack"))
 			ft_add_element(cursor + 15, fd, &data->anim_stack, (t_get_func)ft_get_anim_stack);
 		else if (IS_TAG(cursor, "AnimationLayer"))

@@ -37,10 +37,10 @@ t_anim_node	*ft_get_anim_node(char *cursor, int fd)
 	t_anim_node	*anim_node;
 	char		*line;
 
-	anim_node = malloc(sizeof(t_anim_node));
+	anim_node = ft_calloc(1, sizeof(t_anim_node));
 	if (!anim_node)
 		return (NULL);
-	anim_node->id = ft_atoi(cursor);
+	anim_node->id = ft_atol(cursor);
 	anim_node->type = ft_extract_type(cursor);
 	while (TRUE)
 	{

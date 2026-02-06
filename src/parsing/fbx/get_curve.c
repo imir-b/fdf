@@ -85,7 +85,7 @@ t_anim_curve	*ft_get_anim_curve(char *cursor, int fd)
 	anim_curve = malloc(sizeof(t_anim_curve));
 	if (!anim_curve)
 		return (NULL);
-	anim_curve->id = ft_atoi(cursor);
+	anim_curve->id = ft_atol(cursor);
 	while (TRUE)
 	{
 		line = get_next_line(fd);
