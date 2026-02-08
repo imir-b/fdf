@@ -27,6 +27,7 @@
 
 // **************** DEBUG ****************
 # include <stdio.h>
+void				ft_print_curve(t_anim_curve *curve);
 
 # define SUCCESS 0
 # define ERROR 1

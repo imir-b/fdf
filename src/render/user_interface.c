@@ -86,26 +86,26 @@ static double	ft_get_max_duration(t_anim_node *node, double max_duration)
 		return (max_duration);
 	if (node->x && node->x->n_keys > 0)
 	{
-		printf("1\n"); // debug
+		// printf("1\n"); // debug
 		end = node->x->time[node->x->n_keys - 1];
 		if (end > max_duration)
 			max_duration = end;
 	}
 	if (node->y && node->y->n_keys > 0 && node->y->time)
 	{
-		printf("2\n"); // debug
+		// printf("2\n"); // debug
 		end = node->y->time[node->y->n_keys - 1];
 		if (end > max_duration)
 			max_duration = end;
 	}
 	if (node->z && node->z->n_keys > 0 && node->y->time)
 	{
-		printf ("3\n"); // debug
+		// printf ("3\n"); // debug
 		end = node->z->time[node->z->n_keys - 1];
 		if (end > max_duration)
 			max_duration = end;
 	}
-	printf("return\n"); // debugsdf
+	// printf("return\n"); // debug
 	return (max_duration);
 }
 
@@ -158,36 +158,36 @@ void	ft_next_anim(t_fdf *data)
 	else if (data->fbx->anim_stack)
 		data->fbx->current_anim = (t_anim_stack *)(data->fbx->anim_stack->content);
 	anims = data->fbx->anim_stack;
-	printf("*N : NEXT ANIMATION : \n"); // debug
-	printf("- Current : %s\n", data->fbx->current_anim->name); // debug
+	// printf("*N : NEXT ANIMATION : \n"); // debug
+	// printf("- Current : %s\n", data->fbx->current_anim->name); // debug
 	if (!data->fbx->current_anim)
 	{
-		printf("- Next : %s\n", ((t_anim_stack *)anims->content)->name); // debug
+		// printf("- Next : %s\n", ((t_anim_stack *)anims->content)->name); // debug
 		data->fbx->current_anim = (t_anim_stack *)anims->content;
-		printf("- New current : %s\n", data->fbx->current_anim->name); // debug
+		// printf("- New current : %s\n", data->fbx->current_anim->name); // debug
 	}
 	current_in_list = ft_find_in_list(anims, (void *)data->fbx->current_anim);
     if (!current_in_list || current_in_list->next)
 	{
-		printf("- Next : %s\n", ((t_anim_stack *)(current_in_list->next->content))->name); // debug
+		// printf("- Next : %s\n", ((t_anim_stack *)(current_in_list->next->content))->name); // debug
 		data->fbx->current_anim = (t_anim_stack *)(current_in_list->next->content);
-		printf("- New current : %s\n", data->fbx->current_anim->name); // debug
+		// printf("- New current : %s\n", data->fbx->current_anim->name); // debug
 	}
     else
 	{
-		printf("- Next : %s\n", ((t_anim_stack *)anims->content)->name); // debug
+		// printf("- Next : %s\n", ((t_anim_stack *)anims->content)->name); // debug
 		data->fbx->current_anim = (t_anim_stack *)anims->content;
-		printf("- New current : %s\n", data->fbx->current_anim->name); // debug
+		// printf("- New current : %s\n", data->fbx->current_anim->name); // debug
 	}
-	printf("- weight value before : %f\n", data->timer.weighted_value); // debug
+	// printf("- weight value before : %f\n", data->timer.weighted_value); // debug
 	data->timer.weighted_value = 0;
-	printf("- weight value after : %f\n", data->timer.weighted_value); // debug
-	printf("- duration before : %f\n", data->timer.duration); // debug
+	// printf("- weight value after : %f\n", data->timer.weighted_value); // debug
+	// printf("- duration before : %f\n", data->timer.duration); // debug
 	data->timer.duration = ft_get_anim_duration(data->fbx->current_anim);
 	if (data->timer.duration == 0)
 		data->timer.duration = 1.0;
-	printf("- duration after : %f\n", data->timer.duration); // debug
-	printf("Timer updated\n"); // debug
+	// printf("- duration after : %f\n", data->timer.duration); // debug
+	// printf("Timer updated\n"); // debug
 }
 
 void	ft_prev_anim(t_fdf *data)

@@ -48,18 +48,20 @@ static void	ft_get_anim_at_time(t_properties *transformed, \
 								t_anim_node *current, \
 								t_timer timer)
 {
-	printf("before animation\n");
-	printf("x : %f, y : %f, z : %f\n", transformed->x, transformed->y, \
-										transformed->z);
+	// printf("before animation\n"); // debug
+	// printf("x : %f, y : %f, z : %f\n", transformed->x, transformed->y, transformed->z); // debug
+	// printf("CURRENT\n"); // debug
+	// ft_print_curve(current->x); // debug
+	// ft_print_curve(current->y); // debug
+	// ft_print_curve(current->z); // debug
 	if (current->x)
 		transformed->x = ft_get_value_at_time(current->x, timer.weighted_value);
 	if (current->y)
 		transformed->y = ft_get_value_at_time(current->y, timer.weighted_value);
 	if (current->z)
 		transformed->z = ft_get_value_at_time(current->z, timer.weighted_value);
-	printf("after animation\n");
-	printf("x : %f, y : %f, z : %f\n", transformed->x, transformed->y, \
-										transformed->z);
+	// printf("after animation\n"); // debug
+	// printf("x : %f, y : %f, z : %f\n", transformed->x, transformed->y, transformed->z); // debug
 }
 
 static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
@@ -71,12 +73,10 @@ static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
 	nodes = layer->nodes;
 	while (nodes)
 	{
-		printf("get new node\n");
 		node = (t_anim_node *)nodes->content;
 		model_target = node->target;
 		if (model_target)
 		{
-			printf("get model_target\n");
 			if (node->type == 'S')
 				ft_get_anim_at_time(&model_target->scale, node, data->timer);
 			else if (node->type == 'R')
@@ -106,7 +106,6 @@ void	ft_animate(t_fdf *data)
 	layers = data->fbx->current_anim->layers;
 	while (layers)
 	{
-		printf("get layer\n");
 		layer = (t_anim_layer *)layers->content;
 		ft_animate_nodes(layer, data);
 		layers = layers->next;

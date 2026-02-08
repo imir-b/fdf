@@ -19,6 +19,8 @@ void	ft_print_model(t_model *model)
 
 void	ft_print_curve(t_anim_curve *curve)
 {
+	if (!curve)
+		return ;
 	printf("- Curve id : %li\n", curve->id);
 	printf("- n keys : %d\n", curve->n_keys);
 	if (!curve->time || !curve->value) 
@@ -34,7 +36,7 @@ void	ft_print_curve(t_anim_curve *curve)
 			printf("no value %d for time !\n", i);
 			return ;
 		}
-		printf("- time : %lli\n", curve->time[i]);
+		printf("- time : %f\n", curve->time[i]);
 		i++;
 	}
 	i = 0;
@@ -110,8 +112,8 @@ int	main(int ac, char **av)
 		return (ft_error("File name is not valid"));
 	fbx = NULL;
 	object = ft_parse_dispatch(filename, &fbx);
-	if (fbx)
-		ft_print_anims(fbx); //debug
+	// if (fbx)
+	// 	ft_print_anims(fbx); //debug
 	if (!object)
 		return (ft_error("Parsing map failed"));
 	ft_process_fdf(object, fbx);

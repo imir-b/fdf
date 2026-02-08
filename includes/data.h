@@ -31,6 +31,8 @@
 
 # define THREADS_NB 4
 
+# define FBX_SEC 46186158000.0
+
 # define IS_TAG(str, tag) (!ft_strncmp(str, tag, sizeof(tag) - 1))
 
 /*
@@ -188,10 +190,10 @@ struct s_model
 
 struct s_anim_curve
 {
-	long			id;
-	int				n_keys;
-	long long		*time;
-	double			*value;
+	long	id;
+	int		n_keys;
+	double	*time;
+	double	*value;
 };
 
 struct s_anim_node
@@ -297,9 +299,9 @@ struct s_mouse
 };
 
 struct s_timer {
-    long    start_time;    // Temps au lancement (en ms)
-    long    last_frame;    // Temps de la frame précédente (en ms)
-    double  delta_time;    // Temps écoulé entre 2 frames (en secondes)
+    long    start_time;
+    long    last_frame;
+    double  delta_time;
     double	weighted_value;
     double  duration;
 	bool	is_paused;

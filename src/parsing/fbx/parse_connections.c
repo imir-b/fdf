@@ -41,29 +41,29 @@ void	ft_connect_obj_to_obj(t_fbx *data, long *ids)
 		dst = ft_get_by_id(data->anim_stack, ids[1]);
 		if (dst)
 		{
-			printf("STACK CONNEXION : Layer %ld -> Stack %ld\n", ids[0], ids[1]); //debug
+			// printf("STACK CONNEXION : Layer %ld -> Stack %ld\n", ids[0], ids[1]); //debug
 			ft_lstadd_front(&((t_anim_stack *)dst)->layers, ft_lstnew(src));
 		}
-		else //debug
-			printf("FAIL STACK : Layer %ld veut se connecter à %ld (Introuvable)\n", ids[0], ids[1]);
+		// else //debug
+		// 	printf("FAIL STACK : Layer %ld veut se connecter à %ld (Introuvable)\n", ids[0], ids[1]);
 	}
 	else if ((src = ft_get_by_id(data->anim_node, ids[0])))
 	{
 		dst = ft_get_by_id(data->anim_layer, ids[1]);
 		if (dst)
 		{
-			printf("LAYER CONNEXION : Layer %ld \n", ids[1]); //debug
+			// printf("LAYER CONNEXION : Layer %ld \n", ids[1]); //debug
 			ft_lstadd_front(&((t_anim_layer *)dst)->nodes, ft_lstnew(src));
 		}
-		else //debug
-		{
-			static int printed = 0;
-			if (!printed)
-			{
-				printf("Taille liste AnimNodes: %d\n", ft_lstsize(data->anim_node));
-				printed = 1;
-			}
-		}
+		// else //debug
+		// {
+		// 	static int printed = 0;
+		// 	if (!printed)
+		// 	{
+		// 		printf("Taille liste AnimNodes: %d\n", ft_lstsize(data->anim_node));
+		// 		printed = 1;
+		// 	}
+		// }
 	}
 }
 
@@ -101,7 +101,7 @@ void	ft_connect_anim_to_anim(t_fbx *data, char *line, long *ids)
 		anim_node = (t_anim_node *)ft_get_by_id(data->anim_node, ids[1]);
 		if (anim_node)
 		{
-			line += 3;
+			line += 2;
 			if (IS_TAG(line, "X"))
 				anim_node->x = anim_curve;
 			else if (IS_TAG(line, "Y"))
