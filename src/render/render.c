@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/09 04:55:17 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/09 05:39:43 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,117 @@ static void	ft_transform_threads(t_fdf *data)
 		pthread_join(threads[i], NULL);
 }
 
+static double to_rad(double degree)
+{
+    return (degree * M_PI / 180.0);
+}
+
+static t_vec3 apply_transform(t_vec3 point, t_properties p, t_properties r, t_properties s)
+{
+	double	tx, ty, tz;
+	double	rad_x = to_rad(r.x);
+	double	rad_y = to_rad(r.y);
+	double	rad_z = to_rad(r.z);
+
+    // 1. SCALE
+	point.x *= s.x;
+	point.y *= s.y;
+	point.z *= s.z;
+    // 2. ROTATION X
+	ty = point.y * cos(rad_x) - point.z * sin(rad_x);
+	tz = point.y * sin(rad_x) + point.z * cos(rad_x);
+	point.y = ty;
+	point.z = tz;
+    // 3. ROTATION Y
+	tx = point.x * cos(rad_y) + point.z * sin(rad_y);
+	tz = -point.x * sin(rad_y) + point.z * cos(rad_y);
+	point.x = tx;
+	point.z = tz;
+    // 4. ROTATION Z
+	tx = point.x * cos(rad_z) - point.y * sin(rad_z);
+	ty = point.x * sin(rad_z) + point.y * cos(rad_z);
+	point.x = tx;
+	point.y = ty;
+    // 5. TRANSLATION
+	point.x += p.x;
+	point.y += p.y;
+	point.z += p.z;
+	return (point);
+}
+
+static t_model	*find_model_for_geo(t_list *models, t_geometry *target_geo)
+{
+	t_model	*mdl;
+
+	while (models)
+	{
+		mdl = (t_model *)models->content;
+        // On suppose que ton parser a lié mdl->geo au bon pointeur t_geometry
+		if (mdl->geo == target_geo)
+			return (mdl);
+		models = models->next;
+	}
+	return (NULL);
+}
+
+void    ft_update_mesh_from_animation(t_fdf *data)
+{
+	t_list		*curr_geo;
+	t_geometry	*geo;
+	t_model		*mdl;
+	int			global_index; // Index dans le Big Object
+	int			i;
+	t_vec3		new_pos;
+    // Valeurs par défaut (Identité) si pas d'anim trouvée
+	t_properties	def_pos = {0, 0, 0, 0};
+	t_properties	def_rot = {0, 0, 0, 0};
+	t_properties	def_scale = {0, 1, 1, 1};
+
+	if (!data->fbx || !data->object)
+		return ;
+	global_index = 0;
+	curr_geo = data->fbx->geo;
+    // On parcourt les géométries originales stockées dans le FBX
+	while (curr_geo)
+	{
+		geo = (t_geometry *)curr_geo->content;
+        // On cherche quel "Model" anime cette géométrie
+		mdl = find_model_for_geo(data->fbx->model, geo);
+		if (mdl)
+        {
+            // On a trouvé un modèle, l'animation devrait marcher
+            printf("GEO LINKED! GeoID: %ld -> ModelID: %ld | Pos: %f %f %f\n", 
+                   geo->id, mdl->id, mdl->pos.x, mdl->pos.y, mdl->pos.z);
+        }
+        else
+        {
+            // Pas de modèle trouvé = Pas d'animation appliquée
+            printf("GEO ORPHAN! GeoID: %ld has no Model attached.\n", geo->id);
+        }
+		if (geo->obj)
+		{
+			i = 0;
+			while (i < geo->obj->nb_vertices)
+			{
+                // CRUCIAL : On prend les coordonnées d'origine (geo->obj)
+                // On applique les transfs du modèle (mdl->pos/rot/scale) mises à jour par ft_animate
+				if (mdl)
+					new_pos = apply_transform(geo->obj->vertices[i], mdl->pos, mdl->rot, mdl->scale);
+				else
+					new_pos = apply_transform(geo->obj->vertices[i], def_pos, def_rot, def_scale);
+				// On préserve la couleur d'origine
+				new_pos.color = geo->obj->vertices[i].color;
+				// On écrit le résultat dans le "Big Object" qui sert à l'affichage
+				data->object->vertices[global_index + i] = new_pos;
+				i++;
+			}
+			// On avance l'index global pour la prochaine géométrie
+			global_index += geo->obj->nb_vertices;
+		}
+		curr_geo = curr_geo->next;
+	}
+}
+
 /**
  * Fonction qui rend l'image en 6 etapes :
  * - 1 Pre-calcul des maths pour eviter de repeter les calculs lourds,
@@ -81,12 +192,15 @@ void	ft_render_image(t_fdf *data)
 	data->trigo.sin_beta = sin(data->camera->angle_y);
 	data->trigo.cos_beta = cos(data->camera->angle_y);
 	ft_update_time(&data->timer);
-	if (data->fbx)
+	if (data->fbx && data->fbx->current_anim)
 	{
-		if (!data->fbx->current_anim)
-			data->fbx->current_anim = data->fbx->anim_stack->content;
-		printf("animate %s\n", data->fbx->current_anim->name);
+		double	anim_duration = 0.0;
+		if (data->fbx->current_anim->layers)
+			anim_duration = 4.2;
+		if (anim_duration > 0.001)
+			data->timer.weighted_value = fmod(data->timer.weighted_value, anim_duration);
 		ft_animate(data);
+		ft_update_mesh_from_animation(data);
 	}
 	ft_bzero(data->img.addr, WIN_WIDTH * WIN_HEIGHT * (data->img.bits_per_pixel / 8));
 	ft_transform_threads(data);
@@ -94,6 +208,6 @@ void	ft_render_image(t_fdf *data)
 	ft_draw_axes(data);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.ptr, 0, 0);
 	ft_display_fps(data);
-	if (data->fbx)
+	if (data->fbx->anim_stack)
 		ft_display_anim_menu(data);
 }

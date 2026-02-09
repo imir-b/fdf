@@ -6,15 +6,13 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 21:27:49 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/06 22:19:46 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/09 05:15:54 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-
-static double	ft_get_value_at_time(t_anim_curve *curve, \
-										double current_time_sec)
+static double	ft_get_value_at_time(t_anim_curve *curve, double current_time)
 {
 	int			i;
 	double		t;
@@ -27,12 +25,12 @@ static double	ft_get_value_at_time(t_anim_curve *curve, \
 		return (0.0);
 	if (curve->n_keys == 1)
 		return (curve->value[0]);
-	if (current_time_sec >= curve->time[curve->n_keys - 1])
+	if (current_time >= curve->time[curve->n_keys - 1])
 		return (curve->value[curve->n_keys - 1]);
 	i = 0;
 	while (i < curve->n_keys - 1)
 	{
-		if (current_time_sec < curve->time[i + 1])
+		if (current_time < curve->time[i + 1])
 			break ;
 		i++;
 	}
@@ -40,7 +38,7 @@ static double	ft_get_value_at_time(t_anim_curve *curve, \
 	t_end = curve->time[i + 1];
 	if (t_end - t_start == 0)
 		return (curve->value[i]);
-	t = (current_time_sec - t_start) / (t_end - t_start);
+	t = (current_time - t_start) / (t_end - t_start);
 	return (curve->value[i] * (1.0 - t) + curve->value[i + 1] * t);
 }
 

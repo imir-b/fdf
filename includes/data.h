@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/06 20:14:16 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/09 05:29:33 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 # define THREADS_NB 4
 
 # define FBX_SEC 46186158000.0
+
+# define M_PI 3.14159265358979323846
 
 # define IS_TAG(str, tag) (!ft_strncmp(str, tag, sizeof(tag) - 1))
 
