@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 04:36:29 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/01 22:58:12 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/09 04:44:37 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,15 @@ t_camera	*ft_init_camera(t_object *obj)
 	return (cam);
 }
 
+int	ft_loop_hook(void *param)
+{
+	t_fdf	*data;
+
+	data = (t_fdf *)param;
+	ft_render_image(data);
+	return (SUCCESS);
+}
+
 int	ft_process_fdf(t_object *obj, t_fbx *fbx)
 {
 	t_fdf		*data;
@@ -47,6 +56,7 @@ int	ft_process_fdf(t_object *obj, t_fbx *fbx)
 		return (ERROR);
 	ft_render_image(data);
 	ft_events(data);
+	mlx_loop_hook(data->mlx_ptr, &ft_loop_hook, data);
 	mlx_loop(data->mlx_ptr);
 	ft_free_data(data);
 	return (SUCCESS);

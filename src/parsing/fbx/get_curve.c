@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:39 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/06 22:15:00 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/09 04:50:26 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	ft_parse_keytime(t_anim_curve *anim_curve, char **line, char *cursor,
 	int			index;
 	long long	ktime;
 
-	printf("Parsing KeyTime\n"); // debug
+	// printf("Parsing KeyTime\n"); // debug
 	if (!anim_curve->n_keys)
 	{
 		cursor = ft_strchr(cursor, '*');
@@ -29,7 +29,7 @@ static int	ft_parse_keytime(t_anim_curve *anim_curve, char **line, char *cursor,
 		cursor++;
 		anim_curve->n_keys = ft_atoi(cursor);
 	}
-	printf("- n keys : %d\n", anim_curve->n_keys); // debug
+	// printf("- n keys : %d\n", anim_curve->n_keys); // debug
 	anim_curve->time = malloc(sizeof(double) * anim_curve->n_keys);
 	if (!anim_curve->time)
 		return (ERROR);
@@ -44,7 +44,7 @@ static int	ft_parse_keytime(t_anim_curve *anim_curve, char **line, char *cursor,
 			break ;
 		ktime = ft_atoll(cursor);
 		anim_curve->time[index] = (double)(ktime / FBX_SEC);
-		printf("- KeyTime [%d] : %f\n", index, anim_curve->time[index]);
+		// printf("- KeyTime [%d] : %f\n>>%lli\n", index, anim_curve->time[index], ktime); // debug
 		while (*cursor && (ft_isdigit(*cursor) || *cursor == '-'))
 			cursor++;
 		index++;
@@ -60,7 +60,7 @@ static int	ft_parse_keyvalue(t_anim_curve *anim_curve, char **line, char *cursor
 {
 	int		index;
 
-	printf ("Parsing KeyValueFloat\n"); // debug
+	// printf ("Parsing KeyValueFloat\n"); // debug
 	if (!anim_curve->n_keys)
 	{
 		cursor = ft_strchr(cursor, '*');
@@ -69,7 +69,7 @@ static int	ft_parse_keyvalue(t_anim_curve *anim_curve, char **line, char *cursor
 		cursor++;
 		anim_curve->n_keys = ft_atoi(cursor);
 	}
-	printf ("- n keys : %d\n", anim_curve->n_keys); // debug
+	// printf ("- n keys : %d\n", anim_curve->n_keys); // debug
 	anim_curve->value = malloc(sizeof(double) * anim_curve->n_keys);
 	if (!anim_curve->value)
 		return (ERROR);
@@ -79,29 +79,29 @@ static int	ft_parse_keyvalue(t_anim_curve *anim_curve, char **line, char *cursor
 	index = 0;
 	while (index < anim_curve->n_keys)
 	{
-		ft_jump_to_next_value(&cursor, line, fd);
+		while (TRUE)
+		{
+			if (!cursor || !*cursor || *cursor == '\n' || *cursor == '\r')
+			{
+				if (*line)
+					free(*line);
+				*line = get_next_line(fd);
+				if (!*line)
+					return (ERROR);
+				cursor = *line;
+			}
+			else if (*cursor == ' ' || *cursor == '\t' || *cursor == ',' || *cursor == 'a' || *cursor == ':')
+				cursor++;
+			else
+				break ;
+		}
 		if (*cursor == '}')
 			break ;
 		anim_curve->value[index] = ft_atof(cursor);
-		printf(" - KeyValueFloat [%d] : %f\n", index, anim_curve->value[index]);
-		if (*cursor == '-' || *cursor == '+')
+		// printf(" - KeyValueFloat [%d] : %f\n", index, anim_curve->value[index]); // debug
+		// printf(">> %s\n", cursor); // debug
+		while (*cursor && (ft_isdigit(*cursor) || *cursor == '-' || *cursor == '+' || *cursor == '.' || *cursor == 'e' || *cursor == 'E'))
 			cursor++;
-		while (ft_isdigit(*cursor))
-			cursor++;
-		if (*cursor == '.')
-		{
-			cursor++;
-			while (ft_isdigit(*cursor))
-				cursor++;
-		}
-		if (*cursor == 'e' || *cursor == 'E')
-		{
-			cursor++;
-			if (*cursor == '-' || *cursor == '+')
-				cursor++;
-			while (ft_isdigit(*cursor))
-				cursor++;
-		}
 		index++;
 	}
 	ft_skip_closing_brace(&cursor, line, fd);
@@ -128,7 +128,6 @@ t_anim_curve	*ft_get_anim_curve(char *cursor, int fd)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		// printf("DEBUG - Line read: [%s]\n", line); // debug
 		cursor = ft_skip_spaces(line);
 		if (*cursor == '}')
 		{
