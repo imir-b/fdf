@@ -112,6 +112,14 @@ int	main(int ac, char **av)
 		return (ft_error("File name is not valid"));
 	fbx = NULL;
 	object = ft_parse_dispatch(filename, &fbx);
+	if (fbx)
+	{
+		if (fbx->anim_stack)
+			fbx->current_anim = (t_anim_stack *)fbx->anim_stack->content;
+		printf ("test\n");
+		if (fbx->current_anim)
+			printf("this model has a current anim\n");
+	}
 	// if (fbx)
 	// 	ft_print_anims(fbx); //debug
 	if (!object)

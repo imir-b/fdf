@@ -32,7 +32,7 @@ void	ft_init_timer(t_timer *t, double duration_sec)
 void	ft_update_time(t_timer *t)
 {
 	long	current;
-	
+
 	current = ft_get_time_ms();
 	t->delta_time = (double)(current - t->last_frame) / 1000.0;
 	t->last_frame = current;

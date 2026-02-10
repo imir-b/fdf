@@ -62,11 +62,17 @@ static void	ft_transform_threads(t_fdf *data)
 		pthread_join(threads[i], NULL);
 }
 
+/**
+ * fonction test pour animation
+ */
 static double to_rad(double degree)
 {
     return (degree * M_PI / 180.0);
 }
 
+/**
+ * fonction test pour animation
+ */
 static t_vec3 apply_transform(t_vec3 point, t_properties p, t_properties r, t_properties s)
 {
 	double	tx, ty, tz;
@@ -100,6 +106,24 @@ static t_vec3 apply_transform(t_vec3 point, t_properties p, t_properties r, t_pr
 	return (point);
 }
 
+
+static t_vec3	ft_get_world_transform(t_vec3 point, t_model *model)
+{
+	t_vec3	curr_point;
+
+	curr_point = point;
+	while (model)
+	{
+		curr_point = apply_transform(curr_point, model->pos, model->rot, model->scale);
+		model = model->parent;
+	}
+	return (curr_point);
+}
+
+
+/**
+ * fonction test pour animation
+ */
 static t_model	*find_model_for_geo(t_list *models, t_geometry *target_geo)
 {
 	t_model	*mdl;
@@ -115,6 +139,9 @@ static t_model	*find_model_for_geo(t_list *models, t_geometry *target_geo)
 	return (NULL);
 }
 
+/**
+ * fonction test pour animation
+ */
 void    ft_update_mesh_from_animation(t_fdf *data)
 {
 	t_list		*curr_geo;
@@ -138,13 +165,13 @@ void    ft_update_mesh_from_animation(t_fdf *data)
 		geo = (t_geometry *)curr_geo->content;
         // On cherche quel "Model" anime cette géométrie
 		mdl = find_model_for_geo(data->fbx->model, geo);
-		if (mdl)
+		if (mdl) // debug
         {
             // On a trouvé un modèle, l'animation devrait marcher
             printf("GEO LINKED! GeoID: %ld -> ModelID: %ld | Pos: %f %f %f\n", 
                    geo->id, mdl->id, mdl->pos.x, mdl->pos.y, mdl->pos.z);
         }
-        else
+        else // debug
         {
             // Pas de modèle trouvé = Pas d'animation appliquée
             printf("GEO ORPHAN! GeoID: %ld has no Model attached.\n", geo->id);
@@ -157,7 +184,7 @@ void    ft_update_mesh_from_animation(t_fdf *data)
                 // CRUCIAL : On prend les coordonnées d'origine (geo->obj)
                 // On applique les transfs du modèle (mdl->pos/rot/scale) mises à jour par ft_animate
 				if (mdl)
-					new_pos = apply_transform(geo->obj->vertices[i], mdl->pos, mdl->rot, mdl->scale);
+					new_pos = ft_get_world_transform(geo->obj->vertices[i], mdl);
 				else
 					new_pos = apply_transform(geo->obj->vertices[i], def_pos, def_rot, def_scale);
 				// On préserve la couleur d'origine

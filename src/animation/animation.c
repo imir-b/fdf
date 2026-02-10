@@ -80,7 +80,10 @@ static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
 			else if (node->type == 'R')
 				ft_get_anim_at_time(&model_target->rot, node, data->timer);
 			else if (node->type == 'T')
+			{
 				ft_get_anim_at_time(&model_target->pos, node, data->timer);
+				printf("ANIM UPDATE: Model %ld -> Pos: %f %f %f (Time: %f)\n", model_target->id, model_target->pos.x, model_target->pos.y, model_target->pos.z, data->timer.weighted_value); // debug
+			}
 		}
 		nodes = nodes->next;
 	}
