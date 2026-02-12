@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:01:45 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/01 17:27:21 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/12 21:23:17 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	ft_parse_objects(t_fbx *data, int fd)
 			ft_add_element(cursor + 9, fd, &data->geo, (t_get_func)ft_get_geometry);
 		else if (IS_TAG(cursor, "Model"))
 			ft_add_element(cursor + 6, fd, &data->model, (t_get_func)ft_get_model);
+		else if (IS_TAG(cursor, "Deformer"))
+			ft_add_element(cursor + 9, fd, &data->deformer, (t_get_func)ft_get_deformer);
 		else if (IS_TAG(cursor, "AnimationCurveNode"))
 			ft_add_element(cursor + 19, fd, &data->anim_node, (t_get_func)ft_get_anim_node);
 		else if (IS_TAG(cursor, "AnimationCurve"))

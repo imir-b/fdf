@@ -6,120 +6,192 @@
 #    By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2026/02/01 23:24:38 by vlad             ###   ########.fr        #
+#    Updated: 2026/02/12 21:32:23 by vlad             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# ------------------------------------------------------------------------------
-# EXE
-# ------------------------------------------------------------------------------
-
+ifndef VERBOSE
+.SILENT:
+endif
+# to shift how the lines around the verbose behave use these line to change the length \xe2\x94\x81\ these are for horizontal lines qnd for the vertical ones its basically any other string
 NAME			=	fdf
 
-# ------------------------------------------------------------------------------
-# DEFINITIONS
-# ------------------------------------------------------------------------------
+SRC_DIR			=	src
+OBJ_DIR			=	obj
+LIB_DIR			=	lib
 
-CC				=	cc
-CFLAGS			=	-Wall -Werror -Wextra -I includes -I $(LIBFT_DIR)includes -I $(MINLIB_DIR) -O3 -pthread -march=native -ffast-math -g3
-MAKEFLAGS 		+=	--no-print-directory
-RM				=	rm -rf
+SUB_DIRS		=	parsing parsing/fbx animation render utils controls
 
-# ------------------------------------------------------------------------------
-# DIRECTORIES
-# ------------------------------------------------------------------------------
+LIBFT_DIR		=	$(LIB_DIR)/libft/
+MINLIB_DIR		=	$(LIB_DIR)/minilibx-linux/
 
-SRC_DIR			=	src/
-PARS_DIR		=	parsing/
-FBX_DIR			=	$(PARS_DIR)fbx/
-ANIM_DIR		=	animation/
-REND_DIR		=	render/
-UTIL_DIR		=	utils/
-EVENT_DIR		=	controls/
-OBJ_DIR			=	obj/
-LIB_DIR			=	lib/
-LIBFT_DIR		=	$(LIB_DIR)libft/
-MINLIB_DIR		=	$(LIB_DIR)minilibx-linux/
+SRC				=	$(wildcard $(SRC_DIR)/*.c) \
+					$(foreach dir, $(SUB_DIRS), $(wildcard $(SRC_DIR)/$(dir)/*.c))
 
-# ------------------------------------------------------------------------------
-# FILES
-# ------------------------------------------------------------------------------
+OBJ				=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 
-SRC_PARS		=	$(PARS_DIR)parsing.c \
-					$(PARS_DIR)parsing_fdf.c \
-					$(PARS_DIR)parsing_obj.c \
-					$(PARS_DIR)parsing_fbx.c \
-					$(FBX_DIR)parse_objects.c \
-					$(FBX_DIR)parse_connections.c \
-					$(FBX_DIR)parse_fbx_utils.c \
-					$(FBX_DIR)free_fbx_data.c \
-					$(FBX_DIR)get_node.c \
-					$(FBX_DIR)get_model.c \
-					$(FBX_DIR)get_geo.c \
-					$(FBX_DIR)get_curve.c \
-					$(FBX_DIR)get_stack.c \
-					$(FBX_DIR)extract_faces.c
+CFLAGS			=	-Wall -Wextra -Werror -O3 -pthread -march=native -ffast-math
 
-SRC_ANIM		=	$(ANIM_DIR)animation.c \
-					$(ANIM_DIR)timer.c
+CPPFLAGS		=	-I includes -I $(LIBFT_DIR)/includes -I $(MINLIB_DIR)
 
-SRC_REND		=	$(REND_DIR)render.c \
-					$(REND_DIR)transform.c \
-					$(REND_DIR)project.c \
-					$(REND_DIR)draw.c \
-					$(REND_DIR)init.c \
-					$(REND_DIR)user_interface.c
+VALGRIND		=	-g3
 
-SRC_UTIL		=	$(UTIL_DIR)utils.c \
-					$(UTIL_DIR)error.c \
-					$(UTIL_DIR)utils_data.c \
-					$(UTIL_DIR)utils_mlx.c
+INCLUDE_LIB		=	-L$(LIBFT_DIR) -lft -L$(MINLIB_DIR) -lmlx_Linux -lXext -lX11 -lm -lz 
 
-SRC_EVENT		=	$(EVENT_DIR)mouse_controls.c \
-					$(EVENT_DIR)hooks.c
-
-SRC_FILES		=	main.c $(SRC_PARS) $(SRC_REND) $(SRC_UTIL) $(SRC_EVENT) $(SRC_ANIM)
-SRCS			=	$(addprefix $(SRC_DIR), $(SRC_FILES))
-OBJS			=	$(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))
+INCLUDE			=	-I includes -I $(LIBFT_DIR)/includes -I $(MINLIB_DIR)
 
 
-# ------------------------------------------------------------------------------
-# LIBRARIES
-# ------------------------------------------------------------------------------
+RED				=	\033[31;1m
+BLU				=	\033[34;1m
+CYAN			=	\033[36;1m
+PUR				=	\033[35;1m
+END				=	\033[0m
+purp 			=	/033[0m
 
-LIBS			=	-L$(LIBFT_DIR) -lft -L$(MINLIB_DIR) -lmlx_Linux -lXext -lX11 -lm -lz
+all: $(NAME)
 
-# ------------------------------------------------------------------------------
-# RULES
-# ------------------------------------------------------------------------------
-
-all :			$(NAME)
-
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 				@mkdir -p $(dir $@)
-				@$(CC) $(CFLAGS) -c $< -o $@
-				@echo "Compiling $<"
+				@$(CC) $(CPPFLAGS) -c $< -o $@
 
-$(NAME) :		$(OBJS)
-				@make -C $(LIBFT_DIR)
-				@echo "Libft compiled successfuly"
-				@make -C $(MINLIB_DIR) > /dev/null 2>&1
-				@echo "Minilibx compiled successfuly"
-				@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
-				@echo "$(NAME) compiled successfuly"
+$(NAME): $(OBJ)
+	@make -C $(LIBFT_DIR)
+	@make -C $(MINLIB_DIR)
+	@echo -en "\xe2\x94\x8f\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -e "\xe2\x94\x81\xe2\x94\x93"
+	@echo -en "\xe2\x94\x83$(CYAN)      lib compiled without any issues 🔨, "
+	@echo -e "now compiling the sources 🔧 $(END)\xe2\x94\x83"
+	@echo -en "\xe2\x94\x97\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81"
+	@echo -en "$(END)$(PUR)|lib ready 🛠️ |$(END)"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -e "\xe2\x94\x81\xe2\x94\x9b"
+	@cc -g $(OBJ) $(INCLUDE_LIB) $(CFLAGS) $(CPPFLAGS) -o $(NAME)
+	@echo -en "\xe2\x94\x8f\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -e "\xe2\x94\x81\xe2\x94\x93"
+	@echo -en "\xe2\x94\x83$(CYAN)                      everything ok, "
+	@echo -e "ready to use 🌩️                   $(END)\xe2\x94\x83"
+	@echo -en "\xe2\x94\x97\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "$(END)$(PUR)|binary ready ⛈️ |$(END)"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -e "\xe2\x94\x81\xe2\x94\x9b"
 
-clean :
-				@make clean -C $(LIBFT_DIR)
-				@echo "Libft cleaned successfuly"
-				@make clean -C $(MINLIB_DIR) > /dev/null 2>&1
-				@echo "Minilibx cleaned successfuly"
-				@$(RM) $(OBJ_DIR)
-				@echo "$(NAME) cleaned successfuly"
+clean:
+	@echo -en "\xe2\x94\x8f\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94"
+	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -e "\xe2\x94\x81\xe2\x94\x93"
+	@echo -en "\xe2\x94\x83$(CYAN)                          Cleaning ..."
+	@echo -e "  🌨️                               $(END)\xe2\x94\x83"
+	@make clean -C $(LIBFT_DIR)
+	@make clean -C $(MINLIB_DIR) > /dev/null 2>&1
+	@rm -rf $(OBJ_DIR)
+	@echo -en "\xe2\x94\x97\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "$(END)$(PUR)|🔄|$(END)"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
+	@echo -e "\xe2\x94\x9b"
 
-fclean :		clean
-				@make fclean -C $(LIBFT_DIR)
-				@$(RM) $(NAME)
+fclean: clean
+	@rm -rf $(NAME)
+	@make fclean -C $(LIBFT_DIR)
+	# @echo "\033[1;35]cleaned all 🚽\033[0m"
 
-re :			fclean all
-
-.PHONY:			all clean fclean re
+re: fclean all

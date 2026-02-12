@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/09 05:29:33 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/12 21:25:35 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,8 @@ typedef struct s_properties		t_properties;
  */
 typedef struct s_model			t_model;
 
+typedef struct s_deformer		t_deformer;
+
 /*
  * Courbe d'animation brute définissant l'évolution d'une valeur
  * au fil du temps via des keyframes (temps et valeur).
@@ -190,6 +192,11 @@ struct s_model
 	t_model			*parent;
 };
 
+struct	s_deformer
+{
+	long	id;
+};
+
 struct s_anim_curve
 {
 	long	id;
@@ -225,6 +232,7 @@ struct s_fbx
 {
 	t_list			*geo;
 	t_list			*model;
+	t_list			*deformer;
 	t_list			*anim_curve;
 	t_list			*anim_node;
 	t_list			*anim_stack;

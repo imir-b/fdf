@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/03 01:54:58 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/12 21:23:55 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ int					ft_parse_face(t_object *obj, char **line, char *cursor, int fd);
 t_geometry			*ft_get_geometry(char *cursor, int fd);
 void				*ft_free_geo(t_geometry *geo);
 t_model				*ft_get_model(char *cursor, int fd);
+t_deformer			*ft_get_deformer(char *cursor, int fd);
 t_anim_curve		*ft_get_anim_curve(char *cursor, int fd);
 t_anim_node			*ft_get_anim_node(char *cursor, int fd);
 t_anim_stack		*ft_get_anim_stack(char *cursor, int fd);
