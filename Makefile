@@ -6,29 +6,53 @@
 #    By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2026/02/12 21:32:23 by vlad             ###   ########.fr        #
+#    Updated: 2026/02/12 22:26:42 by vlad             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ifndef VERBOSE
 .SILENT:
 endif
-# to shift how the lines around the verbose behave use these line to change the length \xe2\x94\x81\ these are for horizontal lines qnd for the vertical ones its basically any other string
+
+SHELL			=	zsh
+
+# ------------------------------------------------------------------------------
+# exe
+# ------------------------------------------------------------------------------
+
 NAME			=	fdf
 
+# ------------------------------------------------------------------------------
+# dir
+# ------------------------------------------------------------------------------
+
 SRC_DIR			=	src
+
 OBJ_DIR			=	obj
-LIB_DIR			=	lib
 
 SUB_DIRS		=	parsing parsing/fbx animation render utils controls
 
+LIB_DIR			=	lib
+
 LIBFT_DIR		=	$(LIB_DIR)/libft/
+
 MINLIB_DIR		=	$(LIB_DIR)/minilibx-linux/
+
+# ------------------------------------------------------------------------------
+# files
+# ------------------------------------------------------------------------------
 
 SRC				=	$(wildcard $(SRC_DIR)/*.c) \
 					$(foreach dir, $(SUB_DIRS), $(wildcard $(SRC_DIR)/$(dir)/*.c))
 
 OBJ				=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
+
+# ------------------------------------------------------------------------------
+# flags
+# ------------------------------------------------------------------------------
+
+MAKEFLAGS 		+=	--no-print-directory
+MAKEFLAGS		+=	j8
 
 CFLAGS			=	-Wall -Wextra -Werror -O3 -pthread -march=native -ffast-math
 
@@ -36,27 +60,39 @@ CPPFLAGS		=	-I includes -I $(LIBFT_DIR)/includes -I $(MINLIB_DIR)
 
 VALGRIND		=	-g3
 
-INCLUDE_LIB		=	-L$(LIBFT_DIR) -lft -L$(MINLIB_DIR) -lmlx_Linux -lXext -lX11 -lm -lz 
+INCLUDE_LIB		=	-L$(LIBFT_DIR) -lft -L$(MINLIB_DIR) -lmlx_Linux -lXext -lX11 -lm -lz
 
 INCLUDE			=	-I includes -I $(LIBFT_DIR)/includes -I $(MINLIB_DIR)
 
+# ------------------------------------------------------------------------------
+# colors
+# ------------------------------------------------------------------------------
 
 RED				=	\033[31;1m
+
 BLU				=	\033[34;1m
+
 CYAN			=	\033[36;1m
+
 PUR				=	\033[35;1m
+
 END				=	\033[0m
+
 purp 			=	/033[0m
 
-all: $(NAME)
+# ------------------------------------------------------------------------------
+# rules
+# ------------------------------------------------------------------------------
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+all:			$(NAME)
+
+$(OBJ_DIR)/%.o:	$(SRC_DIR)/%.c
 				@mkdir -p $(dir $@)
 				@$(CC) $(CPPFLAGS) -c $< -o $@
 
-$(NAME): $(OBJ)
+$(NAME):		$(OBJ)
 	@make -C $(LIBFT_DIR)
-	@make -C $(MINLIB_DIR)
+	@make -C $(MINLIB_DIR) > /dev/null 2>&1
 	@echo -en "\xe2\x94\x8f\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81"
@@ -91,7 +127,7 @@ $(NAME): $(OBJ)
 	@echo -en "\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81"
-	@echo -en "$(END)$(PUR)|lib ready 🛠️ |$(END)"
+	@echo -en "$(END)$(PUR)|lib ready 🛠️  |$(END)"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
@@ -125,14 +161,14 @@ $(NAME): $(OBJ)
 	@echo -en "\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -e "\xe2\x94\x81\xe2\x94\x93"
 	@echo -en "\xe2\x94\x83$(CYAN)                      everything ok, "
-	@echo -e "ready to use 🌩️                   $(END)\xe2\x94\x83"
+	@echo -e "ready to use 🌩️                    $(END)\xe2\x94\x83"
 	@echo -en "\xe2\x94\x97\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
-	@echo -en "$(END)$(PUR)|binary ready ⛈️ |$(END)"
+	@echo -en "$(END)$(PUR)|binary ready ⛈️  |$(END)"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
@@ -140,6 +176,11 @@ $(NAME): $(OBJ)
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -e "\xe2\x94\x81\xe2\x94\x9b"
+
+debug:			$(OBJ)
+	@make -C $(LIBFT_DIR)
+	@make -C $(MINLIB_DIR) > /dev/null 2>&1
+	@cc -g $(OBJ) $(INCLUDE_LIB) $(CFLAGS) $(CPPFLAGS) -o $(NAME) $(VALGRIND)
 
 clean:
 	@echo -en "\xe2\x94\x8f\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
@@ -189,9 +230,11 @@ clean:
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -e "\xe2\x94\x9b"
 
-fclean: clean
+fclean: 		clean
 	@rm -rf $(NAME)
 	@make fclean -C $(LIBFT_DIR)
 	# @echo "\033[1;35]cleaned all 🚽\033[0m"
 
-re: fclean all
+re: 			fclean all
+
+.PHONY:			all clean fclean re

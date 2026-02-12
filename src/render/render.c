@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/09 05:39:43 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/12 22:36:55 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,12 +161,12 @@ static t_model	*find_model_for_geo(t_list *models, t_geometry *target_geo)
  */
 void    ft_update_mesh_from_animation(t_fdf *data)
 {
-	t_list		*curr_geo;
-	t_geometry	*geo;
-	t_model		*mdl;
-	int			global_index;
-	int			i;
-	t_vec3		new_pos;
+	t_list			*curr_geo;
+	t_geometry		*geo;
+	t_model			*mdl;
+	int				global_index;
+	int				i;
+	t_vec3			new_pos;
 	t_properties	def_pos = {0, 0, 0, 0};
 	t_properties	def_rot = {0, 0, 0, 0};
 	t_properties	def_scale = {0, 1, 1, 1};
@@ -225,11 +225,11 @@ void	ft_render_image(t_fdf *data)
 	data->trigo.cos_alpha = cos(data->camera->angle_x);
 	data->trigo.sin_beta = sin(data->camera->angle_y);
 	data->trigo.cos_beta = cos(data->camera->angle_y);
-	ft_update_time(&data->timer);
-	if (isnan(data->timer.weighted_value) || isinf(data->timer.weighted_value))
-		data->timer.weighted_value = 0.0;
 	if (data->fbx && data->fbx->current_anim)
 	{
+		ft_update_time(&data->timer);
+		if (isnan(data->timer.weighted_value) || isinf(data->timer.weighted_value))
+			data->timer.weighted_value = 0.0;
 		double	anim_duration = 0.0;
 		if (data->fbx->current_anim->layers)
 			anim_duration = 4.2;

@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/12 21:25:35 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/12 22:14:42 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,10 @@ struct s_model
 struct	s_deformer
 {
 	long	id;
+	int		*indexes;
+	double	*weights;
+	double	*transform;
+	double	*transformlink;
 };
 
 struct s_anim_curve
