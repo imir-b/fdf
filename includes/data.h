@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/12 22:14:42 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/13 16:57:09 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ typedef struct s_point			t_point;
  * Contient aussi les coordonnées projetées à l'écran (sx, sy) et la couleur.
  */
 typedef struct s_vec3			t_vec3;
+
+typedef struct s_matrix			t_matrix;
 
 /*
  * Définit la topologie d'une face (polygone) via une liste d'indices
@@ -195,10 +197,10 @@ struct s_model
 struct	s_deformer
 {
 	long	id;
-	int		*indexes;
+	int		*verticies;
 	double	*weights;
 	double	*transform;
-	double	*transformlink;
+	double	*t_link;
 };
 
 struct s_anim_curve
@@ -259,6 +261,11 @@ struct s_vec3
 	int		sx;
 	int		sy;
 	int		color;
+};
+
+struct s_matrix
+{
+	double	matrix[16];
 };
 
 struct s_face

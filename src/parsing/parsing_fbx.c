@@ -3,79 +3,100 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_fbx.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 22:36:04 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/08 20:08:17 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/13 15:26:07 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+static void	ft_count_fbx_elements(t_fbx *fbx, int *v, int *f)
+{
+	t_list		*curr;
+	t_geometry	*geo;
+
+	curr = fbx->geo;
+	*v = 0;
+	*f = 0;
+	while (curr)
+	{
+		geo = (t_geometry *)curr->content;
+		if (geo && geo->obj)
+		{
+			*v += geo->obj->nb_vertices;
+			*f += geo->obj->nb_faces;
+		}
+		curr = curr->next;
+	}
+}
+
+static void	ft_copy_faces(t_object *dst, t_object *src, int f_off, int v_off)
+{
+	int	j;
+	int	k;
+
+	j = 0;
+	while (j < src->nb_faces)
+	{
+		dst->faces[f_off + j].count = src->faces[j].count;
+		dst->faces[f_off + j].indices = malloc(sizeof(int) * src->faces[j].count);
+		k = 0;
+		while (k < src->faces[j].count)
+		{
+			dst->faces[f_off + j].indices[k] = src->faces[j].indices[k] + v_off;
+			k++;
+		}
+		j++;
+	}
+}
+
+static void	ft_fill_obj(t_fbx *fbx, t_object *big_obj)
+{
+	t_list		*curr;
+	t_geometry	*geo;
+	int			v_off;
+	int			f_off;
+	int			i;
+
+	curr = fbx->geo;
+	v_off = 0;
+	f_off = 0;
+	while (curr)
+	{
+		geo = (t_geometry *)curr->content;
+		if (geo && geo->obj)
+		{
+			i = -1;
+			while (++i < geo->obj->nb_vertices)
+				big_obj->vertices[v_off + i] = geo->obj->vertices[i];
+			ft_copy_faces(big_obj, geo->obj, f_off, v_off);
+			v_off += geo->obj->nb_vertices;
+			f_off += geo->obj->nb_faces;
+		}
+		curr = curr->next;
+	}
+}
+
 t_object	*ft_convert_fbx_to_object(t_fbx *fbx)
 {
-	t_object	*big_obj;
-	t_geometry	*geo;
-	t_list		*curr;
+	t_object	*big;
 	int			total_v;
 	int			total_f;
 
-	total_v = 0;
-	total_f = 0;
-	curr = fbx->geo;
-	while (curr)
-	{
-		geo = (t_geometry *)curr->content;
-		if (geo && geo->obj)
-		{
-			total_v += geo->obj->nb_vertices;
-			total_f += geo->obj->nb_faces;
-		}
-		curr = curr->next;
-	}
-	big_obj = ft_calloc(1, sizeof(t_object));
-	if (!big_obj)
+	ft_count_fbx_elements(fbx, &total_v, &total_f);
+	big = ft_calloc(1, sizeof(t_object));
+	if (!big)
 		return (NULL);
-	big_obj->nb_vertices = total_v;
-	big_obj->nb_faces = total_f;
-	big_obj->vertices = malloc(sizeof(t_vec3) * total_v);
-	big_obj->faces = malloc(sizeof(t_face) * total_f);
-	if (!big_obj->vertices || !big_obj->faces)
-		return (ft_free_object(big_obj), NULL);
-	int	v_offset = 0;
-	int	f_offset = 0;
-	curr = fbx->geo;
-	while (curr)
-	{
-		geo = (t_geometry *)curr->content;
-		if (geo && geo->obj)
-		{
-			int	i = 0;
-			while (i < geo->obj->nb_vertices)
-			{
-				big_obj->vertices[v_offset + i] = geo->obj->vertices[i];
-				i++;
-			}
-			int j = 0;
-			while (j < geo->obj->nb_faces)
-			{
-				big_obj->faces[f_offset + j].count = geo->obj->faces[j].count;
-				big_obj->faces[f_offset + j].indices = malloc(sizeof(int) * geo->obj->faces[j].count);
-				int	k = 0;
-				while (k < geo->obj->faces[j].count)
-				{
-					big_obj->faces[f_offset + j].indices[k] = \
-						geo->obj->faces[j].indices[k] + v_offset;
-					k++;
-				}
-				j++;
-			}
-			v_offset += geo->obj->nb_vertices;
-			f_offset += geo->obj->nb_faces;
-		}
-		curr = curr->next;
-	}
-	return (big_obj);
+	big->nb_vertices = total_v;
+	big->nb_faces = total_f;
+	big->vertices = malloc(sizeof(t_vec3) * total_v);
+	big->faces = malloc(sizeof(t_face) * total_f);
+	if (!big->vertices || !big->faces)
+		return (ft_free_object(big), NULL);
+	ft_fill_obj(fbx, big);
+	return (big);
 }
 
 /**

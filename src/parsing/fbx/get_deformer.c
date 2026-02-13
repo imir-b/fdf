@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 20:59:15 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/12 22:13:02 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/13 16:57:33 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,31 @@
  */
 t_deformer	*ft_get_deformer(char *cursor, int fd)
 {
-	t_deformer	*d;
+	t_deformer	*deformer;
+	char		*line;
+	int			n_verticies;
 
-	return d;
+	deformer = malloc(sizeof(t_deformer));
+	if (!deformer)
+		return (NULL);
+	deformer->id = atol(cursor);
+	while (TRUE)
+	{
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		cursor = ft_skip_spaces(line);
+		if (*cursor == '}')
+			return (free(line), deformer);
+		if (IS_TAG(cursor, "Indexes"))
+			deformer->verticies = ft_parse_verticies(cursor, fd);
+		else if (IS_TAG(cursor, "Weights"))
+			deformer->weights = ft_parse_weights(cursor, fd);
+		else if (IS_TAG(cursor, "TransformLink"))
+			deformer->t_link = ft_parse_transform_link(cursor, fd);
+		else if (IS_TAG(cursor, "Transform"))
+			deformer->transform = ft_parse_transform(cursor, fd);
+		free(line);
+	}
+	return (deformer);
 }
