@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_connections.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:14:16 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/06 20:14:46 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/14 01:29:20 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,30 +40,13 @@ void	ft_connect_obj_to_obj(t_fbx *data, long *ids)
 	{
 		dst = ft_get_by_id(data->anim_stack, ids[1]);
 		if (dst)
-		{
-			// printf("STACK CONNEXION : Layer %ld -> Stack %ld\n", ids[0], ids[1]); //debug
 			ft_lstadd_front(&((t_anim_stack *)dst)->layers, ft_lstnew(src));
-		}
-		// else //debug
-		// 	printf("FAIL STACK : Layer %ld veut se connecter à %ld (Introuvable)\n", ids[0], ids[1]);
 	}
 	else if ((src = ft_get_by_id(data->anim_node, ids[0])))
 	{
 		dst = ft_get_by_id(data->anim_layer, ids[1]);
 		if (dst)
-		{
-			// printf("LAYER CONNEXION : Layer %ld \n", ids[1]); //debug
 			ft_lstadd_front(&((t_anim_layer *)dst)->nodes, ft_lstnew(src));
-		}
-		// else //debug
-		// {
-		// 	static int printed = 0;
-		// 	if (!printed)
-		// 	{
-		// 		printf("Taille liste AnimNodes: %d\n", ft_lstsize(data->anim_node));
-		// 		printed = 1;
-		// 	}
-		// }
 	}
 }
 

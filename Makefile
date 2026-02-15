@@ -6,7 +6,7 @@
 #    By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2026/02/12 22:26:42 by vlad             ###   ########.fr        #
+#    Updated: 2026/02/14 16:52:17 by vlad             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,21 @@ SRC_DIR			=	src
 
 OBJ_DIR			=	obj
 
-SUB_DIRS		=	parsing parsing/fbx animation render utils controls
+PARS_DIR		=	parser
+FBX_DIR			=	$(PARS_DIR)/fbx
+ANIM_DIR		=	animation
+REND_DIR		=	render
+UTIL_DIR		=	utils
+EVENT_DIR		=	controls
+
+SUB_DIRS		=	$(PARS_DIR) \
+						$(FBX_DIR) \
+							$(FBX_DIR)/connections \
+							$(FBX_DIR)/objects \
+					$(EVENT_DIR) \
+					$(ANIM_DIR) \
+					$(REND_DIR) \
+					$(UTIL_DIR) \
 
 LIB_DIR			=	lib
 
