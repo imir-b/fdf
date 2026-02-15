@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 20:59:15 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/14 16:55:28 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/15 15:59:45 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,8 @@ double *ft_parse_weights(char **line, char *cursor, int fd)
 while (i < count)
     {
         ft_jump_to_next_value(&cursor, line, fd);
-		// DEBUG
         if (!*cursor)
-        {
-            printf("[!] ERREUR: Fin de fichier inattendue dans Weights (index %d/%d)\n", i, count);
             break;
-        }
         if (*cursor == '}')
             break;
     }

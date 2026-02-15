@@ -6,7 +6,7 @@
 #    By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2026/02/14 16:52:17 by vlad             ###   ########.fr        #
+#    Updated: 2026/02/15 16:00:44 by vlad             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ FBX_DIR			=	$(PARS_DIR)/fbx
 ANIM_DIR		=	animation
 REND_DIR		=	render
 UTIL_DIR		=	utils
-EVENT_DIR		=	controls
+EVENT_DIR		=	events
 
 SUB_DIRS		=	$(PARS_DIR) \
 						$(FBX_DIR) \
