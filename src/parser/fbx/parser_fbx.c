@@ -100,6 +100,49 @@ t_object	*ft_convert_fbx_to_object(t_fbx *fbx)
 }
 
 /**
+ * Reads file content into a buffer, replaces NUL bytes with spaces,
+ * writes the cleaned content to a temp file, and returns its fd.
+ * Some FBX exporters embed \0 bytes in object name strings,
+ * which breaks get_next_line's C string operations (strchr, strlen).
+ * Returns -1 on error.
+ */
+static int	ft_open_clean_fbx(const char *filename)
+{
+	int		fd_in;
+	int		fd_tmp;
+	char	*buf;
+	ssize_t	total;
+	ssize_t	i;
+
+	fd_in = open(filename, O_RDONLY);
+	if (fd_in == FAIL)
+		return (-1);
+	total = lseek(fd_in, 0, SEEK_END);
+	lseek(fd_in, 0, SEEK_SET);
+	if (total <= 0)
+		return (close(fd_in), -1);
+	buf = malloc(total);
+	if (!buf)
+		return (close(fd_in), -1);
+	if (read(fd_in, buf, total) != total)
+		return (close(fd_in), free(buf), -1);
+	close(fd_in);
+	i = -1;
+	while (++i < total)
+	{
+		if (buf[i] == '\0')
+			buf[i] = ' ';
+	}
+	fd_tmp = open("/tmp/.fdf_clean.fbx", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd_tmp == FAIL)
+		return (free(buf), -1);
+	write(fd_tmp, buf, total);
+	close(fd_tmp);
+	free(buf);
+	return (open("/tmp/.fdf_clean.fbx", O_RDONLY));
+}
+
+/**
  * Lit le fichier 'filename'.fbx pour remplir la structure 'fbx_data'.
  * On separe la lecture en deux parties :
  * 
@@ -123,8 +166,8 @@ t_fbx	*ft_parse_fbx(const char *filename)
 	fbx_data = ft_calloc(1, sizeof(t_fbx));
 	if (!fbx_data)
 		return (NULL);
-	fd = open(filename, O_RDONLY);
-	if (fd == FAIL)
+	fd = ft_open_clean_fbx(filename);
+	if (fd == -1)
 		return (free(fbx_data), NULL);
 	while (TRUE)
 	{
@@ -138,5 +181,16 @@ t_fbx	*ft_parse_fbx(const char *filename)
 		free(line);
 	}
 	close(fd);
+	unlink("/tmp/.fdf_clean.fbx");
+	{
+		t_list	*stacks;
+
+		stacks = fbx_data->anim_stack;
+		while (stacks)
+		{
+			ft_calculate_anim_duration((t_anim_stack *)stacks->content);
+			stacks = stacks->next;
+		}
+	}
 	return (fbx_data);
 }

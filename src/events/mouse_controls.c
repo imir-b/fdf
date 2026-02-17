@@ -22,11 +22,11 @@ int	ft_mouse_down(int button, int x, int y, t_fdf *data)
 		data->mouse.y = y;
 	}
 	if (button == WHEEL_UP)
-		data->camera->zoom += 1;
+		data->camera->zoom *= 1.2;
 	else if (button == WHEEL_DOWN)
 	{
-		if (data->camera->zoom > 1)
-			data->camera->zoom -= 1;
+		if (data->camera->zoom > 0.001)
+			data->camera->zoom /= 1.2;
 	}
 	if (button == WHEEL_UP || button == WHEEL_DOWN)
 		ft_render_image(data);

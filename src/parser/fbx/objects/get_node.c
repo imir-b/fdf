@@ -14,18 +14,24 @@
 
 static char	ft_extract_type(char *line)
 {
-	if (ft_strnstr(line, "\"T\"", ft_strlen(line)))
-		return ('T');
-	if (ft_strnstr(line, "\"R\"", ft_strlen(line)))
-		return ('R');
-	if (ft_strnstr(line, "\"S\"", ft_strlen(line)))
-		return ('S');
-	if (ft_strnstr(line, "::T\"", ft_strlen(line)))
-		return ('T');
-	if (ft_strnstr(line, "::R\"", ft_strlen(line)))
-		return ('R');
-	if (ft_strnstr(line, "::S\"", ft_strlen(line)))
-		return ('S');
+	char	*quote;
+
+	quote = ft_strchr(line, '"');
+	if (!quote)
+		return (0);
+	quote++;
+	if (*quote == 'T' || *quote == 'R' || *quote == 'S')
+	{
+		if (*(quote + 1) == '"' || *(quote + 1) == '\0')
+			return (*quote);
+		if (ft_strnstr(line, "::T\"", ft_strlen(line)))
+			return ('T');
+		if (ft_strnstr(line, "::R\"", ft_strlen(line)))
+			return ('R');
+		if (ft_strnstr(line, "::S\"", ft_strlen(line)))
+			return ('S');
+		return (*quote);
+	}
 	return (0);
 }
 

@@ -15,16 +15,37 @@
 t_camera	*ft_init_camera(t_object *obj)
 {
 	t_camera	*cam;
+	double		span;
+	int			i;
 
 	cam = malloc(sizeof(t_camera));
 	if (!cam)
 		return (NULL);
 	if (obj->width > 0)
 		cam->zoom = WIN_WIDTH / obj->width / 2;
+	else if (obj->nb_vertices > 0)
+	{
+		span = 0;
+		i = 0;
+		while (i < obj->nb_vertices)
+		{
+			if (fabs(obj->vertices[i].x) > span)
+				span = fabs(obj->vertices[i].x);
+			if (fabs(obj->vertices[i].y) > span)
+				span = fabs(obj->vertices[i].y);
+			if (fabs(obj->vertices[i].z) > span)
+				span = fabs(obj->vertices[i].z);
+			i++;
+		}
+		if (span > 0)
+			cam->zoom = (WIN_WIDTH / 3.0) / span;
+		else
+			cam->zoom = 20;
+	}
 	else
 		cam->zoom = 20;
-	if (cam->zoom < 1)
-		cam->zoom = 1;
+	if (cam->zoom < 0.001)
+		cam->zoom = 0.001;
 	cam->angle_x = RADIAN_30;
 	cam->angle_y = RADIAN_30;
 	cam->z_scale = 1.0;

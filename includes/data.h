@@ -6,7 +6,7 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/13 16:57:09 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/15 16:19:16 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,7 @@ struct s_anim_stack
 {
 	long	id;
 	char	*name;
+	double	duration;
 	t_list	*layers;
 };
 
@@ -288,7 +289,7 @@ struct s_camera
 {
 	int		shift_x;
 	int		shift_y;
-	int		zoom;
+	double	zoom;
 	float	z_scale;
 	int		projection;
 	double	angle_x;

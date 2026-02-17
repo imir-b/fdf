@@ -47,16 +47,26 @@ static char	*ft_extract_name(char *cursor)
 t_anim_stack	*ft_get_anim_stack(char *cursor, int fd)
 {
 	t_anim_stack	*anim_stack;
+	char			*colon;
 
 	(void)fd;
 	anim_stack = ft_calloc(1, sizeof(t_anim_stack));
 	if (!anim_stack)
 		return (NULL);
 	anim_stack->id = ft_atol(cursor);
-	cursor = ft_strrchr(cursor, ':');
-	if (*cursor)
-		cursor++;
-	anim_stack->name = ft_extract_name(cursor);
+	colon = ft_strrchr(cursor, ':');
+	if (colon && *colon)
+		cursor = colon + 1;
+	else
+	{
+		cursor = ft_strchr(cursor, '"');
+		if (cursor)
+			cursor++;
+	}
+	if (cursor)
+		anim_stack->name = ft_extract_name(cursor);
+	else
+		anim_stack->name = ft_strdup("Unknown");
 	return (anim_stack);
 }
 

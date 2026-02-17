@@ -82,6 +82,8 @@ double	ft_atof(const char *s)
 	double	res;
 	double	fact;
 	int		sign;
+	int		exp;
+	int		exp_sign;
 
 	res = 0.0;
 	fact = 1.0;
@@ -91,14 +93,32 @@ double	ft_atof(const char *s)
 		sign = -1;
 		s++;
 	}
-	while (*s && *s != '.')
+	while (*s && ft_isdigit(*s))
 		res = res * 10.0 + (*s++ - '0');
 	if (*s == '.')
-		s++;
-	while (*s)
 	{
-		fact /= 10.0;
-		res += (*s++ - '0') * fact;
+		s++;
+		while (*s && ft_isdigit(*s))
+		{
+			fact /= 10.0;
+			res += (*s++ - '0') * fact;
+		}
+	}
+	if (*s == 'e' || *s == 'E')
+	{
+		s++;
+		exp_sign = 1;
+		if (*s == '-')
+		{
+			exp_sign = -1;
+			s++;
+		}
+		else if (*s == '+')
+			s++;
+		exp = 0;
+		while (*s && ft_isdigit(*s))
+			exp = exp * 10 + (*s++ - '0');
+		res *= pow(10.0, exp_sign * exp);
 	}
 	return (res * sign);
 }

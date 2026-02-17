@@ -6,11 +6,58 @@
 /*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:14:16 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/14 01:29:20 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/15 16:39:15 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+void	ft_calculate_anim_duration(t_anim_stack *anim)
+{
+	t_list			*l_layer;
+	t_list			*l_node;
+	t_anim_layer	*layer;
+	t_anim_node		*node;
+	long long		max_time;
+	long long		current_time;
+
+	max_time = 0;
+	l_layer = anim->layers;
+	while (l_layer)
+	{
+		layer = (t_anim_layer *)l_layer->content;
+		l_node = layer->nodes;
+		while (l_node)
+		{
+			node = (t_anim_node *)l_node->content; 
+			if (node->x && node->x->n_keys > 0)
+			{
+				current_time = node->x->time[node->x->n_keys - 1];
+				if (current_time > max_time)
+					max_time = current_time;
+			}
+			if (node->y && node->y->n_keys > 0)
+			{
+				current_time = node->y->time[node->y->n_keys - 1];
+				if (current_time > max_time)
+					max_time = current_time;
+			}
+			if (node->z && node->z->n_keys > 0)
+			{
+				current_time = node->z->time[node->z->n_keys - 1];
+				if (current_time > max_time)
+					max_time = current_time;
+			}
+			l_node = l_node->next;
+		}
+		l_layer = l_layer->next;
+	}
+	if (max_time > 0)
+		anim->duration = (double)max_time / FBX_SEC;
+	else
+		anim->duration = 1.0;
+	printf("Animation duration calculated: %.2f seconds\n", anim->duration);
+}
 
 long	*ft_read_ids(char *line, long *ids)
 {

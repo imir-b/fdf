@@ -179,15 +179,15 @@ void    ft_update_mesh_from_animation(t_fdf *data)
 	{
 		geo = (t_geometry *)curr_geo->content;
 		mdl = find_model_for_geo(data->fbx->model, geo);
-		if (mdl) // debug
-        {
-            printf("GEO LINKED! GeoID: %ld -> ModelID: %ld | Pos: %f %f %f\n", 
-                   geo->id, mdl->id, mdl->pos.x, mdl->pos.y, mdl->pos.z);
-        }
-        else // debug
-        {
-            printf("GEO ORPHAN! GeoID: %ld has no Model attached.\n", geo->id);
-        }
+		// if (mdl) // debug
+        // {
+        //     printf("GEO LINKED! GeoID: %ld -> ModelID: %ld | Pos: %f %f %f\n", 
+        //            geo->id, mdl->id, mdl->pos.x, mdl->pos.y, mdl->pos.z);
+        // }
+        // else // debug
+        // {
+        //     printf("GEO ORPHAN! GeoID: %ld has no Model attached.\n", geo->id);
+        // }
 		if (geo->obj)
 		{
 			i = 0;
@@ -244,6 +244,6 @@ void	ft_render_image(t_fdf *data)
 	ft_draw_axes(data);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.ptr, 0, 0);
 	ft_display_fps(data);
-	if (data->fbx->anim_stack)
+	if (data->fbx && data->fbx->anim_stack)
 		ft_display_anim_menu(data);
 }
