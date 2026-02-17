@@ -18,8 +18,8 @@ void	ft_calculate_anim_duration(t_anim_stack *anim)
 	t_list			*l_node;
 	t_anim_layer	*layer;
 	t_anim_node		*node;
-	long long		max_time;
-	long long		current_time;
+	double			max_time; // Changed from long long to double
+	long long		current_time_placeholder; // unused
 
 	max_time = 0;
 	l_layer = anim->layers;
@@ -29,34 +29,31 @@ void	ft_calculate_anim_duration(t_anim_stack *anim)
 		l_node = layer->nodes;
 		while (l_node)
 		{
-			node = (t_anim_node *)l_node->content; 
+			node = (t_anim_node *)l_node->content;
+			
 			if (node->x && node->x->n_keys > 0)
 			{
-				current_time = node->x->time[node->x->n_keys - 1];
-				if (current_time > max_time)
-					max_time = current_time;
+				if (node->x->time[node->x->n_keys - 1] > max_time)
+					max_time = node->x->time[node->x->n_keys - 1];
 			}
 			if (node->y && node->y->n_keys > 0)
 			{
-				current_time = node->y->time[node->y->n_keys - 1];
-				if (current_time > max_time)
-					max_time = current_time;
+				if (node->y->time[node->y->n_keys - 1] > max_time)
+					max_time = node->y->time[node->y->n_keys - 1];
 			}
 			if (node->z && node->z->n_keys > 0)
 			{
-				current_time = node->z->time[node->z->n_keys - 1];
-				if (current_time > max_time)
-					max_time = current_time;
+				if (node->z->time[node->z->n_keys - 1] > max_time)
+					max_time = node->z->time[node->z->n_keys - 1];
 			}
 			l_node = l_node->next;
 		}
 		l_layer = l_layer->next;
 	}
 	if (max_time > 0)
-		anim->duration = (double)max_time / FBX_SEC;
+		anim->duration = max_time; // Already in seconds
 	else
 		anim->duration = 1.0;
-	printf("Animation duration calculated: %.2f seconds\n", anim->duration);
 }
 
 long	*ft_read_ids(char *line, long *ids)

@@ -116,31 +116,6 @@ int	main(int ac, char **av)
 	{
 		if (fbx->anim_stack)
 			fbx->current_anim = (t_anim_stack *)fbx->anim_stack->content;
-		/* DEBUG: trace animation structure */
-		{
-			t_list *s = fbx->anim_stack;
-			while (s) {
-				t_anim_stack *st = (t_anim_stack *)s->content;
-				fprintf(stderr, "STACK: id=%ld name=%s dur=%f layers=%p\n",
-					st->id, st->name, st->duration, (void*)st->layers);
-				t_list *ll = st->layers;
-				while (ll) {
-					t_anim_layer *la = (t_anim_layer *)ll->content;
-					fprintf(stderr, "  LAYER: id=%ld nodes=%p\n",
-						la->id, (void*)la->nodes);
-					t_list *nn = la->nodes;
-					while (nn) {
-						t_anim_node *nd = (t_anim_node *)nn->content;
-						fprintf(stderr, "    NODE: id=%ld type=%c tgt=%p x=%p y=%p z=%p\n",
-							nd->id, nd->type ? nd->type : '?',
-							(void*)nd->target, (void*)nd->x, (void*)nd->y, (void*)nd->z);
-						nn = nn->next;
-					}
-					ll = ll->next;
-				}
-				s = s->next;
-			}
-		}
 	}
 	if (!object)
 		return (ft_error("Parsing map failed"));

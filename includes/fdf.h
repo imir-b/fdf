@@ -47,8 +47,10 @@ int					ft_absolute(int n);
 int					ft_direction(int x1, int x2);
 void				my_mlx_pixel_put(t_fdf *data, int x, int y, int color);
 int					ft_close_window(t_fdf *data);
-t_fdf				*ft_init_data(t_object *obj, t_camera *camera, t_fbx *fbx);
+t_fdf				*ft_init_data(t_object *obj, t_camera *cam, t_fbx *fbx);
 t_bresenham			ft_init_graphics(t_point p1, t_point p2);
+t_camera			*ft_init_camera(t_object *obj, t_fbx *fbx);
+int					ft_process_fdf(t_object *obj, t_fbx *fbx);
 void				*ft_free_tab(char **tab);
 void				*ft_free_int_tab(int **tab);
 void				*ft_free_object(t_object *obj);
@@ -62,7 +64,12 @@ int					ft_process_fdf(t_object *obj, t_fbx *fbx);
 void				ft_project_point(t_vec3 *v, t_fdf *data);
 void				ft_transform_axis_point(double *x, double *y, double *z, \
 						t_fdf *data);
+// Render
 void				ft_render_image(t_fdf *data);
+double				to_rad(double degree);
+t_vec3				apply_transform(t_vec3 point, t_properties p, t_properties r, t_properties s);
+t_vec3				ft_get_world_transform(t_vec3 point, t_model *model);
+t_model				*find_model_for_geo(t_list *models, t_geometry *target_geo);
 void				ft_iso_project(double *x, double *y, double *z);
 void				ft_parallel_project(t_fdf *data, float angle_x, \
 						float angle_y);
@@ -79,6 +86,7 @@ int					ft_pause(t_fdf *data);
 void				ft_next_anim(t_fdf *data);
 void				ft_prev_anim(t_fdf *data);
 void				ft_update_time(t_timer *t);
+void				ft_init_timer(t_timer *t, double duration_sec);
 
 // -----------------------------------------------------------------------------
 // *** USER INTERFACE ***
@@ -112,6 +120,7 @@ int					ft_extract_line(char **cursor, char **line, int fd);
 void				*ft_get_by_id(t_list *list, long id);
 int					ft_parse_objects(t_fbx *fbx_data, int fd);
 int					ft_parse_connections(t_fbx *fbx_data, int fd);
+void				ft_calculate_anim_duration(t_anim_stack *anim);
 void				*ft_free_fbx_data(t_fbx *data);
 int					ft_parse_face(t_object *obj, char **line, char *cursor, int fd);
 t_geometry			*ft_get_geometry(char *cursor, int fd);

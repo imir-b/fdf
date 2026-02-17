@@ -12,20 +12,55 @@
 
 #include "fdf.h"
 
-t_camera	*ft_init_camera(t_object *obj)
+t_camera	*ft_init_camera(t_object *obj, t_fbx *fbx)
 {
 	t_camera	*cam;
 	double		span;
 	int			i;
+	t_vec3		v;
+	t_list		*curr;
+	t_geometry	*geo;
+	t_model		*mdl;
 
 	cam = malloc(sizeof(t_camera));
 	if (!cam)
 		return (NULL);
+	span = 0;
 	if (obj->width > 0)
 		cam->zoom = WIN_WIDTH / obj->width / 2;
+	else if (fbx && fbx->geo)
+	{
+		curr = fbx->geo;
+		while (curr)
+		{
+			geo = (t_geometry *)curr->content;
+			mdl = find_model_for_geo(fbx->model, geo);
+			if (geo->obj)
+			{
+				i = -1;
+				while (++i < geo->obj->nb_vertices)
+				{
+					if (mdl)
+						v = ft_get_world_transform(geo->obj->vertices[i], mdl);
+					else
+						v = geo->obj->vertices[i];
+					if (fabs(v.x) > span)
+						span = fabs(v.x);
+					if (fabs(v.y) > span)
+						span = fabs(v.y);
+					if (fabs(v.z) > span)
+						span = fabs(v.z);
+				}
+			}
+			curr = curr->next;
+		}
+		if (span > 0)
+			cam->zoom = (WIN_WIDTH / 3.0) / span;
+		else
+			cam->zoom = 20;
+	}
 	else if (obj->nb_vertices > 0)
 	{
-		span = 0;
 		i = 0;
 		while (i < obj->nb_vertices)
 		{
@@ -69,7 +104,7 @@ int	ft_process_fdf(t_object *obj, t_fbx *fbx)
 	t_fdf		*data;
 	t_camera	*cam;
 
-	cam = ft_init_camera(obj);
+	cam = ft_init_camera(obj, fbx);
 	if (!cam)
 		return (ERROR);
 	data = ft_init_data(obj, cam, fbx);

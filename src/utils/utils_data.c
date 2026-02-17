@@ -92,5 +92,9 @@ t_fdf	*ft_init_data(t_object *obj, t_camera *camera, t_fbx *fbx)
 	data->mouse.x = 0;
 	data->mouse.y = 0;
 	data->fbx = fbx;
+	if (fbx && fbx->current_anim)
+		ft_init_timer(&data->timer, fbx->current_anim->duration);
+	else
+		ft_init_timer(&data->timer, 1.0);
 	return (data);
 }

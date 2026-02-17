@@ -65,7 +65,7 @@ static void	ft_transform_threads(t_fdf *data)
 /**
  * fonction test pour animation
  */
-static double to_rad(double degree)
+double to_rad(double degree)
 {
     return (degree * M_PI / 180.0);
 }
@@ -73,7 +73,7 @@ static double to_rad(double degree)
 /**
  * fonction test pour animation
  */
-static t_vec3 apply_transform(t_vec3 point, t_properties p, t_properties r, t_properties s)
+t_vec3 apply_transform(t_vec3 point, t_properties p, t_properties r, t_properties s)
 {
 	double	tx, ty, tz;
 	double	rad_x;
@@ -125,7 +125,7 @@ static t_vec3 apply_transform(t_vec3 point, t_properties p, t_properties r, t_pr
 }
 
 
-static t_vec3	ft_get_world_transform(t_vec3 point, t_model *model)
+t_vec3	ft_get_world_transform(t_vec3 point, t_model *model)
 {
 	t_vec3	curr_point;
 
@@ -142,7 +142,7 @@ static t_vec3	ft_get_world_transform(t_vec3 point, t_model *model)
 /**
  * fonction test pour animation
  */
-static t_model	*find_model_for_geo(t_list *models, t_geometry *target_geo)
+t_model	*find_model_for_geo(t_list *models, t_geometry *target_geo)
 {
 	t_model	*mdl;
 
@@ -230,11 +230,9 @@ void	ft_render_image(t_fdf *data)
 		ft_update_time(&data->timer);
 		if (isnan(data->timer.weighted_value) || isinf(data->timer.weighted_value))
 			data->timer.weighted_value = 0.0;
-		double	anim_duration = 0.0;
-		if (data->fbx->current_anim->layers)
-			anim_duration = 4.2;
-		if (anim_duration > 0.001)
-			data->timer.weighted_value = fmod(data->timer.weighted_value, anim_duration);
+		if (data->fbx->current_anim->duration > 0.001)
+			data->timer.weighted_value = fmod(data->timer.weighted_value, \
+			data->fbx->current_anim->duration);
 		ft_animate(data);
 		ft_update_mesh_from_animation(data);
 	}
