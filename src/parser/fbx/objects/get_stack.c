@@ -48,8 +48,8 @@ t_anim_stack	*ft_get_anim_stack(char *cursor, int fd)
 {
 	t_anim_stack	*anim_stack;
 	char			*colon;
+	char			*line;
 
-	(void)fd;
 	anim_stack = ft_calloc(1, sizeof(t_anim_stack));
 	if (!anim_stack)
 		return (NULL);
@@ -67,6 +67,16 @@ t_anim_stack	*ft_get_anim_stack(char *cursor, int fd)
 		anim_stack->name = ft_extract_name(cursor);
 	else
 		anim_stack->name = ft_strdup("Unknown");
+	while (TRUE)
+	{
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		cursor = ft_skip_spaces(line);
+		if (*cursor == '}')
+			return (free(line), anim_stack);
+		free(line);
+	}
 	return (anim_stack);
 }
 
@@ -77,11 +87,23 @@ t_anim_stack	*ft_get_anim_stack(char *cursor, int fd)
 t_anim_layer	*ft_get_anim_layer(char *cursor, int fd)
 {
 	t_anim_layer	*anim_layer;
+	char			*line;
 
-	(void)fd;
 	anim_layer = ft_calloc(1, sizeof(t_anim_layer));
 	if (!anim_layer)
 		return (NULL);
 	anim_layer->id = ft_atol(cursor);
+	if (!ft_strchr(cursor, '{'))
+		return (anim_layer);
+	while (TRUE)
+	{
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		cursor = ft_skip_spaces(line);
+		if (*cursor == '}')
+			return (free(line), anim_layer);
+		free(line);
+	}
 	return (anim_layer);
 }

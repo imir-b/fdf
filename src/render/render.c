@@ -118,9 +118,9 @@ t_vec3 apply_transform(t_vec3 point, t_properties p, t_properties r, t_propertie
 	point.x = tx;
 	point.y = ty;
     // 5. TRANSLATION
-	point.x += (p.x / 1000.0);
-	point.y += (p.y / 1000.0);
-	point.z += (p.z / 1000.0);
+	point.x += p.x;
+	point.y += p.y;
+	point.z += p.z;
 	return (point);
 }
 
@@ -155,15 +155,78 @@ t_model	*find_model_for_geo(t_list *models, t_geometry *target_geo)
 	}
 	return (NULL);
 }
+/**
+ * Cherche un modèle animé avec de vraies keyframes (>1 keys)
+ * pour propager l'animation racine aux maillages squelettiques.
+ */
+static t_model	*ft_find_animated_bone(t_list *models)
+{
+	t_model	*mdl;
+	t_model	*best;
+	int		max_keys;
+	int		keys;
+
+	best = NULL;
+	max_keys = 1;
+	while (models)
+	{
+		mdl = (t_model *)models->content;
+		keys = 0;
+		if (mdl->anim_pos && mdl->anim_pos->x)
+			keys = mdl->anim_pos->x->n_keys;
+		if (mdl->anim_rot && mdl->anim_rot->x
+			&& mdl->anim_rot->x->n_keys > keys)
+			keys = mdl->anim_rot->x->n_keys;
+		if (keys > max_keys)
+		{
+			max_keys = keys;
+			best = mdl;
+		}
+		models = models->next;
+	}
+	return (best);
+}
 
 /**
- * fonction test pour animation
+ * Vérifie si un modèle est un maillage squelettique :
+ * il a des liens d'animation (anim_pos/rot/scale non NULL)
+ * mais avec seulement 1 keyframe (= pose de repos, pas d'animation réelle).
+ * Les modèles sans AUCUN lien d'animation (ex: escaliers) ne sont PAS
+ * des maillages squelettiques et ne doivent PAS recevoir d'animation d'os.
+ */
+static int	ft_model_is_skeletal_mesh(t_model *mdl)
+{
+	int	has_anim_link;
+	int	has_real_keys;
+
+	has_anim_link = (mdl->anim_pos != NULL || mdl->anim_rot != NULL
+			|| mdl->anim_scale != NULL);
+	if (!has_anim_link)
+		return (0);
+	has_real_keys = 0;
+	if (mdl->anim_pos && mdl->anim_pos->x
+		&& mdl->anim_pos->x->n_keys > 1)
+		has_real_keys = 1;
+	if (mdl->anim_rot && mdl->anim_rot->x
+		&& mdl->anim_rot->x->n_keys > 1)
+		has_real_keys = 1;
+	if (mdl->anim_scale && mdl->anim_scale->x
+		&& mdl->anim_scale->x->n_keys > 1)
+		has_real_keys = 1;
+	return (!has_real_keys);
+}
+
+/**
+ * Met à jour les vertices du maillage à partir des animations.
+ * Pour les modèles squelettiques (parrot, etc.), applique aussi
+ * l'animation de l'os racine pour donner du mouvement global.
  */
 void    ft_update_mesh_from_animation(t_fdf *data)
 {
 	t_list			*curr_geo;
 	t_geometry		*geo;
 	t_model			*mdl;
+	t_model			*bone;
 	int				global_index;
 	int				i;
 	t_vec3			new_pos;
@@ -179,15 +242,9 @@ void    ft_update_mesh_from_animation(t_fdf *data)
 	{
 		geo = (t_geometry *)curr_geo->content;
 		mdl = find_model_for_geo(data->fbx->model, geo);
-		// if (mdl) // debug
-        // {
-        //     printf("GEO LINKED! GeoID: %ld -> ModelID: %ld | Pos: %f %f %f\n", 
-        //            geo->id, mdl->id, mdl->pos.x, mdl->pos.y, mdl->pos.z);
-        // }
-        // else // debug
-        // {
-        //     printf("GEO ORPHAN! GeoID: %ld has no Model attached.\n", geo->id);
-        // }
+		bone = NULL;
+		if (mdl && ft_model_is_skeletal_mesh(mdl))
+			bone = ft_find_animated_bone(data->fbx->model);
 		if (geo->obj)
 		{
 			i = 0;
@@ -197,6 +254,8 @@ void    ft_update_mesh_from_animation(t_fdf *data)
 					new_pos = ft_get_world_transform(geo->obj->vertices[i], mdl);
 				else
 					new_pos = apply_transform(geo->obj->vertices[i], def_pos, def_rot, def_scale);
+				if (bone)
+					new_pos = ft_get_world_transform(new_pos, bone);
 				new_pos.color = geo->obj->vertices[i].color;
 				data->object->vertices[global_index + i] = new_pos;
 				i++;

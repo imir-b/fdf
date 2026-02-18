@@ -33,6 +33,8 @@ void	ft_update_time(t_timer *t)
 {
 	long	current;
 
+	if (t->is_paused)
+		return ;
 	current = ft_get_time_ms();
 	t->delta_time = (double)(current - t->last_frame) / 1000.0;
 	t->last_frame = current;

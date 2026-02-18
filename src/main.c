@@ -115,7 +115,7 @@ int	main(int ac, char **av)
 	if (fbx)
 	{
 		if (fbx->anim_stack)
-			fbx->current_anim = (t_anim_stack *)fbx->anim_stack->content;
+			fbx->current_anim = (t_anim_stack *)ft_lstlast(fbx->anim_stack)->content;
 	}
 	if (!object)
 		return (ft_error("Parsing map failed"));
@@ -123,3 +123,4 @@ int	main(int ac, char **av)
 	ft_free_object(object);
 	return (SUCCESS);
 }
+

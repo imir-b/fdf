@@ -22,16 +22,18 @@ static char	ft_extract_type(char *line)
 	quote++;
 	if (*quote == 'T' || *quote == 'R' || *quote == 'S')
 	{
-		if (*(quote + 1) == '"' || *(quote + 1) == '\0')
+		if (*(quote + 1) == '"' || *(quote + 1) == '\0'
+			|| *(quote + 1) == ' ')
 			return (*quote);
-		if (ft_strnstr(line, "::T\"", ft_strlen(line)))
-			return ('T');
-		if (ft_strnstr(line, "::R\"", ft_strlen(line)))
-			return ('R');
-		if (ft_strnstr(line, "::S\"", ft_strlen(line)))
-			return ('S');
-		return (*quote);
 	}
+	if (ft_strnstr(line, "::T\"", ft_strlen(line)))
+		return ('T');
+	if (ft_strnstr(line, "::R\"", ft_strlen(line)))
+		return ('R');
+	if (ft_strnstr(line, "::S\"", ft_strlen(line)))
+		return ('S');
+	if (*quote == 'T' || *quote == 'R' || *quote == 'S')
+		return (*quote);
 	return (0);
 }
 
