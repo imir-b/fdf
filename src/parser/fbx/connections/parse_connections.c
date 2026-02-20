@@ -19,7 +19,6 @@ void	ft_calculate_anim_duration(t_anim_stack *anim)
 	t_anim_layer	*layer;
 	t_anim_node		*node;
 	double			max_time; // Changed from long long to double
-	long long		current_time_placeholder; // unused
 
 	max_time = 0;
 	l_layer = anim->layers;
@@ -69,10 +68,35 @@ long	*ft_read_ids(char *line, long *ids)
 	return (ids);
 }
 
+static t_geometry	*ft_find_geo_with_deformer(t_fbx *data, long skin_id)
+{
+	t_list		*geos;
+	t_geometry	*geo;
+	t_list		*defs;
+	t_deformer	*def;
+
+	geos = data->geo;
+	while (geos)
+	{
+		geo = (t_geometry *)geos->content;
+		defs = geo->deformers;
+		while (defs)
+		{
+			def = (t_deformer *)defs->content;
+			if (def->id == skin_id)
+				return (geo);
+			defs = defs->next;
+		}
+		geos = geos->next;
+	}
+	return (NULL);
+}
+
 void	ft_connect_obj_to_obj(t_fbx *data, long *ids)
 {
-	void	*src;
-	void	*dst;
+	void		*src;
+	void		*dst;
+	t_geometry	*geo;
 
 	src = ft_get_by_id(data->geo, ids[0]);
 	dst = ft_get_by_id(data->model, ids[1]);
@@ -91,6 +115,24 @@ void	ft_connect_obj_to_obj(t_fbx *data, long *ids)
 		dst = ft_get_by_id(data->anim_layer, ids[1]);
 		if (dst)
 			ft_lstadd_front(&((t_anim_layer *)dst)->nodes, ft_lstnew(src));
+	}
+	else if ((src = ft_get_by_id(data->deformer, ids[0])))
+	{
+		dst = ft_get_by_id(data->geo, ids[1]);
+		if (dst)
+			ft_lstadd_front(&((t_geometry *)dst)->deformers, ft_lstnew(src));
+		else if (ft_get_by_id(data->deformer, ids[1]))
+		{
+			geo = ft_find_geo_with_deformer(data, ids[1]);
+			if (geo)
+				ft_lstadd_front(&geo->deformers, ft_lstnew(src));
+		}
+	}
+	else if ((src = ft_get_by_id(data->model, ids[0])))
+	{
+		dst = ft_get_by_id(data->deformer, ids[1]);
+		if (dst)
+			((t_deformer *)dst)->bone = (t_model *)src;
 	}
 }
 

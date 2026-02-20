@@ -109,10 +109,16 @@ t_model	*ft_get_model(char *cursor, int fd)
 			break ;
 		cursor = ft_skip_spaces(line);
 		if (*cursor == '}')
-			return (free(line), model);
+		{
+			free(line);
+			break ;
+		}
 		if (IS_TAG(cursor, "Properties70"))
 			ft_parse_properties(model, fd);
 		free(line);
 	}
+	model->base_pos = model->pos;
+	model->base_rot = model->rot;
+	model->base_scale = model->scale;
 	return (model);
 }

@@ -100,9 +100,9 @@ purp 			=	/033[0m
 
 all:			$(NAME)
 
-$(OBJ_DIR)/%.o:	$(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o:	$(SRC_DIR)/%.c $(wildcard includes/*.h)
 				@mkdir -p $(dir $@)
-				@$(CC) $(CPPFLAGS) -c $< -o $@
+				@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 $(NAME):		$(OBJ)
 	@make -C $(LIBFT_DIR)

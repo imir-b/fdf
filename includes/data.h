@@ -171,6 +171,7 @@ struct s_geometry
 {
 	long		id;
 	t_object	*obj;
+	t_list		*deformers;
 };
 
 struct s_properties
@@ -187,6 +188,9 @@ struct s_model
 	t_properties	pos;
 	t_properties	rot;
 	t_properties	scale;
+	t_properties	base_pos;
+	t_properties	base_rot;
+	t_properties	base_scale;
 	t_anim_node		*anim_pos;
 	t_anim_node		*anim_rot;
 	t_anim_node		*anim_scale;
@@ -196,11 +200,13 @@ struct s_model
 
 struct	s_deformer
 {
-	long	id;
-	int		*verticies;
-	double	*weights;
-	double	*transform;
-	double	*t_link;
+	long		id;
+	int			n_vertices;
+	int			*verticies;
+	double		*weights;
+	double		*transform;
+	double		*t_link;
+	t_model		*bone;
 };
 
 struct s_anim_curve

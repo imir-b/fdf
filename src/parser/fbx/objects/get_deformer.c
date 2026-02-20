@@ -23,7 +23,7 @@ static void ft_skip_number(char **cursor)
 /**
  * Indexes: *26 { a: 1480, 1481, ... }
  */
-int *ft_parse_verticies(char **line, char *cursor, int fd)
+int *ft_parse_verticies(char **line, char *cursor, int fd, int *out_count)
 {
     int     *indexes;
     int     count;
@@ -49,6 +49,9 @@ int *ft_parse_verticies(char **line, char *cursor, int fd)
         ft_skip_number(&cursor);
         i++;
     }
+    ft_skip_closing_brace(&cursor, line, fd);
+    if (out_count)
+        *out_count = count;
     return (indexes);
 }
 
@@ -72,14 +75,16 @@ double *ft_parse_weights(char **line, char *cursor, int fd)
     if (cursor)
         cursor++;
     i = 0;
-while (i < count)
+    while (i < count)
     {
         ft_jump_to_next_value(&cursor, line, fd);
-        if (!*cursor)
+        if (!*cursor || *cursor == '}')
             break;
-        if (*cursor == '}')
-            break;
+        weights[i] = ft_atof(cursor);
+        ft_skip_number(&cursor);
+        i++;
     }
+    ft_skip_closing_brace(&cursor, line, fd);
     return (weights);
 }
 
@@ -142,9 +147,8 @@ t_deformer	*ft_get_deformer(char *cursor, int fd)
 {
 	t_deformer	*deformer;
 	char		*line;
-	int			n_verticies;
 
-	deformer = malloc(sizeof(t_deformer));
+	deformer = ft_calloc(1, sizeof(t_deformer));
 	if (!deformer)
 		return (NULL);
 	deformer->id = atol(cursor);
@@ -157,7 +161,7 @@ t_deformer	*ft_get_deformer(char *cursor, int fd)
 		if (*cursor == '}')
 			return (free(line), deformer);
 		if (IS_TAG(cursor, "Indexes"))
-			deformer->verticies = ft_parse_verticies(&line, cursor, fd);
+			deformer->verticies = ft_parse_verticies(&line, cursor, fd, &deformer->n_vertices);
 		else if (IS_TAG(cursor, "Weights"))
 			deformer->weights = ft_parse_weights(&line, cursor, fd);
 		else if (IS_TAG(cursor, "TransformLink"))

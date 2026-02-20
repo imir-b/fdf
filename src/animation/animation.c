@@ -86,6 +86,24 @@ static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
 	}
 }
 
+static void	ft_reset_models_to_base(t_fdf *data)
+{
+	t_list	*models;
+	t_model	*mdl;
+
+	if (!data || !data->fbx || !data->fbx->model)
+		return ;
+	models = data->fbx->model;
+	while (models)
+	{
+		mdl = (t_model *)models->content;
+		mdl->pos = mdl->base_pos;
+		mdl->rot = mdl->base_rot;
+		mdl->scale = mdl->base_scale;
+		models = models->next;
+	}
+}
+
 /**
  * logique transition entre 2 frames :
  * 1 - trouver/stocker la clé précédente
@@ -101,6 +119,7 @@ void	ft_animate(t_fdf *data)
 	t_anim_layer	*layer;
 	t_list			*layers;
 
+	ft_reset_models_to_base(data);
 	layers = data->fbx->current_anim->layers;
 	while (layers)
 	{

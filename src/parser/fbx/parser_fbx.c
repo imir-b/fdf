@@ -136,7 +136,12 @@ static int	ft_open_clean_fbx(const char *filename)
 	fd_tmp = open("/tmp/.fdf_clean.fbx", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_tmp == FAIL)
 		return (free(buf), -1);
-	write(fd_tmp, buf, total);
+	if (write(fd_tmp, buf, total) != total)
+	{
+		close(fd_tmp);
+		free(buf);
+		return (-1);
+	}
 	close(fd_tmp);
 	free(buf);
 	return (open("/tmp/.fdf_clean.fbx", O_RDONLY));

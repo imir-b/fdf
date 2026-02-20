@@ -156,77 +156,179 @@ t_model	*find_model_for_geo(t_list *models, t_geometry *target_geo)
 	return (NULL);
 }
 /**
- * Cherche un modèle animé avec de vraies keyframes (>1 keys)
- * pour propager l'animation racine aux maillages squelettiques.
+ * Multiplie une matrice 4x4 (row-major FBX) par un vec3 (w=1).
  */
-static t_model	*ft_find_animated_bone(t_list *models)
+static t_vec3	ft_apply_mat4(double *m, t_vec3 v)
 {
-	t_model	*mdl;
-	t_model	*best;
-	int		max_keys;
-	int		keys;
+	t_vec3	r;
 
-	best = NULL;
-	max_keys = 1;
-	while (models)
-	{
-		mdl = (t_model *)models->content;
-		keys = 0;
-		if (mdl->anim_pos && mdl->anim_pos->x)
-			keys = mdl->anim_pos->x->n_keys;
-		if (mdl->anim_rot && mdl->anim_rot->x
-			&& mdl->anim_rot->x->n_keys > keys)
-			keys = mdl->anim_rot->x->n_keys;
-		if (keys > max_keys)
-		{
-			max_keys = keys;
-			best = mdl;
-		}
-		models = models->next;
-	}
-	return (best);
+	if (!m)
+		return (v);
+	r.x = m[0] * v.x + m[4] * v.y + m[8] * v.z + m[12];
+	r.y = m[1] * v.x + m[5] * v.y + m[9] * v.z + m[13];
+	r.z = m[2] * v.x + m[6] * v.y + m[10] * v.z + m[14];
+	r.color = v.color;
+	return (r);
 }
 
 /**
- * Vérifie si un modèle est un maillage squelettique :
- * il a des liens d'animation (anim_pos/rot/scale non NULL)
- * mais avec seulement 1 keyframe (= pose de repos, pas d'animation réelle).
- * Les modèles sans AUCUN lien d'animation (ex: escaliers) ne sont PAS
- * des maillages squelettiques et ne doivent PAS recevoir d'animation d'os.
+ * Multiplie deux matrices 4x4 (row-major): result = A × B
  */
-static int	ft_model_is_skeletal_mesh(t_model *mdl)
+static void	ft_mat4_multiply(double *a, double *b, double *out)
 {
-	int	has_anim_link;
-	int	has_real_keys;
+	int	i;
+	int	j;
+	int	k;
 
-	has_anim_link = (mdl->anim_pos != NULL || mdl->anim_rot != NULL
-			|| mdl->anim_scale != NULL);
-	if (!has_anim_link)
-		return (0);
-	has_real_keys = 0;
-	if (mdl->anim_pos && mdl->anim_pos->x
-		&& mdl->anim_pos->x->n_keys > 1)
-		has_real_keys = 1;
-	if (mdl->anim_rot && mdl->anim_rot->x
-		&& mdl->anim_rot->x->n_keys > 1)
-		has_real_keys = 1;
-	if (mdl->anim_scale && mdl->anim_scale->x
-		&& mdl->anim_scale->x->n_keys > 1)
-		has_real_keys = 1;
-	return (!has_real_keys);
+	i = -1;
+	while (++i < 4)
+	{
+		j = -1;
+		while (++j < 4)
+		{
+			out[i * 4 + j] = 0;
+			k = -1;
+			while (++k < 4)
+				out[i * 4 + j] += a[i * 4 + k] * b[k * 4 + j];
+		}
+	}
 }
+
+/**
+ * Construit une matrice 4x4 à partir de pos/rot/scale d'un modèle.
+ * Ordre : Scale → RotX → RotY → RotZ → Translation
+ */
+static void	ft_build_bone_matrix(t_model *mdl, double *out)
+{
+	double	rx;
+	double	ry;
+	double	rz;
+	double	sx;
+	double	sy;
+	double	sz;
+
+	rx = to_rad(mdl->rot.x);
+	ry = to_rad(mdl->rot.y);
+	rz = to_rad(mdl->rot.z);
+	sx = (mdl->scale.x == 0.0) ? 1.0 : mdl->scale.x;
+	sy = (mdl->scale.y == 0.0) ? 1.0 : mdl->scale.y;
+	sz = (mdl->scale.z == 0.0) ? 1.0 : mdl->scale.z;
+	out[0] = sx * (cos(ry) * cos(rz));
+	out[1] = sx * (cos(ry) * sin(rz));
+	out[2] = sx * (-sin(ry));
+	out[3] = 0;
+	out[4] = sy * (sin(rx) * sin(ry) * cos(rz) - cos(rx) * sin(rz));
+	out[5] = sy * (sin(rx) * sin(ry) * sin(rz) + cos(rx) * cos(rz));
+	out[6] = sy * (sin(rx) * cos(ry));
+	out[7] = 0;
+	out[8] = sz * (cos(rx) * sin(ry) * cos(rz) + sin(rx) * sin(rz));
+	out[9] = sz * (cos(rx) * sin(ry) * sin(rz) - sin(rx) * cos(rz));
+	out[10] = sz * (cos(rx) * cos(ry));
+	out[11] = 0;
+	out[12] = mdl->pos.x;
+	out[13] = mdl->pos.y;
+	out[14] = mdl->pos.z;
+	out[15] = 1;
+}
+
+/**
+ * Construit la matrice monde d'un bone en remontant la chaîne parent.
+ * world = parent_world × local
+ */
+static void	ft_get_bone_world_matrix(t_model *bone, double *world, int depth)
+{
+	double	local[16];
+	double	parent_world[16];
+	double	tmp[16];
+
+	if (depth > 100)
+	{
+		fprintf(stderr, "ERROR: Bone recursion depth exceeded for bone ID %ld\n", bone->id);
+		return ; // Should probably return identity or handle error better
+	}
+	ft_build_bone_matrix(bone, local);
+	if (!bone->parent)
+	{
+		ft_memcpy(world, local, sizeof(double) * 16);
+		return ;
+	}
+	ft_get_bone_world_matrix(bone->parent, parent_world, depth + 1);
+	ft_mat4_multiply(parent_world, local, tmp);
+	ft_memcpy(world, tmp, sizeof(double) * 16);
+}
+
+/**
+ * Applique le skinning sur un vertex donné en utilisant tous les deformers.
+ * Formule : final = Σ(weight_i × bone_world_i × transform_i × vertex)
+ * La TransformLink est déjà intégrée dans le bone world matrix.
+ */
+static t_vec3	ft_skin_vertex(t_vec3 vertex, int vtx_idx, t_list *deformers)
+{
+	t_vec3		result;
+	t_vec3		skinned;
+	t_deformer	*def;
+	double		total_weight;
+	double		bone_world[16];
+	double		final_mat[16];
+	int			j;
+
+	result.x = 0;
+	result.y = 0;
+	result.z = 0;
+	total_weight = 0;
+	while (deformers)
+	{
+		def = (t_deformer *)deformers->content;
+		if (!def || !def->bone || !def->verticies || !def->weights)
+		{
+			// Safe break because Skin deformer (no bone/weights) is usually the last node (added first).
+			// Prevents crashing if the tail node's next pointer is corrupted.
+			break ; 
+		}
+		j = -1;
+		while (++j < def->n_vertices)
+		{
+			if (def->verticies[j] == vtx_idx)
+			{
+				ft_get_bone_world_matrix(def->bone, bone_world, 0);
+				if (def->transform)
+					ft_mat4_multiply(bone_world, def->transform, final_mat);
+				else
+					ft_memcpy(final_mat, bone_world, sizeof(double) * 16);
+				skinned = ft_apply_mat4(final_mat, vertex);
+				result.x += def->weights[j] * skinned.x;
+				result.y += def->weights[j] * skinned.y;
+				result.z += def->weights[j] * skinned.z;
+				total_weight += def->weights[j];
+				break ;
+			}
+		}
+		deformers = deformers->next;
+	}
+	if (total_weight > 0.001)
+	{
+		result.x /= total_weight;
+		result.y /= total_weight;
+		result.z /= total_weight;
+	}
+	else
+		return (vertex);
+	result.color = vertex.color;
+	return (result);
+}
+
 
 /**
  * Met à jour les vertices du maillage à partir des animations.
- * Pour les modèles squelettiques (parrot, etc.), applique aussi
- * l'animation de l'os racine pour donner du mouvement global.
+ * Pour les modèles avec deformers (skinning squelettique),
+ * applique la formule de skinning par vertex.
+ * Pour les modèles sans deformers, applique le transform rigide.
  */
 void    ft_update_mesh_from_animation(t_fdf *data)
 {
 	t_list			*curr_geo;
 	t_geometry		*geo;
 	t_model			*mdl;
-	t_model			*bone;
 	int				global_index;
 	int				i;
 	t_vec3			new_pos;
@@ -242,20 +344,20 @@ void    ft_update_mesh_from_animation(t_fdf *data)
 	{
 		geo = (t_geometry *)curr_geo->content;
 		mdl = find_model_for_geo(data->fbx->model, geo);
-		bone = NULL;
-		if (mdl && ft_model_is_skeletal_mesh(mdl))
-			bone = ft_find_animated_bone(data->fbx->model);
 		if (geo->obj)
 		{
 			i = 0;
 			while (i < geo->obj->nb_vertices)
 			{
-				if (mdl)
-					new_pos = ft_get_world_transform(geo->obj->vertices[i], mdl);
+				if (geo->deformers)
+					new_pos = ft_skin_vertex(geo->obj->vertices[i],
+							i, geo->deformers);
+				else if (mdl)
+					new_pos = ft_get_world_transform(
+							geo->obj->vertices[i], mdl);
 				else
-					new_pos = apply_transform(geo->obj->vertices[i], def_pos, def_rot, def_scale);
-				if (bone)
-					new_pos = ft_get_world_transform(new_pos, bone);
+					new_pos = apply_transform(geo->obj->vertices[i],
+							def_pos, def_rot, def_scale);
 				new_pos.color = geo->obj->vertices[i].color;
 				data->object->vertices[global_index + i] = new_pos;
 				i++;

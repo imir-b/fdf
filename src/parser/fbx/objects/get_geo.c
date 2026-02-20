@@ -100,7 +100,7 @@ t_geometry	*ft_get_geometry(char *cursor, int fd)
 	obj = ft_calloc(1, sizeof(t_object));
 	if (!obj)
 		return (NULL);
-	geo = malloc(sizeof(t_geometry));
+	geo = ft_calloc(1, sizeof(t_geometry));
 	if (!geo)
 		return (ft_free_object(obj));
 	geo->id = ft_atol(cursor);
