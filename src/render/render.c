@@ -172,6 +172,56 @@ static t_vec3	ft_apply_mat4(double *m, t_vec3 v)
 }
 
 /**
+ * Calcule l'inverse d'une matrice 4x4
+ * Utilise la méthode des cofacteurs / adjugée
+ */
+static void	ft_mat4_inverse(double *m, double *inv)
+{
+	double	det;
+	int		i;
+
+	inv[0] = m[5]  * m[10] * m[15] - m[5]  * m[11] * m[14] - m[9]  * m[6]  * m[15] +
+			 m[9]  * m[7]  * m[14] + m[13] * m[6]  * m[11] - m[13] * m[7]  * m[10];
+	inv[4] = -m[4]  * m[10] * m[15] + m[4]  * m[11] * m[14] + m[8]  * m[6]  * m[15] -
+			 m[8]  * m[7]  * m[14] - m[12] * m[6]  * m[11] + m[12] * m[7]  * m[10];
+	inv[8] = m[4]  * m[9]  * m[15] - m[4]  * m[11] * m[13] - m[8]  * m[5]  * m[15] +
+			 m[8]  * m[7]  * m[13] + m[12] * m[5]  * m[11] - m[12] * m[7]  * m[9];
+	inv[12] = -m[4]  * m[9]  * m[14] + m[4]  * m[10] * m[13] + m[8]  * m[5]  * m[14] -
+			  m[8]  * m[6]  * m[13] - m[12] * m[5]  * m[10] + m[12] * m[6]  * m[9];
+	inv[1] = -m[1]  * m[10] * m[15] + m[1]  * m[11] * m[14] + m[9]  * m[2]  * m[15] -
+			 m[9]  * m[3]  * m[14] - m[13] * m[2]  * m[11] + m[13] * m[3]  * m[10];
+	inv[5] = m[0]  * m[10] * m[15] - m[0]  * m[11] * m[14] - m[8]  * m[2]  * m[15] +
+			 m[8]  * m[3]  * m[14] + m[12] * m[2]  * m[11] - m[12] * m[3]  * m[10];
+	inv[9] = -m[0]  * m[9]  * m[15] + m[0]  * m[11] * m[13] + m[8]  * m[1]  * m[15] -
+			 m[8]  * m[3]  * m[13] - m[12] * m[1]  * m[11] + m[12] * m[3]  * m[9];
+	inv[13] = m[0]  * m[9]  * m[14] - m[0]  * m[10] * m[13] - m[8]  * m[1]  * m[14] +
+			  m[8]  * m[2]  * m[13] + m[12] * m[1]  * m[10] - m[12] * m[2]  * m[9];
+	inv[2] = m[1]  * m[6]  * m[15] - m[1]  * m[7]  * m[14] - m[5]  * m[2]  * m[15] +
+			 m[5]  * m[3]  * m[14] + m[13] * m[2]  * m[7]  - m[13] * m[3]  * m[6];
+	inv[6] = -m[0]  * m[6]  * m[15] + m[0]  * m[7]  * m[14] + m[4]  * m[2]  * m[15] -
+			 m[4]  * m[3]  * m[14] - m[12] * m[2]  * m[7]  + m[12] * m[3]  * m[6];
+	inv[10] = m[0]  * m[5]  * m[15] - m[0]  * m[7]  * m[13] - m[4]  * m[1]  * m[15] +
+			  m[4]  * m[3]  * m[13] + m[12] * m[1]  * m[7]  - m[12] * m[3]  * m[5];
+	inv[14] = -m[0]  * m[5]  * m[14] + m[0]  * m[6]  * m[13] + m[4]  * m[1]  * m[14] -
+			  m[4]  * m[2]  * m[13] - m[12] * m[1]  * m[6]  + m[12] * m[2]  * m[5];
+	inv[3] = -m[1]  * m[6]  * m[11] + m[1]  * m[7]  * m[10] + m[5]  * m[2]  * m[11] -
+			 m[5]  * m[3]  * m[10] - m[9]  * m[2]  * m[7]  + m[9]  * m[3]  * m[6];
+	inv[7] = m[0]  * m[6]  * m[11] - m[0]  * m[7]  * m[10] - m[4]  * m[2]  * m[11] +
+			 m[4]  * m[3]  * m[10] + m[8]  * m[2]  * m[7]  - m[8]  * m[3]  * m[6];
+	inv[11] = -m[0]  * m[5]  * m[11] + m[0]  * m[7]  * m[9]  + m[4]  * m[1]  * m[11] -
+			  m[4]  * m[3]  * m[9]  - m[8]  * m[1]  * m[7]  + m[8]  * m[3]  * m[5];
+	inv[15] = m[0]  * m[5]  * m[10] - m[0]  * m[6]  * m[9]  - m[4]  * m[1]  * m[10] +
+			  m[4]  * m[2]  * m[9]  + m[8]  * m[1]  * m[6]  - m[8]  * m[2]  * m[5];
+	det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
+	if (det == 0)
+		return ;
+	det = 1.0 / det;
+	i = -1;
+	while (++i < 16)
+		inv[i] = inv[i] * det;
+}
+
+/**
  * Multiplie deux matrices 4x4 (row-major): result = A × B
  */
 static void	ft_mat4_multiply(double *a, double *b, double *out)
@@ -233,7 +283,7 @@ static void	ft_build_bone_matrix(t_model *mdl, double *out)
 
 /**
  * Construit la matrice monde d'un bone en remontant la chaîne parent.
- * world = parent_world × local
+ * world = local × parent_world
  */
 static void	ft_get_bone_world_matrix(t_model *bone, double *world, int depth)
 {
@@ -253,14 +303,22 @@ static void	ft_get_bone_world_matrix(t_model *bone, double *world, int depth)
 		return ;
 	}
 	ft_get_bone_world_matrix(bone->parent, parent_world, depth + 1);
-	ft_mat4_multiply(parent_world, local, tmp);
+	ft_mat4_multiply(local, parent_world, tmp);
 	ft_memcpy(world, tmp, sizeof(double) * 16);
+}
+
+static void	ft_mat4_identity(double *out)
+{
+	int	i;
+
+	i = -1;
+	while (++i < 16)
+		out[i] = (i % 5 == 0) ? 1.0 : 0.0;
 }
 
 /**
  * Applique le skinning sur un vertex donné en utilisant tous les deformers.
- * Formule : final = Σ(weight_i × bone_world_i × transform_i × vertex)
- * La TransformLink est déjà intégrée dans le bone world matrix.
+ * Formule : final = Transform * Inverse(TransformLink) * BoneWorld
  */
 static t_vec3	ft_skin_vertex(t_vec3 vertex, int vtx_idx, t_list *deformers)
 {
@@ -269,6 +327,9 @@ static t_vec3	ft_skin_vertex(t_vec3 vertex, int vtx_idx, t_list *deformers)
 	t_deformer	*def;
 	double		total_weight;
 	double		bone_world[16];
+	double		transform_geom[16];
+	double		inv_bind[16];
+	double		m_step1[16];
 	double		final_mat[16];
 	int			j;
 
@@ -280,21 +341,27 @@ static t_vec3	ft_skin_vertex(t_vec3 vertex, int vtx_idx, t_list *deformers)
 	{
 		def = (t_deformer *)deformers->content;
 		if (!def || !def->bone || !def->verticies || !def->weights)
-		{
-			// Safe break because Skin deformer (no bone/weights) is usually the last node (added first).
-			// Prevents crashing if the tail node's next pointer is corrupted.
 			break ; 
-		}
 		j = -1;
 		while (++j < def->n_vertices)
 		{
 			if (def->verticies[j] == vtx_idx)
 			{
 				ft_get_bone_world_matrix(def->bone, bone_world, 0);
+
 				if (def->transform)
-					ft_mat4_multiply(bone_world, def->transform, final_mat);
+					ft_memcpy(transform_geom, def->transform, sizeof(double) * 16);
 				else
-					ft_memcpy(final_mat, bone_world, sizeof(double) * 16);
+					ft_mat4_identity(transform_geom);
+
+				if (def->t_link)
+					ft_mat4_inverse(def->t_link, inv_bind);
+				else
+					ft_mat4_identity(inv_bind);
+
+				ft_mat4_multiply(transform_geom, inv_bind, m_step1);
+				ft_mat4_multiply(m_step1, bone_world, final_mat);
+
 				skinned = ft_apply_mat4(final_mat, vertex);
 				result.x += def->weights[j] * skinned.x;
 				result.y += def->weights[j] * skinned.y;

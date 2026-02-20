@@ -82,6 +82,7 @@ long 				ft_get_time_ms(void);
 // *** ANIMATE ***
 
 void				ft_animate(t_fdf *data);
+void				ft_reset_models_to_base(t_fdf *data);
 int					ft_pause(t_fdf *data);
 void				ft_next_anim(t_fdf *data);
 void				ft_prev_anim(t_fdf *data);

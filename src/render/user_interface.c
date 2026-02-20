@@ -103,6 +103,7 @@ void	ft_next_anim(t_fdf *data)
 	else
 		data->fbx->current_anim = \
 			(t_anim_stack *)(data->fbx->anim_stack->content);
+	ft_reset_models_to_base(data);
 	data->timer.weighted_value = 0;
 	data->timer.duration = data->fbx->current_anim->duration;
 	if (data->timer.duration == 0)
@@ -137,6 +138,7 @@ void	ft_prev_anim(t_fdf *data)
 			anims = anims->next;
 		}
 	}
+	ft_reset_models_to_base(data);
 	data->timer.weighted_value = 0;
 	data->timer.duration = data->fbx->current_anim->duration;
 	if (data->timer.duration == 0)

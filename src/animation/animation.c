@@ -86,7 +86,7 @@ static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
 	}
 }
 
-static void	ft_reset_models_to_base(t_fdf *data)
+void	ft_reset_models_to_base(t_fdf *data)
 {
 	t_list	*models;
 	t_model	*mdl;
@@ -119,7 +119,7 @@ void	ft_animate(t_fdf *data)
 	t_anim_layer	*layer;
 	t_list			*layers;
 
-	ft_reset_models_to_base(data);
+	// ft_reset_models_to_base(data);
 	layers = data->fbx->current_anim->layers;
 	while (layers)
 	{
