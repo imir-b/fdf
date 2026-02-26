@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 21:27:49 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/09 05:15:54 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/26 15:38:17 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,20 +46,12 @@ static void	ft_get_anim_at_time(t_properties *transformed, \
 								t_anim_node *current, \
 								t_timer timer)
 {
-	// printf("before animation\n"); // debug
-	// printf("x : %f, y : %f, z : %f\n", transformed->x, transformed->y, transformed->z); // debug
-	// printf("CURRENT\n"); // debug
-	// ft_print_curve(current->x); // debug
-	// ft_print_curve(current->y); // debug
-	// ft_print_curve(current->z); // debug
 	if (current->x)
 		transformed->x = ft_get_value_at_time(current->x, timer.weighted_value);
 	if (current->y)
 		transformed->y = ft_get_value_at_time(current->y, timer.weighted_value);
 	if (current->z)
 		transformed->z = ft_get_value_at_time(current->z, timer.weighted_value);
-	// printf("after animation\n"); // debug
-	// printf("x : %f, y : %f, z : %f\n", transformed->x, transformed->y, transformed->z); // debug
 }
 
 static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
@@ -86,23 +78,23 @@ static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
 	}
 }
 
-void	ft_reset_models_to_base(t_fdf *data)
-{
-	t_list	*models;
-	t_model	*mdl;
+// void	ft_reset_models_to_base(t_fdf *data)
+// {
+// 	t_list	*models;
+// 	t_model	*mdl;
 
-	if (!data || !data->fbx || !data->fbx->model)
-		return ;
-	models = data->fbx->model;
-	while (models)
-	{
-		mdl = (t_model *)models->content;
-		mdl->pos = mdl->base_pos;
-		mdl->rot = mdl->base_rot;
-		mdl->scale = mdl->base_scale;
-		models = models->next;
-	}
-}
+// 	if (!data || !data->fbx || !data->fbx->model)
+// 		return ;
+// 	models = data->fbx->model;
+// 	while (models)
+// 	{
+// 		mdl = (t_model *)models->content;
+// 		mdl->pos = mdl->base_pos;
+// 		mdl->rot = mdl->base_rot;
+// 		mdl->scale = mdl->base_scale;
+// 		models = models->next;
+// 	}
+// }
 
 /**
  * logique transition entre 2 frames :

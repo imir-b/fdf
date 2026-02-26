@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/12 22:36:55 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/26 15:44:06 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,7 +294,7 @@ static void	ft_get_bone_world_matrix(t_model *bone, double *world, int depth)
 	if (depth > 100)
 	{
 		fprintf(stderr, "ERROR: Bone recursion depth exceeded for bone ID %ld\n", bone->id);
-		return ; // Should probably return identity or handle error better
+		return ;
 	}
 	ft_build_bone_matrix(bone, local);
 	if (!bone->parent)
@@ -327,7 +327,7 @@ static t_vec3	ft_skin_vertex(t_vec3 vertex, int vtx_idx, t_list *deformers)
 	t_deformer	*def;
 	double		total_weight;
 	double		bone_world[16];
-	double		transform_geom[16];
+	double		transform_geo[16];
 	double		inv_bind[16];
 	double		m_step1[16];
 	double		final_mat[16];
@@ -341,7 +341,7 @@ static t_vec3	ft_skin_vertex(t_vec3 vertex, int vtx_idx, t_list *deformers)
 	{
 		def = (t_deformer *)deformers->content;
 		if (!def || !def->bone || !def->verticies || !def->weights)
-			break ; 
+			break ;
 		j = -1;
 		while (++j < def->n_vertices)
 		{
@@ -350,16 +350,16 @@ static t_vec3	ft_skin_vertex(t_vec3 vertex, int vtx_idx, t_list *deformers)
 				ft_get_bone_world_matrix(def->bone, bone_world, 0);
 
 				if (def->transform)
-					ft_memcpy(transform_geom, def->transform, sizeof(double) * 16);
+					ft_memcpy(transform_geo, def->transform, sizeof(double) * 16);
 				else
-					ft_mat4_identity(transform_geom);
+					ft_mat4_identity(transform_geo);
 
 				if (def->t_link)
 					ft_mat4_inverse(def->t_link, inv_bind);
 				else
 					ft_mat4_identity(inv_bind);
 
-				ft_mat4_multiply(transform_geom, inv_bind, m_step1);
+				ft_mat4_multiply(transform_geo, inv_bind, m_step1);
 				ft_mat4_multiply(m_step1, bone_world, final_mat);
 
 				skinned = ft_apply_mat4(final_mat, vertex);

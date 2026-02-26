@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   timer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/01 22:30:16 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/01 22:30:44 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/26 15:37:38 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-long ft_get_time_ms(void)
+long	ft_get_time_ms(void)
 {
 	struct timeval	tv;
 
