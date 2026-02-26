@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 21:27:49 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/26 15:38:17 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/26 16:43:32 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,23 +78,23 @@ static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
 	}
 }
 
-// void	ft_reset_models_to_base(t_fdf *data)
-// {
-// 	t_list	*models;
-// 	t_model	*mdl;
+void	ft_reset_models_to_base(t_fdf *data)
+{
+	t_list	*models;
+	t_model	*mdl;
 
-// 	if (!data || !data->fbx || !data->fbx->model)
-// 		return ;
-// 	models = data->fbx->model;
-// 	while (models)
-// 	{
-// 		mdl = (t_model *)models->content;
-// 		mdl->pos = mdl->base_pos;
-// 		mdl->rot = mdl->base_rot;
-// 		mdl->scale = mdl->base_scale;
-// 		models = models->next;
-// 	}
-// }
+	if (!data || !data->fbx || !data->fbx->model)
+		return ;
+	models = data->fbx->model;
+	while (models)
+	{
+		mdl = (t_model *)models->content;
+		mdl->pos = mdl->base_pos;
+		mdl->rot = mdl->base_rot;
+		mdl->scale = mdl->base_scale;
+		models = models->next;
+	}
+}
 
 /**
  * logique transition entre 2 frames :

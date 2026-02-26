@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/26 15:44:06 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 00:36:47 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,6 @@ t_vec3 apply_transform(t_vec3 point, t_properties p, t_properties r, t_propertie
 	return (point);
 }
 
-
 t_vec3	ft_get_world_transform(t_vec3 point, t_model *model)
 {
 	t_vec3	curr_point;
@@ -137,7 +136,6 @@ t_vec3	ft_get_world_transform(t_vec3 point, t_model *model)
 	}
 	return (curr_point);
 }
-
 
 /**
  * fonction test pour animation
