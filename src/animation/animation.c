@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   animation.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 21:27:49 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/27 10:22:12 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 13:25:42 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,48 @@ void	ft_animate(t_fdf *data)
 		layer = (t_anim_layer *)layers->content;
 		ft_animate_nodes(layer, data);
 		layers = layers->next;
+	}
+}
+
+static void	ft_process_geo_vertices(t_fdf *data, t_geometry *geo, int *g_idx)
+{
+	t_model	*model;
+	t_vec3	new_pos;
+	int		i;
+
+	model = find_model_for_geo(data->fbx->model, geo);
+	i = 0;
+	while (i < geo->obj->nb_vertices)
+	{
+		new_pos = ft_get_new_pos(geo, model, i);
+		data->object->vertices[*g_idx + i] = new_pos;
+		i++;
+	}
+	*g_idx += geo->obj->nb_vertices;
+}
+
+
+/**
+ * Met à jour les vertices du maillage à partir des animations.
+ * Pour les modèles avec deformers (skinning squelettique),
+ * applique la formule de skinning par vertex.
+ * Pour les modèles sans deformers, applique le transform rigide.
+ */
+void	ft_update_mesh_from_animation(t_fdf *data)
+{
+	t_list		*curr_geo;
+	t_geometry	*geo;
+	int			global_index;
+
+	if (!data->fbx || !data->object)
+		return ;
+	global_index = 0;
+	curr_geo = data->fbx->geo;
+	while (curr_geo)
+	{
+		geo = (t_geometry *)curr_geo->content;
+		if (geo->obj)
+			ft_process_geo_vertices(data, geo, &global_index);
+		curr_geo = curr_geo->next;
 	}
 }

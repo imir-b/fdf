@@ -3,14 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   connect.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 11:58:17 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 11:58:44 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 13:19:04 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+static t_geometry	*ft_find_geo_with_deformer(t_fbx *data, long skin_id)
+{
+	t_list		*geos;
+	t_geometry	*geo;
+	t_list		*defs;
+	t_deformer	*def;
+
+	geos = data->geo;
+	while (geos)
+	{
+		geo = (t_geometry *)geos->content;
+		defs = geo->deformers;
+		while (defs)
+		{
+			def = (t_deformer *)defs->content;
+			if (def->id == skin_id)
+				return (geo);
+			defs = defs->next;
+		}
+		geos = geos->next;
+	}
+	return (NULL);
+}
 
 void	ft_connect_obj_to_obj(t_fbx *data, long *ids)
 {

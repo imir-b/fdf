@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   transform_world.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 11:00:57 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 11:53:18 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 13:29:52 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ static void	ft_rotate(t_vec3 *p, t_properties r)
 	t_transform_data	d;
 	double				tmp;
 
-	d.rx = to_rad(r.x);
-	d.ry = to_rad(r.y);
-	d.rz = to_rad(r.z);
+	d.rx = ft_to_rad(r.x);
+	d.ry = ft_to_rad(r.y);
+	d.rz = ft_to_rad(r.z);
 	tmp = p->y * cos(d.rx) - p->z * sin(d.rx);
 	p->z = p->y * sin(d.rx) + p->z * cos(d.rx);
 	p->y = tmp;

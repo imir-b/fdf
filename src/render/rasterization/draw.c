@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 04:36:22 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 11:44:02 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 13:26:36 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	ft_draw_axes(t_fdf *data)
 		(t_point){z.sx, z.sy, 0}, 0x0000FF);
 }
 
-static void	ft_process_face(t_fdf *data, t_face *face)
+void	ft_process_face(t_fdf *data, t_face *face)
 {
 	int		j;
 	t_vec3	v1;

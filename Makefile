@@ -6,7 +6,7 @@
 #    By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/29 13:31:53 by vbleskin          #+#    #+#              #
-#    Updated: 2026/02/15 16:00:44 by vlad             ###   ########.fr        #
+#    Updated: 2026/02/27 12:36:42 by vlad             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,19 +31,33 @@ SRC_DIR			=	src
 OBJ_DIR			=	obj
 
 PARS_DIR		=	parser
-FBX_DIR			=	$(PARS_DIR)/fbx
+P_FBX_DIR		=	$(PARS_DIR)/parse_fbx
+P_OBJ_DIR		=	$(PARS_DIR)/parse_obj
+P_FDF_DIR		=	$(PARS_DIR)/parse_fdf
 ANIM_DIR		=	animation
 REND_DIR		=	render
-UTIL_DIR		=	utils
+PROJ_DIR		=	$(REND_DIR)/projection
+RAST_DIR		=	$(REND_DIR)/rasterization
+WORLD_DIR		=	$(REND_DIR)/world
+UI_DIR			=	user_interface
 EVENT_DIR		=	events
+MATHS_DIR		=	maths
+UTIL_DIR		=	utils
 
 SUB_DIRS		=	$(PARS_DIR) \
-						$(FBX_DIR) \
-							$(FBX_DIR)/connections \
-							$(FBX_DIR)/objects \
-					$(EVENT_DIR) \
+						$(P_FBX_DIR) \
+							$(P_FBX_DIR)/connections \
+							$(P_FBX_DIR)/objects \
+						$(P_OBJ_DIR) \
+						$(P_FDF_DIR) \
 					$(ANIM_DIR) \
 					$(REND_DIR) \
+						$(RAST_DIR) \
+						$(PROJ_DIR) \
+						$(WORLD_DIR) \
+					$(UI_DIR) \
+					$(EVENT_DIR) \
+					$(MATHS_DIR) \
 					$(UTIL_DIR) \
 
 LIB_DIR			=	lib

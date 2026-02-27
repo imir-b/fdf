@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   matrix.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 10:48:29 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 12:17:08 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 13:28:16 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void	ft_mat4_identity(t_mat4 *out)
+void	ft_mat4_identity(t_mat4 *out)
 {
 	int	i;
 	int	j;
@@ -29,7 +29,7 @@ static void	ft_mat4_identity(t_mat4 *out)
 /**
  * Multiplie deux matrices 4x4 (row-major): result = A × B
  */
-static void	ft_mat4_multiply(t_mat4 *a, t_mat4 *b, t_mat4 *out)
+void	ft_mat4_multiply(t_mat4 *a, t_mat4 *b, t_mat4 *out)
 {
 	int	i;
 	int	j;

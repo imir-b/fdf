@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 11:17:50 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 11:44:08 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 13:23:08 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	*ft_calc_transform_thread(void *arg)
  * Utilise le multi-threading pour faire les calculs de projection en fonction
  * des transformations.
  */
-static void	ft_transform_threads(t_fdf *data)
+void	ft_transform_threads(t_fdf *data)
 {
 	pthread_t	threads[THREADS_NB];
 	t_thread	args[THREADS_NB];

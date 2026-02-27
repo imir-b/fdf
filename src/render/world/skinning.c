@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   skinning.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 11:02:12 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 11:09:06 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 13:29:42 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ static void	ft_build_bone_matrix(t_model *model, t_mat4 *out)
 	double	cos_rot[3];
 	double	sin_rot[3];
 
-	rot[0] = to_rad(model->rot.x);
-	rot[1] = to_rad(model->rot.y);
-	rot[2] = to_rad(model->rot.z);
+	rot[0] = ft_to_rad(model->rot.x);
+	rot[1] = ft_to_rad(model->rot.y);
+	rot[2] = ft_to_rad(model->rot.z);
 	ft_set_scale_vec(model, scale);
 	cos_rot[0] = cos(rot[0]);
 	cos_rot[1] = cos(rot[1]);
@@ -157,7 +157,7 @@ static t_vec3	ft_skin_vertex(t_vec3 vertex, int vtx_idx, t_list *deformers)
 	return (res.x /= total_w, res.y /= total_w, res.z /= total_w, res);
 }
 
-static t_vec3	ft_get_new_pos(t_geometry *geo, t_model *model, int i)
+t_vec3	ft_get_new_pos(t_geometry *geo, t_model *model, int i)
 {
 	t_vec3	v;
 	t_vec3	res;
@@ -172,46 +172,4 @@ static t_vec3	ft_get_new_pos(t_geometry *geo, t_model *model, int i)
 				(t_properties){0, 0, 0, 0}, (t_properties){0, 1, 1, 1});
 	res.color = v.color;
 	return (res);
-}
-
-static void	ft_process_geo_vertices(t_fdf *data, t_geometry *geo, int *g_idx)
-{
-	t_model	*model;
-	t_vec3	new_pos;
-	int		i;
-
-	model = find_model_for_geo(data->fbx->model, geo);
-	i = 0;
-	while (i < geo->obj->nb_vertices)
-	{
-		new_pos = ft_get_new_pos(geo, model, i);
-		data->object->vertices[*g_idx + i] = new_pos;
-		i++;
-	}
-	*g_idx += geo->obj->nb_vertices;
-}
-
-/**
- * Met à jour les vertices du maillage à partir des animations.
- * Pour les modèles avec deformers (skinning squelettique),
- * applique la formule de skinning par vertex.
- * Pour les modèles sans deformers, applique le transform rigide.
- */
-void	ft_update_mesh_from_animation(t_fdf *data)
-{
-	t_list		*curr_geo;
-	t_geometry	*geo;
-	int			global_index;
-
-	if (!data->fbx || !data->object)
-		return ;
-	global_index = 0;
-	curr_geo = data->fbx->geo;
-	while (curr_geo)
-	{
-		geo = (t_geometry *)curr_geo->content;
-		if (geo->obj)
-			ft_process_geo_vertices(data, geo, &global_index);
-		curr_geo = curr_geo->next;
-	}
 }

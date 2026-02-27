@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matrix_inverse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 10:54:18 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 10:57:28 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 13:27:42 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static double	ft_mat4_cofactor(t_mat4 *m, int r, int c)
  * Calcule l'inverse d'une matrice 4x4
  * Utilise la méthode des cofacteurs / adjugée
  */
-static void	ft_mat4_inverse(t_mat4 *m, t_mat4 *inv)
+void	ft_mat4_inverse(t_mat4 *m, t_mat4 *inv)
 {
 	double	det;
 	int		i;

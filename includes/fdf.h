@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/27 11:07:55 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 13:29:31 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,10 @@ int					ft_error(char *str);
 // *** MATHS ***
 // -----------------------------------------------------------------------------
 t_vec3				ft_apply_mat4(t_mat4 *mat, t_vec3 v);
-
+void	ft_mat4_identity(t_mat4 *out);
+void	ft_mat4_inverse(t_mat4 *m, t_mat4 *inv);
+void	ft_mat4_multiply(t_mat4 *a, t_mat4 *b, t_mat4 *out);
+t_vec3	ft_apply_mat4(t_mat4 *mat, t_vec3 v);
 
 // -----------------------------------------------------------------------------
 // *** RENDER ***
@@ -71,7 +74,7 @@ void				ft_project_point(t_vec3 *v, t_fdf *data);
 void				ft_transform_axis_point(double *x, double *y,
 						double *z, t_fdf *data);
 void				ft_render_image(t_fdf *data);
-double				to_rad(double degree);
+double				ft_to_rad(double degree);
 t_vec3				apply_transform(t_vec3 point, t_properties p,
 						t_properties r, t_properties s);
 t_vec3				ft_get_world_transform(t_vec3 point, t_model *model);
@@ -84,6 +87,9 @@ void				ft_draw_threads(t_fdf *data);
 void				ft_draw_line(t_fdf *data, t_point p1, t_point p2,
 						int color);
 long				ft_get_time_ms(void);
+void	ft_transform_threads(t_fdf *data);
+t_vec3	ft_get_new_pos(t_geometry *geo, t_model *model, int i);
+void	ft_process_face(t_fdf *data, t_face *face);
 
 // -----------------------------------------------------------------------------
 // *** ANIMATE ***
@@ -95,6 +101,7 @@ void				ft_next_anim(t_fdf *data);
 void				ft_prev_anim(t_fdf *data);
 void				ft_update_time(t_timer *t);
 void				ft_init_timer(t_timer *t, double duration_sec);
+void	ft_update_mesh_from_animation(t_fdf *data);
 
 // -----------------------------------------------------------------------------
 // *** USER INTERFACE ***
@@ -128,6 +135,9 @@ int					ft_extract_line(char **cursor, char **line, int fd);
 void				*ft_get_by_id(t_list *list, long id);
 int					ft_parse_objects(t_fbx *fbx_data, int fd);
 int					ft_parse_connections(t_fbx *fbx_data, int fd);
+void				ft_connect_obj_to_obj(t_fbx *data, long *ids);
+void	ft_connect_anim_to_model(t_fbx *data, char *line, long *ids);
+void	ft_connect_anim_to_anim(t_fbx *data, char *line, long *ids);
 void				ft_calculate_anim_duration(t_anim_stack *anim);
 void				*ft_free_fbx_data(t_fbx *data);
 int					ft_parse_face(t_object *obj, char **line, char *cursor,
