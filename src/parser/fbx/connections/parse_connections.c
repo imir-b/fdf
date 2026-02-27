@@ -18,7 +18,7 @@ void	ft_calculate_anim_duration(t_anim_stack *anim)
 	t_list			*l_node;
 	t_anim_layer	*layer;
 	t_anim_node		*node;
-	double			max_time; // Changed from long long to double
+	double			max_time;
 
 	max_time = 0;
 	l_layer = anim->layers;
@@ -50,7 +50,7 @@ void	ft_calculate_anim_duration(t_anim_stack *anim)
 		l_layer = l_layer->next;
 	}
 	if (max_time > 0)
-		anim->duration = max_time; // Already in seconds
+		anim->duration = max_time;
 	else
 		anim->duration = 1.0;
 }

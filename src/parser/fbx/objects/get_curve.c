@@ -100,8 +100,6 @@ static int	ft_parse_keytime(t_anim_curve *anim_curve, char **line, char *cursor,
 static int	ft_parse_keyvalue(t_anim_curve *anim_curve, char **line, char *cursor, int fd)
 {
 	int		index;
-
-	// printf ("Parsing KeyValueFloat\n"); // debug
 	if (!anim_curve->n_keys)
 	{
 		cursor = ft_strchr(cursor, '*');
@@ -110,7 +108,6 @@ static int	ft_parse_keyvalue(t_anim_curve *anim_curve, char **line, char *cursor
 		cursor++;
 		anim_curve->n_keys = ft_atoi(cursor);
 	}
-	// printf ("- n keys : %d\n", anim_curve->n_keys); // debug
 	anim_curve->value = malloc(sizeof(double) * anim_curve->n_keys);
 	if (!anim_curve->value)
 		return (ERROR);

@@ -41,22 +41,6 @@ int	ft_display_fps(t_fdf *data)
 	return (SUCCESS);
 }
 
-// *** DEBUG ***
-void	ft_print_anim_stack(t_list *list)
-{
-	t_anim_stack	*stack;
-	int				i;
-
-	i = 0;
-	while (list)
-	{
-		stack = list->content;
-		i++;
-		printf("Anim %d : %s\n", i, stack->name);
-		list = list->next;
-	}
-}
-
 t_list	*ft_find_node(t_list *list, void *content_to_find)
 {
 	while (list)

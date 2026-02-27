@@ -33,7 +33,6 @@ static void	ft_extract_property_values(t_properties *property, char *line, \
 		line++;
 		i++;
 	}
-	// skip "A"
 	line = ft_skip_spaces(line);
 	property->x = ft_atof(line);
 	line = ft_strchr(line, ',');

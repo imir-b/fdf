@@ -111,7 +111,6 @@ void	ft_animate(t_fdf *data)
 	t_anim_layer	*layer;
 	t_list			*layers;
 
-	// ft_reset_models_to_base(data);
 	layers = data->fbx->current_anim->layers;
 	while (layers)
 	{

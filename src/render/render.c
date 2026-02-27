@@ -98,26 +98,21 @@ t_vec3 apply_transform(t_vec3 point, t_properties p, t_properties r, t_propertie
 		scale_z = 1.0;
 	else
 		scale_z = s.z;
-    // 1. SCALE
 	point.x *= scale_x;
 	point.y *= scale_y;
 	point.z *= scale_z;
-    // 2. ROTATION X
 	ty = point.y * cos(rad_x) - point.z * sin(rad_x);
 	tz = point.y * sin(rad_x) + point.z * cos(rad_x);
 	point.y = ty;
 	point.z = tz;
-    // 3. ROTATION Y
 	tx = point.x * cos(rad_y) + point.z * sin(rad_y);
 	tz = -point.x * sin(rad_y) + point.z * cos(rad_y);
 	point.x = tx;
 	point.z = tz;
-    // 4. ROTATION Z
 	tx = point.x * cos(rad_z) - point.y * sin(rad_z);
 	ty = point.x * sin(rad_z) + point.y * cos(rad_z);
 	point.x = tx;
 	point.y = ty;
-    // 5. TRANSLATION
 	point.x += p.x;
 	point.y += p.y;
 	point.z += p.z;
@@ -290,10 +285,7 @@ static void	ft_get_bone_world_matrix(t_model *bone, double *world, int depth)
 	double	tmp[16];
 
 	if (depth > 100)
-	{
-		fprintf(stderr, "ERROR: Bone recursion depth exceeded for bone ID %ld\n", bone->id);
 		return ;
-	}
 	ft_build_bone_matrix(bone, local);
 	if (!bone->parent)
 	{
