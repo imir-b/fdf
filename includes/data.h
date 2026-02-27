@@ -49,7 +49,7 @@ typedef struct s_point			t_point;
  */
 typedef struct s_vec3			t_vec3;
 
-typedef struct s_matrix			t_matrix;
+typedef struct s_mat4			t_mat4;
 
 /*
  * Définit la topologie d'une face (polygone) via une liste d'indices
@@ -204,8 +204,8 @@ struct	s_deformer
 	int			n_vertices;
 	int			*verticies;
 	double		*weights;
-	double		*transform;
-	double		*t_link;
+	t_mat4		*transform;
+	t_mat4		*t_link;
 	t_model		*bone;
 };
 
@@ -270,9 +270,9 @@ struct s_vec3
 	int		color;
 };
 
-struct s_matrix
+struct s_mat4
 {
-	double	matrix[16];
+	double	m[4][4];
 };
 
 struct s_face

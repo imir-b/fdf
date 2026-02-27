@@ -151,15 +151,15 @@ t_model	*find_model_for_geo(t_list *models, t_geometry *target_geo)
 /**
  * Multiplie une matrice 4x4 (row-major FBX) par un vec3 (w=1).
  */
-static t_vec3	ft_apply_mat4(double *m, t_vec3 v)
+static t_vec3	ft_apply_mat4(t_mat4 *mat, t_vec3 v)
 {
 	t_vec3	r;
 
-	if (!m)
+	if (!mat)
 		return (v);
-	r.x = m[0] * v.x + m[4] * v.y + m[8] * v.z + m[12];
-	r.y = m[1] * v.x + m[5] * v.y + m[9] * v.z + m[13];
-	r.z = m[2] * v.x + m[6] * v.y + m[10] * v.z + m[14];
+	r.x = v.x * mat->m[0][0] + v.y * mat->m[1][0] + v.z * mat->m[2][0] + mat->m[3][0];
+	r.y = v.x * mat->m[0][1] + v.y * mat->m[1][1] + v.z * mat->m[2][1] + mat->m[3][1];
+	r.z = v.x * mat->m[0][2] + v.y * mat->m[1][2] + v.z * mat->m[2][2] + mat->m[3][2];
 	r.color = v.color;
 	return (r);
 }
@@ -168,56 +168,74 @@ static t_vec3	ft_apply_mat4(double *m, t_vec3 v)
  * Calcule l'inverse d'une matrice 4x4
  * Utilise la méthode des cofacteurs / adjugée
  */
-static void	ft_mat4_inverse(double *m, double *inv)
+static double	ft_mat3_det(double m[3][3])
+{
+	return (m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1])
+		- m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0])
+		+ m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]));
+}
+
+static double	ft_mat4_cofactor(t_mat4 *m, int r, int c)
+{
+	double	sub[3][3];
+	int		i;
+	int		j;
+	int		sub_i;
+	int		sub_j;
+
+	sub_i = 0;
+	i = -1;
+	while (++i < 4)
+	{
+		if (i == r)
+			continue ;
+		sub_j = 0;
+		j = -1;
+		while (++j < 4)
+		{
+			if (j == c)
+				continue ;
+			sub[sub_i][sub_j] = m->m[i][j];
+			sub_j++;
+		}
+		sub_i++;
+	}
+	if ((r + c) % 2 == 0)
+		return (ft_mat3_det(sub));
+	return (-ft_mat3_det(sub));
+}
+
+static void	ft_mat4_inverse(t_mat4 *m, t_mat4 *inv)
 {
 	double	det;
 	int		i;
+	int		j;
 
-	inv[0] = m[5]  * m[10] * m[15] - m[5]  * m[11] * m[14] - m[9]  * m[6]  * m[15] +
-			 m[9]  * m[7]  * m[14] + m[13] * m[6]  * m[11] - m[13] * m[7]  * m[10];
-	inv[4] = -m[4]  * m[10] * m[15] + m[4]  * m[11] * m[14] + m[8]  * m[6]  * m[15] -
-			 m[8]  * m[7]  * m[14] - m[12] * m[6]  * m[11] + m[12] * m[7]  * m[10];
-	inv[8] = m[4]  * m[9]  * m[15] - m[4]  * m[11] * m[13] - m[8]  * m[5]  * m[15] +
-			 m[8]  * m[7]  * m[13] + m[12] * m[5]  * m[11] - m[12] * m[7]  * m[9];
-	inv[12] = -m[4]  * m[9]  * m[14] + m[4]  * m[10] * m[13] + m[8]  * m[5]  * m[14] -
-			  m[8]  * m[6]  * m[13] - m[12] * m[5]  * m[10] + m[12] * m[6]  * m[9];
-	inv[1] = -m[1]  * m[10] * m[15] + m[1]  * m[11] * m[14] + m[9]  * m[2]  * m[15] -
-			 m[9]  * m[3]  * m[14] - m[13] * m[2]  * m[11] + m[13] * m[3]  * m[10];
-	inv[5] = m[0]  * m[10] * m[15] - m[0]  * m[11] * m[14] - m[8]  * m[2]  * m[15] +
-			 m[8]  * m[3]  * m[14] + m[12] * m[2]  * m[11] - m[12] * m[3]  * m[10];
-	inv[9] = -m[0]  * m[9]  * m[15] + m[0]  * m[11] * m[13] + m[8]  * m[1]  * m[15] -
-			 m[8]  * m[3]  * m[13] - m[12] * m[1]  * m[11] + m[12] * m[3]  * m[9];
-	inv[13] = m[0]  * m[9]  * m[14] - m[0]  * m[10] * m[13] - m[8]  * m[1]  * m[14] +
-			  m[8]  * m[2]  * m[13] + m[12] * m[1]  * m[10] - m[12] * m[2]  * m[9];
-	inv[2] = m[1]  * m[6]  * m[15] - m[1]  * m[7]  * m[14] - m[5]  * m[2]  * m[15] +
-			 m[5]  * m[3]  * m[14] + m[13] * m[2]  * m[7]  - m[13] * m[3]  * m[6];
-	inv[6] = -m[0]  * m[6]  * m[15] + m[0]  * m[7]  * m[14] + m[4]  * m[2]  * m[15] -
-			 m[4]  * m[3]  * m[14] - m[12] * m[2]  * m[7]  + m[12] * m[3]  * m[6];
-	inv[10] = m[0]  * m[5]  * m[15] - m[0]  * m[7]  * m[13] - m[4]  * m[1]  * m[15] +
-			  m[4]  * m[3]  * m[13] + m[12] * m[1]  * m[7]  - m[12] * m[3]  * m[5];
-	inv[14] = -m[0]  * m[5]  * m[14] + m[0]  * m[6]  * m[13] + m[4]  * m[1]  * m[14] -
-			  m[4]  * m[2]  * m[13] - m[12] * m[1]  * m[6]  + m[12] * m[2]  * m[5];
-	inv[3] = -m[1]  * m[6]  * m[11] + m[1]  * m[7]  * m[10] + m[5]  * m[2]  * m[11] -
-			 m[5]  * m[3]  * m[10] - m[9]  * m[2]  * m[7]  + m[9]  * m[3]  * m[6];
-	inv[7] = m[0]  * m[6]  * m[11] - m[0]  * m[7]  * m[10] - m[4]  * m[2]  * m[11] +
-			 m[4]  * m[3]  * m[10] + m[8]  * m[2]  * m[7]  - m[8]  * m[3]  * m[6];
-	inv[11] = -m[0]  * m[5]  * m[11] + m[0]  * m[7]  * m[9]  + m[4]  * m[1]  * m[11] -
-			  m[4]  * m[3]  * m[9]  - m[8]  * m[1]  * m[7]  + m[8]  * m[3]  * m[5];
-	inv[15] = m[0]  * m[5]  * m[10] - m[0]  * m[6]  * m[9]  - m[4]  * m[1]  * m[10] +
-			  m[4]  * m[2]  * m[9]  + m[8]  * m[1]  * m[6]  - m[8]  * m[2]  * m[5];
-	det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
+	i = -1;
+	while (++i < 4)
+	{
+		j = -1;
+		while (++j < 4)
+			inv->m[j][i] = ft_mat4_cofactor(m, i, j);
+	}
+	det = m->m[0][0] * inv->m[0][0] + m->m[0][1] * inv->m[1][0]
+		+ m->m[0][2] * inv->m[2][0] + m->m[0][3] * inv->m[3][0];
 	if (det == 0)
 		return ;
 	det = 1.0 / det;
 	i = -1;
-	while (++i < 16)
-		inv[i] = inv[i] * det;
+	while (++i < 4)
+	{
+		j = -1;
+		while (++j < 4)
+			inv->m[i][j] *= det;
+	}
 }
 
 /**
  * Multiplie deux matrices 4x4 (row-major): result = A × B
  */
-static void	ft_mat4_multiply(double *a, double *b, double *out)
+static void	ft_mat4_multiply(t_mat4 *a, t_mat4 *b, t_mat4 *out)
 {
 	int	i;
 	int	j;
@@ -229,10 +247,10 @@ static void	ft_mat4_multiply(double *a, double *b, double *out)
 		j = -1;
 		while (++j < 4)
 		{
-			out[i * 4 + j] = 0;
+			out->m[i][j] = 0;
 			k = -1;
 			while (++k < 4)
-				out[i * 4 + j] += a[i * 4 + k] * b[k * 4 + j];
+				out->m[i][j] += a->m[i][k] * b->m[k][j];
 		}
 	}
 }
@@ -241,7 +259,7 @@ static void	ft_mat4_multiply(double *a, double *b, double *out)
  * Construit une matrice 4x4 à partir de pos/rot/scale d'un modèle.
  * Ordre : Scale → RotX → RotY → RotZ → Translation
  */
-static void	ft_build_bone_matrix(t_model *mdl, double *out)
+static void	ft_build_bone_matrix(t_model *mdl, t_mat4 *out)
 {
 	double	rx;
 	double	ry;
@@ -256,54 +274,59 @@ static void	ft_build_bone_matrix(t_model *mdl, double *out)
 	sx = (mdl->scale.x == 0.0) ? 1.0 : mdl->scale.x;
 	sy = (mdl->scale.y == 0.0) ? 1.0 : mdl->scale.y;
 	sz = (mdl->scale.z == 0.0) ? 1.0 : mdl->scale.z;
-	out[0] = sx * (cos(ry) * cos(rz));
-	out[1] = sx * (cos(ry) * sin(rz));
-	out[2] = sx * (-sin(ry));
-	out[3] = 0;
-	out[4] = sy * (sin(rx) * sin(ry) * cos(rz) - cos(rx) * sin(rz));
-	out[5] = sy * (sin(rx) * sin(ry) * sin(rz) + cos(rx) * cos(rz));
-	out[6] = sy * (sin(rx) * cos(ry));
-	out[7] = 0;
-	out[8] = sz * (cos(rx) * sin(ry) * cos(rz) + sin(rx) * sin(rz));
-	out[9] = sz * (cos(rx) * sin(ry) * sin(rz) - sin(rx) * cos(rz));
-	out[10] = sz * (cos(rx) * cos(ry));
-	out[11] = 0;
-	out[12] = mdl->pos.x;
-	out[13] = mdl->pos.y;
-	out[14] = mdl->pos.z;
-	out[15] = 1;
+	out->m[0][0] = sx * (cos(ry) * cos(rz));
+	out->m[0][1] = sx * (cos(ry) * sin(rz));
+	out->m[0][2] = sx * (-sin(ry));
+	out->m[0][3] = 0;
+	out->m[1][0] = sy * (sin(rx) * sin(ry) * cos(rz) - cos(rx) * sin(rz));
+	out->m[1][1] = sy * (sin(rx) * sin(ry) * sin(rz) + cos(rx) * cos(rz));
+	out->m[1][2] = sy * (sin(rx) * cos(ry));
+	out->m[1][3] = 0;
+	out->m[2][0] = sz * (cos(rx) * sin(ry) * cos(rz) + sin(rx) * sin(rz));
+	out->m[2][1] = sz * (cos(rx) * sin(ry) * sin(rz) - sin(rx) * cos(rz));
+	out->m[2][2] = sz * (cos(rx) * cos(ry));
+	out->m[2][3] = 0;
+	out->m[3][0] = mdl->pos.x;
+	out->m[3][1] = mdl->pos.y;
+	out->m[3][2] = mdl->pos.z;
+	out->m[3][3] = 1;
 }
 
 /**
  * Construit la matrice monde d'un bone en remontant la chaîne parent.
  * world = local × parent_world
  */
-static void	ft_get_bone_world_matrix(t_model *bone, double *world, int depth)
+static void	ft_get_bone_world_matrix(t_model *bone, t_mat4 *world, int depth)
 {
-	double	local[16];
-	double	parent_world[16];
-	double	tmp[16];
+	t_mat4	local;
+	t_mat4	parent_world;
+	t_mat4	tmp;
 
 	if (depth > 100)
 		return ;
-	ft_build_bone_matrix(bone, local);
+	ft_build_bone_matrix(bone, &local);
 	if (!bone->parent)
 	{
-		ft_memcpy(world, local, sizeof(double) * 16);
+		ft_memcpy(world, &local, sizeof(t_mat4));
 		return ;
 	}
-	ft_get_bone_world_matrix(bone->parent, parent_world, depth + 1);
-	ft_mat4_multiply(local, parent_world, tmp);
-	ft_memcpy(world, tmp, sizeof(double) * 16);
+	ft_get_bone_world_matrix(bone->parent, &parent_world, depth + 1);
+	ft_mat4_multiply(&local, &parent_world, &tmp);
+	ft_memcpy(world, &tmp, sizeof(t_mat4));
 }
 
-static void	ft_mat4_identity(double *out)
+static void	ft_mat4_identity(t_mat4 *out)
 {
 	int	i;
+	int	j;
 
 	i = -1;
-	while (++i < 16)
-		out[i] = (i % 5 == 0) ? 1.0 : 0.0;
+	while (++i < 4)
+	{
+		j = -1;
+		while (++j < 4)
+			out->m[i][j] = (i == j) ? 1.0 : 0.0;
+	}
 }
 
 /**
@@ -316,11 +339,11 @@ static t_vec3	ft_skin_vertex(t_vec3 vertex, int vtx_idx, t_list *deformers)
 	t_vec3		skinned;
 	t_deformer	*def;
 	double		total_weight;
-	double		bone_world[16];
-	double		transform_geo[16];
-	double		inv_bind[16];
-	double		m_step1[16];
-	double		final_mat[16];
+	t_mat4		bone_world;
+	t_mat4		transform_geo;
+	t_mat4		inv_bind;
+	t_mat4		m_step1;
+	t_mat4		final_mat;
 	int			j;
 
 	result.x = 0;
@@ -337,22 +360,22 @@ static t_vec3	ft_skin_vertex(t_vec3 vertex, int vtx_idx, t_list *deformers)
 		{
 			if (def->verticies[j] == vtx_idx)
 			{
-				ft_get_bone_world_matrix(def->bone, bone_world, 0);
+				ft_get_bone_world_matrix(def->bone, &bone_world, 0);
 
 				if (def->transform)
-					ft_memcpy(transform_geo, def->transform, sizeof(double) * 16);
+					ft_memcpy(&transform_geo, def->transform, sizeof(t_mat4));
 				else
-					ft_mat4_identity(transform_geo);
+					ft_mat4_identity(&transform_geo);
 
 				if (def->t_link)
-					ft_mat4_inverse(def->t_link, inv_bind);
+					ft_mat4_inverse(def->t_link, &inv_bind);
 				else
-					ft_mat4_identity(inv_bind);
+					ft_mat4_identity(&inv_bind);
 
-				ft_mat4_multiply(transform_geo, inv_bind, m_step1);
-				ft_mat4_multiply(m_step1, bone_world, final_mat);
+				ft_mat4_multiply(&transform_geo, &inv_bind, &m_step1);
+				ft_mat4_multiply(&m_step1, &bone_world, &final_mat);
 
-				skinned = ft_apply_mat4(final_mat, vertex);
+				skinned = ft_apply_mat4(&final_mat, vertex);
 				result.x += def->weights[j] * skinned.x;
 				result.y += def->weights[j] * skinned.y;
 				result.z += def->weights[j] * skinned.z;

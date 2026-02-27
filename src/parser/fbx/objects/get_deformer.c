@@ -96,9 +96,9 @@ double *ft_parse_weights(char **line, char *cursor, int fd)
  * Transform: *16 { a: 0.385, ... }
  * Matrice 4x4
  */
-double *ft_parse_transform(char **line, char *cursor, int fd)
+t_mat4 *ft_parse_transform(char **line, char *cursor, int fd)
 {
-    double  *matrix;
+    t_mat4  *matrix;
     int     count;
     int     i;
 
@@ -106,19 +106,19 @@ double *ft_parse_transform(char **line, char *cursor, int fd)
     if (!cursor)
         return (NULL);
     count = ft_atoi(++cursor);
-    matrix = malloc(sizeof(double) * count);
+    matrix = malloc(sizeof(t_mat4));
     if (!matrix)
         return (NULL);
     cursor = ft_strchr(cursor, '{');
     if (cursor)
         cursor++;
     i = 0;
-    while (i < count)
+    while (i < count && i < 16)
     {
         ft_jump_to_next_value(&cursor, line, fd);
         if (*cursor == '}')
             break;
-        matrix[i] = ft_atof(cursor);
+        matrix->m[i / 4][i % 4] = ft_atof(cursor);
         ft_skip_number(&cursor);
         i++;
     }
