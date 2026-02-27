@@ -13,6 +13,49 @@
 #include "fdf.h"
 
 /**
+ * Redistributes duplicate keyframe times evenly between unique timestamps.
+ * When a baked FBX has e.g. 60 keys at t=0.0 and 60 keys at t=1.0,
+ * this spreads the 60 keys at t=0.0 across [0.0 .. 1.0) so interpolation
+ * works per-frame instead of per-second.
+ */
+static void	ft_redistribute_keytimes(t_anim_curve *curve)
+{
+	int		i;
+	int		group_start;
+	int		group_size;
+	double	next_time;
+	double	step;
+	int		j;
+
+	if (!curve || curve->n_keys <= 1 || !curve->time)
+		return ;
+	i = 0;
+	while (i < curve->n_keys)
+	{
+		group_start = i;
+		while (i < curve->n_keys - 1 && curve->time[i + 1] == curve->time[group_start])
+			i++;
+		group_size = i - group_start + 1;
+		if (group_size > 1)
+		{
+			if (i + 1 < curve->n_keys)
+				next_time = curve->time[i + 1];
+			else
+				next_time = curve->time[group_start] + 1.0;
+			step = (next_time - curve->time[group_start]) / group_size;
+			j = 0;
+			while (j < group_size)
+			{
+				curve->time[group_start + j] = curve->time[group_start]
+					+ j * step;
+				j++;
+			}
+		}
+		i++;
+	}
+}
+
+/**
  *	KeyTime: *3 { 0, 153953860000, 307907720000 }
  */
 static int	ft_parse_keytime(t_anim_curve *anim_curve, char **line, char *cursor, int fd)
@@ -20,7 +63,6 @@ static int	ft_parse_keytime(t_anim_curve *anim_curve, char **line, char *cursor,
 	int			index;
 	long long	ktime;
 
-	// printf("Parsing KeyTime\n"); // debug
 	if (!anim_curve->n_keys)
 	{
 		cursor = ft_strchr(cursor, '*');
@@ -29,7 +71,6 @@ static int	ft_parse_keytime(t_anim_curve *anim_curve, char **line, char *cursor,
 		cursor++;
 		anim_curve->n_keys = ft_atoi(cursor);
 	}
-	// printf("- n keys : %d\n", anim_curve->n_keys); // debug
 	anim_curve->time = malloc(sizeof(double) * anim_curve->n_keys);
 	if (!anim_curve->time)
 		return (ERROR);
@@ -44,12 +85,12 @@ static int	ft_parse_keytime(t_anim_curve *anim_curve, char **line, char *cursor,
 			break ;
 		ktime = ft_atoll(cursor);
 		anim_curve->time[index] = (double)(ktime / FBX_SEC);
-		// printf("- KeyTime [%d] : %f\n>>%lli\n", index, anim_curve->time[index], ktime); // debug
 		while (*cursor && (ft_isdigit(*cursor) || *cursor == '-'))
 			cursor++;
 		index++;
 	}
 	ft_skip_closing_brace(&cursor, line, fd);
+	ft_redistribute_keytimes(anim_curve);
 	return (SUCCESS);
 }
 

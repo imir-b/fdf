@@ -224,7 +224,7 @@ clean:
 	@echo -en "\xe2\x94\x83$(CYAN)                          Cleaning ..."
 	@echo -e "  🌨️                               $(END)\xe2\x94\x83"
 	@make clean -C $(LIBFT_DIR)
-	@make clean -C $(MINLIB_DIR) > /dev/null 2>&1
+	@make clean -C $(MINLIB_DIR) > /dev/null 2>&1 || true
 	@rm -rf $(OBJ_DIR)
 	@echo -en "\xe2\x94\x97\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
