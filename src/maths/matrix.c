@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 10:48:29 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 10:53:52 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 12:17:08 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	ft_mat4_multiply(t_mat4 *a, t_mat4 *b, t_mat4 *out)
 /**
  * Multiplie une matrice 4x4 (row-major FBX) par un vec3 (w=1).
  */
-static t_vec3	ft_apply_mat4(t_mat4 *mat, t_vec3 v)
+t_vec3	ft_apply_mat4(t_mat4 *mat, t_vec3 v)
 {
 	t_vec3	r;
 
