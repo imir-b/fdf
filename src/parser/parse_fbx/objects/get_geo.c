@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_geo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:41 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/31 21:07:39 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/27 11:29:54 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,18 @@
 
 static void	ft_read_value(char **cursor)
 {
-	while (	**cursor && (ft_isdigit(**cursor) || **cursor == '-' || \
-			**cursor == '.' || **cursor == 'e' || **cursor == 'E'))
+	while (**cursor && (ft_isdigit(**cursor) || **cursor == '-'
+			|| **cursor == '.' || **cursor == 'e' || **cursor == 'E'))
 	{
 		(*cursor)++;
 	}
 }
 
-static char	*ft_parse_vertex(t_object *obj, char **line, char *cursor, int fd)
+static char	*ft_parse_vertex(t_object *obj, char **line, char *cursor,
+				int fd)
 {
 	int		index;
-	int 	nb_floats;
+	int		nb_floats;
 
 	cursor = ft_strchr(cursor, '*');
 	if (!cursor)

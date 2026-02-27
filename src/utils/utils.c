@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:20:18 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/01/29 17:31:10 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 11:10:45 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,6 @@ int	ft_atoi_hexa(char *str)
 		str++;
 	}
 	return (result);
-}
-
-int	ft_absolute(int n)
-{
-	if (n < 0)
-		return (-n);
-	return (n);
 }
 
 int	ft_direction(int pos1, int pos2)

@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:39 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/09 04:50:26 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 11:34:05 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ static int	ft_parse_keytime(t_anim_curve *anim_curve, char **line, char *cursor,
 static int	ft_parse_keyvalue(t_anim_curve *anim_curve, char **line, char *cursor, int fd)
 {
 	int		index;
+
 	if (!anim_curve->n_keys)
 	{
 		cursor = ft_strchr(cursor, '*');
@@ -128,7 +129,8 @@ static int	ft_parse_keyvalue(t_anim_curve *anim_curve, char **line, char *cursor
 					return (ERROR);
 				cursor = *line;
 			}
-			else if (*cursor == ' ' || *cursor == '\t' || *cursor == ',' || *cursor == 'a' || *cursor == ':')
+			else if (*cursor == ' ' || *cursor == '\t' || *cursor == ','
+				|| *cursor == 'a' || *cursor == ':')
 				cursor++;
 			else
 				break ;
@@ -136,7 +138,9 @@ static int	ft_parse_keyvalue(t_anim_curve *anim_curve, char **line, char *cursor
 		if (*cursor == '}')
 			break ;
 		anim_curve->value[index] = ft_atof(cursor);
-		while (*cursor && (ft_isdigit(*cursor) || *cursor == '-' || *cursor == '+' || *cursor == '.' || *cursor == 'e' || *cursor == 'E'))
+		while (*cursor && (ft_isdigit(*cursor) || *cursor == '-'
+				|| *cursor == '+' || *cursor == '.'
+				|| *cursor == 'e' || *cursor == 'E'))
 			cursor++;
 		index++;
 	}
@@ -153,7 +157,7 @@ static int	ft_parse_keyvalue(t_anim_curve *anim_curve, char **line, char *cursor
 t_anim_curve	*ft_get_anim_curve(char *cursor, int fd)
 {
 	t_anim_curve	*curve;
-	char		*line;
+	char			*line;
 
 	curve = ft_calloc(1, sizeof(t_anim_curve));
 	if (!curve)

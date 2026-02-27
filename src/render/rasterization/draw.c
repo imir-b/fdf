@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 04:36:22 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/01 19:16:36 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/27 11:44:02 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ static inline void	fast_pixel_put(t_fdf *data, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = data->img.addr + (y * data->img.line_length + x * \
-		(data->img.bits_per_pixel >> 3));
+	dst = data->img.addr + (y * data->img.line_length + x
+			* (data->img.bits_per_pixel >> 3));
 	*(unsigned int *)dst = color;
 }
 
@@ -42,14 +42,11 @@ void	ft_draw_axes(t_fdf *data)
 	ft_project_point(&x, data);
 	ft_project_point(&y, data);
 	ft_project_point(&z, data);
-	ft_draw_line(data, \
-		(t_point){o.sx, o.sy, 0}, \
+	ft_draw_line(data, (t_point){o.sx, o.sy, 0},
 		(t_point){x.sx, x.sy, 0}, 0xFF0000);
-	ft_draw_line(data, \
-		(t_point){o.sx, o.sy, 0}, \
+	ft_draw_line(data, (t_point){o.sx, o.sy, 0},
 		(t_point){y.sx, y.sy, 0}, 0x00FF00);
-	ft_draw_line(data, \
-		(t_point){o.sx, o.sy, 0}, \
+	ft_draw_line(data, (t_point){o.sx, o.sy, 0},
 		(t_point){z.sx, z.sy, 0}, 0x0000FF);
 }
 
@@ -64,57 +61,10 @@ static void	ft_process_face(t_fdf *data, t_face *face)
 	{
 		v1 = data->object->vertices[face->indices[j]];
 		v2 = data->object->vertices[face->indices[(j + 1) % face->count]];
-		ft_draw_line(data, \
-			(t_point){v1.sx, v1.sy, 0}, \
+		ft_draw_line(data, (t_point){v1.sx, v1.sy, 0},
 			(t_point){v2.sx, v2.sy, 0}, v1.color);
 		j++;
 	}
-}
-
-/**
- * Fonction qui dessine la map avant de l'afficher sur la fenetre.
- * On parcourt toute la map, on trace un trait entre le point et son voisin
- * en appelant la fonction ft_draw_line. Si on est au dernier point de la ligne
- * ou de la colone, on ne dessine pas car plus de voisin, la droite est tracee.
- */
-void	*ft_draw_faces_thread(void *arg)
-{
-	t_thread	*thread;
-	t_fdf		*data;
-	int			i;
-
-	thread = (t_thread *)arg;
-	data = thread->data;
-	i = thread->start;
-	while (i < thread->end)
-	{
-		ft_process_face(data, &data->object->faces[i]);
-		i++;
-	}
-	return (NULL);
-}
-
-void	ft_draw_threads(t_fdf *data)
-{
-	pthread_t	threads[THREADS_NB];
-	t_thread	args[THREADS_NB];
-	int			i;
-	int			chunk;
-
-	chunk = data->object->nb_faces / THREADS_NB;
-	i = -1;
-	while (++i < THREADS_NB)
-	{
-		args[i].data = data;
-		args[i].start = i * chunk;
-		args[i].end = (i + 1) * chunk;
-		if (i == THREADS_NB - 1)
-			args[i].end = data->object->nb_faces;
-		pthread_create(&threads[i], NULL, ft_draw_faces_thread, &args[i]);
-	}
-	i = -1;
-	while (++i < THREADS_NB)
-		pthread_join(threads[i], NULL);
 }
 
 /**

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/15 16:19:16 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/27 11:41:42 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@
 
 # define IS_TAG(str, tag) (!ft_strncmp(str, tag, sizeof(tag) - 1))
 
+typedef void					*(*t_get_func)(char *, int);
+
 /*
  * Structure simple représentant un point avec des coordonnées
  * entières en 3D (souvent utilisé pour les coordonnées grille).
@@ -50,6 +52,8 @@ typedef struct s_point			t_point;
 typedef struct s_vec3			t_vec3;
 
 typedef struct s_mat4			t_mat4;
+
+typedef struct s_transform_data	t_transform_data;
 
 /*
  * Définit la topologie d'une face (polygone) via une liste d'indices
@@ -110,7 +114,6 @@ typedef struct s_fdf			t_fdf;
  * Définit la portion de travail (start/end) attribuée à un thread spécifique.
  */
 typedef struct s_thread			t_thread;
-
 
 // -----------------------------------------------------------------------------
 // ****** Data parsing fbx ******
@@ -270,6 +273,16 @@ struct s_vec3
 	int		color;
 };
 
+struct s_transform_data
+{
+	double	rx;
+	double	ry;
+	double	rz;
+	double	sx;
+	double	sy;
+	double	sz;
+};
+
 struct s_mat4
 {
 	double	m[4][4];
@@ -326,12 +339,13 @@ struct s_mouse
 	int	is_pressed;
 };
 
-struct s_timer {
-    long    start_time;
-    long    last_frame;
-    double  delta_time;
-    double	weighted_value;
-    double  duration;
+struct s_timer
+{
+	long	start_time;
+	long	last_frame;
+	double	delta_time;
+	double	weighted_value;
+	double	duration;
 	bool	is_paused;
 };
 

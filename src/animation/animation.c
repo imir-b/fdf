@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 21:27:49 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/26 16:43:32 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 10:22:12 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,8 @@ static double	ft_get_value_at_time(t_anim_curve *curve, double current_time)
 	return (curve->value[i] * (1.0 - t) + curve->value[i + 1] * t);
 }
 
-static void	ft_get_anim_at_time(t_properties *transformed, \
-								t_anim_node *current, \
-								t_timer timer)
+static void	ft_get_anim_at_time(t_properties *transformed,
+	t_anim_node *current, t_timer timer)
 {
 	if (current->x)
 		transformed->x = ft_get_value_at_time(current->x, timer.weighted_value);

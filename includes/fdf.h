@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/14 02:03:07 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/27 11:07:55 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void				ft_print_curve(t_anim_curve *curve);
 # define FALSE 0
 
 // -----------------------------------------------------------------------------
-// UTILS
+// *** UTILS ***
 // -----------------------------------------------------------------------------
 int					ft_count_words_sep(char *str, char sep);
 int					ft_atoi_hexa(char *str);
@@ -58,29 +58,36 @@ void				*ft_free_data(t_fdf *data);
 int					ft_error(char *str);
 
 // -----------------------------------------------------------------------------
+// *** MATHS ***
+// -----------------------------------------------------------------------------
+t_vec3				ft_apply_mat4(t_mat4 *mat, t_vec3 v);
+
+
+// -----------------------------------------------------------------------------
 // *** RENDER ***
 // -----------------------------------------------------------------------------
 int					ft_process_fdf(t_object *obj, t_fbx *fbx);
 void				ft_project_point(t_vec3 *v, t_fdf *data);
-void				ft_transform_axis_point(double *x, double *y, double *z, \
-						t_fdf *data);
-// Render
+void				ft_transform_axis_point(double *x, double *y,
+						double *z, t_fdf *data);
 void				ft_render_image(t_fdf *data);
 double				to_rad(double degree);
-t_vec3				apply_transform(t_vec3 point, t_properties p, t_properties r, t_properties s);
+t_vec3				apply_transform(t_vec3 point, t_properties p,
+						t_properties r, t_properties s);
 t_vec3				ft_get_world_transform(t_vec3 point, t_model *model);
 t_model				*find_model_for_geo(t_list *models, t_geometry *target_geo);
 void				ft_iso_project(double *x, double *y, double *z);
-void				ft_parallel_project(t_fdf *data, float angle_x, \
+void				ft_parallel_project(t_fdf *data, float angle_x,
 						float angle_y);
 void				ft_draw_axes(t_fdf *data);
 void				ft_draw_threads(t_fdf *data);
-void				ft_draw_line(t_fdf *data, t_point p1, t_point p2, \
-									int color);
-long 				ft_get_time_ms(void);
+void				ft_draw_line(t_fdf *data, t_point p1, t_point p2,
+						int color);
+long				ft_get_time_ms(void);
 
+// -----------------------------------------------------------------------------
 // *** ANIMATE ***
-
+// -----------------------------------------------------------------------------
 void				ft_animate(t_fdf *data);
 void				ft_reset_models_to_base(t_fdf *data);
 int					ft_pause(t_fdf *data);
@@ -123,7 +130,8 @@ int					ft_parse_objects(t_fbx *fbx_data, int fd);
 int					ft_parse_connections(t_fbx *fbx_data, int fd);
 void				ft_calculate_anim_duration(t_anim_stack *anim);
 void				*ft_free_fbx_data(t_fbx *data);
-int					ft_parse_face(t_object *obj, char **line, char *cursor, int fd);
+int					ft_parse_face(t_object *obj, char **line, char *cursor,
+						int fd);
 t_geometry			*ft_get_geometry(char *cursor, int fd);
 void				*ft_free_geo(t_geometry *geo);
 t_model				*ft_get_model(char *cursor, int fd);

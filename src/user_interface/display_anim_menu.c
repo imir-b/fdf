@@ -1,45 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   user_interface.c                                   :+:      :+:    :+:   */
+/*   display_anim_menu.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/01 22:27:27 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/15 16:21:54 by vlad             ###   ########.fr       */
+/*   Created: 2026/02/27 03:38:14 by vbleskin          #+#    #+#             */
+/*   Updated: 2026/02/27 03:43:00 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-int	ft_display_fps(t_fdf *data)
-{
-	static long		last_check = 0;
-	static int		frames = 0;
-	static char		*final_str = NULL;
-	char			*fps_str;
-	long			current_time;
-
-	current_time = ft_get_time_ms();
-	frames++;
-	if (current_time - last_check >= 1000)
-	{
-		if (final_str)
-			free(final_str);
-		fps_str = ft_itoa(frames);
-		if (!fps_str)
-			return (ERROR);
-		final_str = ft_strjoin("FPS : ", fps_str);
-		free(fps_str);
-		if (!final_str)
-			return (ERROR);
-		frames = 0;
-		last_check = current_time;
-	}
-	if (final_str)
-		mlx_string_put(data->mlx_ptr, data->win_ptr, 50, 20, 0xFFFFFF, final_str);
-	return (SUCCESS);
-}
 
 t_list	*ft_find_node(t_list *list, void *content_to_find)
 {
@@ -60,17 +31,6 @@ int	ft_pause(t_fdf *data)
 	if (!data->timer.is_paused)
 		data->timer.last_frame = ft_get_time_ms();
 	return (SUCCESS);
-}
-
-t_list	*ft_find_in_list(t_list *list, void *content)
-{
-	while (list)
-	{
-		if (list->content == content)
-			return (list);
-		list = list->next;
-	}
-	return (NULL);
 }
 
 void	ft_next_anim(t_fdf *data)

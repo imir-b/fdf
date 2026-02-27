@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:46 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/06 22:15:24 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 11:39:36 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
  * Exemple de ligne :
  * 'P: "Nom", "Type", "Label", "Flags", x, y, z'
  */
-static void	ft_extract_property_values(t_properties *property, char *line, \
-										char type)
+static void	ft_extract_property_values(t_properties *property, char *line,
+				char type)
 {
 	int	i;
 

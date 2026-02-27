@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   extract_faces.c                                    :+:      :+:    :+:   */
+/*   parse_face.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 07:12:12 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/03 02:00:31 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/27 11:40:04 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ static int	ft_extract_one_face(t_face *face, int *raw, int start, int end)
 	return (SUCCESS);
 }
 
-static t_face	*ft_extract_faces(int *raw, int total, \
-										t_object *obj)
+static t_face	*ft_extract_faces(int *raw, int total,
+					t_object *obj)
 {
 	t_face	*faces;
 	int		index;

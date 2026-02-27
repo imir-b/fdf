@@ -1,16 +1,58 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_fbx.c                                      :+:      :+:    :+:   */
+/*   parser_fbx.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 22:36:04 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/13 15:26:07 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/27 11:59:29 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+void	ft_calculate_anim_duration(t_anim_stack *anim)
+{
+	t_list			*l_layer;
+	t_list			*l_node;
+	t_anim_layer	*layer;
+	t_anim_node		*node;
+	double			max_time;
+
+	max_time = 0;
+	l_layer = anim->layers;
+	while (l_layer)
+	{
+		layer = (t_anim_layer *)l_layer->content;
+		l_node = layer->nodes;
+		while (l_node)
+		{
+			node = (t_anim_node *)l_node->content;
+			if (node->x && node->x->n_keys > 0)
+			{
+				if (node->x->time[node->x->n_keys - 1] > max_time)
+					max_time = node->x->time[node->x->n_keys - 1];
+			}
+			if (node->y && node->y->n_keys > 0)
+			{
+				if (node->y->time[node->y->n_keys - 1] > max_time)
+					max_time = node->y->time[node->y->n_keys - 1];
+			}
+			if (node->z && node->z->n_keys > 0)
+			{
+				if (node->z->time[node->z->n_keys - 1] > max_time)
+					max_time = node->z->time[node->z->n_keys - 1];
+			}
+			l_node = l_node->next;
+		}
+		l_layer = l_layer->next;
+	}
+	if (max_time > 0)
+		anim->duration = max_time;
+	else
+		anim->duration = 1.0;
+}
 
 static void	ft_count_fbx_elements(t_fbx *fbx, int *v, int *f)
 {
@@ -41,7 +83,8 @@ static void	ft_copy_faces(t_object *dst, t_object *src, int f_off, int v_off)
 	while (j < src->nb_faces)
 	{
 		dst->faces[f_off + j].count = src->faces[j].count;
-		dst->faces[f_off + j].indices = malloc(sizeof(int) * src->faces[j].count);
+		dst->faces[f_off + j].indices = malloc(sizeof(int)
+				* src->faces[j].count);
 		k = 0;
 		while (k < src->faces[j].count)
 		{

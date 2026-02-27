@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   transform.c                                        :+:      :+:    :+:   */
+/*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 01:40:06 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/01 23:48:37 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/27 11:51:44 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@ static void	ft_rotate_y(double *x, double *z, t_maths trigo)
 	*z = -x_copy * trigo.sin_beta + *z * trigo.cos_beta;
 }
 
+/**
+ * 
+ */
 void	ft_transform_axis_point(double *x, double *y, double *z, t_fdf *data)
 {
 	ft_rotate_y(x, z, data->trigo);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fbx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:10:52 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/14 16:43:38 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/27 12:00:12 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ void	ft_jump_to_next_value(char **cursor, char **line, int fd)
 	}
 }
 
-void    *ft_get_by_id(t_list *list, long id)
+void	*ft_get_by_id(t_list *list, long id)
 {
-	long    *ptr;
+	long	*ptr;
 
 	while (list)
 	{
@@ -94,9 +94,9 @@ void    *ft_get_by_id(t_list *list, long id)
 		{
 			ptr = (long *)list->content;
 			if (*ptr == id)
-			return (list->content);
+				return (list->content);
 		}
-	list = list->next;
+		list = list->next;
 	}
 	return (NULL);
 }
