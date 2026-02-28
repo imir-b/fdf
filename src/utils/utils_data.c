@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_data.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 22:45:09 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/01 22:49:51 by vlad             ###   ########.fr       */
+/*   Updated: 2026/02/28 22:56:57 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,18 +79,15 @@ t_fdf	*ft_init_data(t_object *obj, t_camera *camera, t_fbx *fbx)
 	data->mlx_ptr = mlx_init();
 	if (!data->mlx_ptr)
 		return (ft_free_data(data));
-	data->win_ptr = mlx_new_window(data->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, \
-		"FDF vbleskin");
+	data->win_ptr = mlx_new_window(data->mlx_ptr, WIN_WIDTH, WIN_HEIGHT,
+			"FDF vbleskin");
 	if (!data->win_ptr)
 		return (ft_free_data(data));
 	data->img.ptr = mlx_new_image(data->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
-	data->img.addr = mlx_get_data_addr(data->img.ptr, &data->img.bits_per_pixel, \
-		&data->img.line_length, &data->img.endian);
+	data->img.addr = mlx_get_data_addr(data->img.ptr, &data->img.bits_per_pixel,
+			&data->img.line_length, &data->img.endian);
 	data->object = obj;
 	data->camera = camera;
-	data->mouse.is_pressed = FALSE;
-	data->mouse.x = 0;
-	data->mouse.y = 0;
 	data->fbx = fbx;
 	if (fbx && fbx->current_anim)
 		ft_init_timer(&data->timer, fbx->current_anim->duration);

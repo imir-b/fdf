@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:11:10 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/06 22:20:56 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/28 23:03:18 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	main(int ac, char **av)
 	if (fbx)
 	{
 		if (fbx->anim_stack)
-			fbx->current_anim = (t_anim_stack *)ft_lstlast(fbx->anim_stack)->content;
+			fbx->current_anim
+				= (t_anim_stack *)ft_lstlast(fbx->anim_stack)->content;
 	}
 	if (!object)
 		return (ft_error("Parsing map failed"));
@@ -36,4 +37,3 @@ int	main(int ac, char **av)
 	ft_free_object(object);
 	return (SUCCESS);
 }
-

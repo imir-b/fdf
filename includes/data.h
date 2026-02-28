@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 11:41:42 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/28 23:04:57 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 
 # define M_PI 3.14159265358979323846
 
-# define IS_TAG(str, tag) (!ft_strncmp(str, tag, sizeof(tag) - 1))
+# define IS_TAG(str, tag) (!ft_strncmp(str, tag, sizeof(tag) - 1)) // remplacer par une fonction ft_is_tag ou par strncmp directement?
 
 typedef void					*(*t_get_func)(char *, int);
 

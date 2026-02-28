@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:08:41 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 11:29:54 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 14:50:40 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,32 @@ static void	ft_read_value(char **cursor)
 	}
 }
 
-static char	*ft_parse_vertex(t_object *obj, char **line, char *cursor,
-				int fd)
+static void	ft_fill_vertices(t_object *obj, char **cursor, char **line, int fd)
 {
-	int		index;
-	int		nb_floats;
+	int	i;
+
+	i = 0;
+	while (i < obj->nb_vertices)
+	{
+		ft_jump_to_next_value(cursor, line, fd);
+		if (**cursor == '}')
+			break ;
+		obj->vertices[i].x = ft_atof(*cursor);
+		ft_read_value(cursor);
+		ft_jump_to_next_value(cursor, line, fd);
+		obj->vertices[i].y = ft_atof(*cursor);
+		ft_read_value(cursor);
+		ft_jump_to_next_value(cursor, line, fd);
+		obj->vertices[i].z = ft_atof(*cursor);
+		ft_read_value(cursor);
+		obj->vertices[i].color = WHITE;
+		i++;
+	}
+}
+
+static char	*ft_parse_vertex(t_object *obj, char **line, char *cursor, int fd)
+{
+	int	nb_floats;
 
 	cursor = ft_strchr(cursor, '*');
 	if (!cursor)
@@ -39,23 +60,7 @@ static char	*ft_parse_vertex(t_object *obj, char **line, char *cursor,
 	cursor = ft_strchr(cursor, '{');
 	if (cursor)
 		cursor++;
-	index = 0;
-	while (index < obj->nb_vertices)
-	{
-		ft_jump_to_next_value(&cursor, line, fd);
-		if (*cursor == '}')
-			break ;
-		obj->vertices[index].x = ft_atof(cursor);
-		ft_read_value(&cursor);
-		ft_jump_to_next_value(&cursor, line, fd);
-		obj->vertices[index].y = ft_atof(cursor);
-		ft_read_value(&cursor);
-		ft_jump_to_next_value(&cursor, line, fd);
-		obj->vertices[index].z = ft_atof(cursor);
-		ft_read_value(&cursor);
-		obj->vertices[index].color = WHITE;
-		index++;
-	}
+	ft_fill_vertices(obj, &cursor, line, fd);
 	ft_skip_closing_brace(&cursor, line, fd);
 	return (*line);
 }

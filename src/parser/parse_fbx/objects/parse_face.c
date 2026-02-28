@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 07:12:12 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 11:40:04 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 15:01:53 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,40 +78,51 @@ static t_face	*ft_extract_faces(int *raw, int total,
 	return (faces);
 }
 
+/*
+** Initialise le parsing des faces en trouvant le nombre d'indices
+** et en allouant le tableau correspondant. Met à jour le curseur.
+*/
+static int	*ft_init_face_parse(char **cursor, int *nb)
+{
+	int	*raw;
+
+	*cursor = ft_strchr(*cursor, '*');
+	if (!*cursor)
+		return (NULL);
+	*nb = ft_atoi(++(*cursor));
+	raw = malloc(sizeof(int) * (*nb));
+	if (!raw)
+		return (NULL);
+	*cursor = ft_strchr(*cursor, '{');
+	if (*cursor)
+		(*cursor)++;
+	return (raw);
+}
+
 int	ft_parse_face(t_object *obj, char **line, char *cursor, int fd)
 {
-	int		index;
-	int		nb_indices;
-	int		*raw_indices;
+	int	*raw;
+	int	nb;
+	int	i;
 
-	cursor = ft_strchr(cursor, '*');
-	if (!cursor)
+	raw = ft_init_face_parse(&cursor, &nb);
+	if (!raw)
 		return (ERROR);
-	cursor++;
-	nb_indices = ft_atoi(cursor);
-	raw_indices = malloc(sizeof(int) * nb_indices);
-	if (!raw_indices)
-		return (ERROR);
-	cursor = ft_strchr(cursor, '{');
-	if (cursor)
-		cursor++;
-	index = 0;
-	while (index < nb_indices)
+	i = -1;
+	while (++i < nb)
 	{
 		ft_jump_to_next_value(&cursor, line, fd);
 		if (*cursor == '}')
 			break ;
-		raw_indices[index] = ft_atoi(cursor);
+		raw[i] = ft_atoi(cursor);
 		if (*cursor == '-')
 			cursor++;
 		while (*cursor && ft_isdigit(*cursor) && *cursor != '-')
 			cursor++;
-		index++;
 	}
-	obj->faces = ft_extract_faces(raw_indices, nb_indices, obj);
+	obj->faces = ft_extract_faces(raw, nb, obj);
 	ft_skip_closing_brace(&cursor, line, fd);
-	free(raw_indices);
 	if (!obj->faces)
-		return (ERROR);
-	return (SUCCESS);
+		return (free(raw), ERROR);
+	return (free(raw), SUCCESS);
 }

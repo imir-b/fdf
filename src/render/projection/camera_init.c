@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 11:20:07 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 11:51:37 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/28 22:47:23 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,32 @@ static double	ft_get_obj_span(t_object *obj)
 	return (span);
 }
 
-/**
- * 
- */
+static double	ft_calc_geo_span(t_geometry *geo, t_model *mdl, double span)
+{
+	t_vec3	v;
+	int		i;
+
+	i = -1;
+	while (geo->obj && ++i < geo->obj->nb_vertices)
+	{
+		v = geo->obj->vertices[i];
+		if (mdl)
+			v = ft_get_world_transform(v, mdl);
+		if (fabs(v.x) > span)
+			span = fabs(v.x);
+		if (fabs(v.y) > span)
+			span = fabs(v.y);
+		if (fabs(v.z) > span)
+			span = fabs(v.z);
+	}
+	return (span);
+}
+
 static double	ft_get_fbx_span(t_fbx *fbx)
 {
 	t_list		*curr;
 	t_geometry	*geo;
 	t_model		*mdl;
-	t_vec3		v;
-	int			i;
 	double		span;
 
 	curr = fbx->geo;
@@ -53,15 +69,7 @@ static double	ft_get_fbx_span(t_fbx *fbx)
 	{
 		geo = (t_geometry *)curr->content;
 		mdl = find_model_for_geo(fbx->model, geo);
-		i = -1;
-		while (geo->obj && ++i < geo->obj->nb_vertices)
-		{
-			v = geo->obj->vertices[i];
-			if (mdl)
-				v = ft_get_world_transform(v, mdl);
-			if (fabs(v.x) > span || fabs(v.y) > span || fabs(v.z) > span)
-				span = fmax(fabs(v.x), fmax(fabs(v.y), fabs(v.z)));
-		}
+		span = ft_calc_geo_span(geo, mdl, span);
 		curr = curr->next;
 	}
 	return (span);

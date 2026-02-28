@@ -1,32 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_mlx.c                                        :+:      :+:    :+:   */
+/*   slider_animation.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/01 18:23:51 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/28 22:54:37 by vbleskin         ###   ########.fr       */
+/*   Created: 2026/02/28 22:51:49 by vbleskin          #+#    #+#             */
+/*   Updated: 2026/02/28 22:52:05 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	my_mlx_pixel_put(t_fdf *data, int x, int y, int color)
+int	ft_pause(t_fdf *data)
 {
-	char	*dst;
-
-	if (x >= 0 && x < WIN_WIDTH && y >= 0 && y < WIN_HEIGHT)
-	{
-		dst = data->img.addr + (y * data->img.line_length + x
-				* (data->img.bits_per_pixel / 8));
-		*(unsigned int *)dst = color;
-	}
-}
-
-int	ft_close_window(t_fdf *data)
-{
-	ft_free_data(data);
-	exit(SUCCESS);
+	if (!data || !data->fbx)
+		return (ERROR);
+	data->timer.is_paused = !data->timer.is_paused;
+	if (!data->timer.is_paused)
+		data->timer.last_frame = ft_get_time_ms();
 	return (SUCCESS);
 }

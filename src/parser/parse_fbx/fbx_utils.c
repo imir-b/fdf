@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 17:10:52 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 12:00:12 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/02/27 13:54:37 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
  */
 int	ft_extract_line(char **cursor, char **line_ptr, int fd)
 {
-
 	if (*cursor && **cursor != '\0' && **cursor != '\n' && **cursor != '}')
 		return (SUCCESS);
 	if (*line_ptr)
