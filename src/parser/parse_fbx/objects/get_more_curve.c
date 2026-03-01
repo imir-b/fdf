@@ -26,12 +26,19 @@ static void	ft_distribute_group(t_anim_curve *c, int start, int i)
 		next = c->time[i + 1];
 	else
 		next = c->time[start] + 1.0;
-	step = (next - c->time[start]) / size;
+	step = (next - c->time[start]) / (size + 1);
 	j = -1;
 	while (++j < size)
 		c->time[start + j] = c->time[start] + j * step;
 }
 
+/**
+ * Redistribue les clés temporelles (keyframes) pour lisser l'animation.
+ * Les exports "baked" partagent souvent le même "timestamp" pour de multiples
+ * frames (ex: 60 frames listées à 0 seconde). Cette fonction repère ces groupes
+ * et les espace de manière égale jusqu'à la seconde suivante pour interpoler
+ * chaque frame fluidement sans accoups.
+ */
 void	ft_redistribute_keytimes(t_anim_curve *curve)
 {
 	int	i;

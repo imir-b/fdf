@@ -13,7 +13,9 @@
 #include "fdf.h"
 
 /**
- * 
+ * Cherche dans la liste de modèles celui qui correspond à la géométrie donnée.
+ * Utile pour faire le lien entre les données de maillage (geo) et la hiérarchie
+ * des noeuds (modèles/os) dans le graphe de scène.
  */
 t_model	*find_model_for_geo(t_list *models, t_geometry *target_geo)
 {
@@ -69,6 +71,10 @@ static void	ft_rotate(t_vec3 *p, t_properties r)
 	p->x = tmp;
 }
 
+/**
+ * Applique successivement la mise à l'échelle (scale), la rotation (rot)
+ * et la translation (pos) à un point 3D en utilisant les propriétés locales.
+ */
 t_vec3	apply_transform(t_vec3 point, t_properties p, t_properties r,
 	t_properties s)
 {
@@ -80,6 +86,11 @@ t_vec3	apply_transform(t_vec3 point, t_properties p, t_properties r,
 	return (point);
 }
 
+/**
+ * Calcule la position absolue (World Transform) d'un sommet en parcourant
+ * la hiérarchie de son modèle jusqu'à la racine (parent -> parent).
+ * Applique les transformations locales de chaque parent lu de bas en haut.
+ */
 t_vec3	ft_get_world_transform(t_vec3 point, t_model *model)
 {
 	t_vec3	curr_point;

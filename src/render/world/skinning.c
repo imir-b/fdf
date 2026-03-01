@@ -77,6 +77,12 @@ static t_vec3	ft_skin_vertex(t_vec3 vertex, int vtx_idx, t_list *deformers)
 	return (res.x /= total_w, res.y /= total_w, res.z /= total_w, res);
 }
 
+/**
+ * Calcule la nouvelle position d'un sommet (vertex).
+ * Si la géométrie possède des déformateurs (skinning), applique l'influence
+ * des os. Sinon, applique la transformation du modèle parent. Si aucun des
+ * deux n'existe, retourne le sommet avec les transformations par défaut.
+ */
 t_vec3	ft_get_new_pos(t_geometry *geo, t_model *model, int i)
 {
 	t_vec3	v;

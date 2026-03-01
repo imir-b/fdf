@@ -22,6 +22,10 @@ int	ft_is_extension(const char *filename, const char *extension)
 	return (FALSE);
 }
 
+/**
+ * Vérifie que l'extension du fichier passé en argument est bien supportée
+ * par le programme (.fdf, .obj, ou .fbx).
+ */
 int	ft_check_filename(const char *filename)
 {
 	char	*format;
@@ -41,6 +45,11 @@ int	ft_check_filename(const char *filename)
 		return (ERROR);
 }
 
+/**
+ * Fonction de routage principale (dispatcher) pour le parsing.
+ * Détecte l'extension du fichier et appelle le parser correspondant
+ * (fdf, obj ou fbx). Convertit ensuite la géométrie pour retourner l'objet final.
+ */
 t_object	*ft_parse_dispatch(const char *filename, t_fbx **fbx)
 {
 	t_object	*object;
@@ -55,6 +64,8 @@ t_object	*ft_parse_dispatch(const char *filename, t_fbx **fbx)
 	else if (ft_is_extension(filename, ".fbx"))
 	{
 		*fbx = ft_parse_fbx(filename);
+		if (!*fbx)
+			return (ft_free_object(object));
 		object = ft_convert_fbx_to_object(*fbx);
 		if (!object)
 			return (NULL);

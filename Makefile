@@ -119,7 +119,7 @@ $(OBJ_DIR)/%.o:	$(SRC_DIR)/%.c $(wildcard includes/*.h)
 				@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 $(NAME):		$(OBJ)
-	@make -C $(LIBFT_DIR)
+	@make -C $(LIBFT_DIR) > /dev/null 2>&1
 	@make -C $(MINLIB_DIR) > /dev/null 2>&1
 	@echo -en "\xe2\x94\x8f\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
 	@echo -en "\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
@@ -206,7 +206,7 @@ $(NAME):		$(OBJ)
 	@echo -e "\xe2\x94\x81\xe2\x94\x9b"
 
 debug:			$(OBJ)
-	@make -C $(LIBFT_DIR)
+	@make -C $(LIBFT_DIR) > /dev/null 2>&1
 	@make -C $(MINLIB_DIR) > /dev/null 2>&1
 	@cc -g $(OBJ) $(INCLUDE_LIB) $(CFLAGS) $(CPPFLAGS) -o $(NAME) $(VALGRIND)
 

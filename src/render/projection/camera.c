@@ -37,7 +37,8 @@ static void	ft_rotate_y(double *x, double *z, t_maths trigo)
 }
 
 /**
- * 
+ * Applique les rotations de la caméra et la projection isométrique
+ * spécifiquement pour les points des axes (X, Y, Z) dessinés à l'écran.
  */
 void	ft_transform_axis_point(double *x, double *y, double *z, t_fdf *data)
 {

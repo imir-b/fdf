@@ -23,7 +23,10 @@ static char	*ft_read_entire_file(const char *filename, ssize_t *total)
 
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
+	{
+		ft_error(strerror(errno));
 		return (NULL);
+	}
 	*total = lseek(fd, 0, SEEK_END);
 	lseek(fd, 0, SEEK_SET);
 	if (*total <= 0)

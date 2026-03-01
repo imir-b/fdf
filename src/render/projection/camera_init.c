@@ -104,6 +104,11 @@ static void	ft_set_cam_zoom(t_camera *cam, t_object *obj, t_fbx *fbx)
 		cam->zoom = 0.001;
 }
 
+/**
+ * Initialise la caméra (angles par défaut, position, zoom dynamique).
+ * Le zoom est ajusté en fonction de la taille ("span") du modèle chargé
+ * afin qu'il rentre correctement dans la fenêtre au lancement.
+ */
 t_camera	*ft_init_camera(t_object *obj, t_fbx *fbx)
 {
 	t_camera	*cam;
