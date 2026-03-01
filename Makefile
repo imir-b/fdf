@@ -237,7 +237,7 @@ clean:
 	@echo -e "\xe2\x94\x81\xe2\x94\x93"
 	@echo -en "\xe2\x94\x83$(CYAN)                          Cleaning ..."
 	@echo -e "  🌨️                               $(END)\xe2\x94\x83"
-	@make clean -C $(LIBFT_DIR)
+	@make clean -C $(LIBFT_DIR) > /dev/null 2>&1
 	@make clean -C $(MINLIB_DIR) > /dev/null 2>&1 || true
 	@rm -rf $(OBJ_DIR)
 	@echo -en "\xe2\x94\x97\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81\xe2\x94\x81"
@@ -260,7 +260,7 @@ clean:
 
 fclean: 		clean
 	@rm -rf $(NAME)
-	@make fclean -C $(LIBFT_DIR)
+	@make fclean -C $(LIBFT_DIR) > /dev/null 2>&1
 	# @echo "\033[1;35]cleaned all 🚽\033[0m"
 
 re: 			fclean all
