@@ -25,11 +25,11 @@ void	ft_connect_anim_to_model(t_fbx *data, char *line, long *ids)
 		{
 			anim->target = model;
 			line += 4;
-			if (IS_TAG(line, "Translation"))
+			if (ft_is_tag(line, "Translation"))
 				model->anim_pos = anim;
-			else if (IS_TAG(line, "Rotation"))
+			else if (ft_is_tag(line, "Rotation"))
 				model->anim_rot = anim;
-			else if (IS_TAG(line, "Scaling"))
+			else if (ft_is_tag(line, "Scaling"))
 				model->anim_scale = anim;
 		}
 	}
@@ -47,11 +47,11 @@ void	ft_connect_anim_to_anim(t_fbx *data, char *line, long *ids)
 		if (anim_node)
 		{
 			line += 2;
-			if (IS_TAG(line, "X"))
+			if (ft_is_tag(line, "X"))
 				anim_node->x = anim_curve;
-			else if (IS_TAG(line, "Y"))
+			else if (ft_is_tag(line, "Y"))
 				anim_node->y = anim_curve;
-			else if (IS_TAG(line, "Z"))
+			else if (ft_is_tag(line, "Z"))
 				anim_node->z = anim_curve;
 		}
 	}

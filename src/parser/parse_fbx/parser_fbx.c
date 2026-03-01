@@ -139,9 +139,9 @@ t_fbx	*ft_parse_fbx(const char *filename)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		else if (IS_TAG(line, "Objects"))
+		else if (ft_is_tag(line, "Objects"))
 			ft_parse_objects(fbx_data, fd);
-		else if (IS_TAG(line, "Connections"))
+		else if (ft_is_tag(line, "Connections"))
 			ft_parse_connections(fbx_data, fd);
 		free(line);
 	}

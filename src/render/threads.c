@@ -40,26 +40,31 @@ void	*ft_calc_transform_thread(void *arg)
  */
 void	ft_transform_threads(t_fdf *data)
 {
-	pthread_t	threads[THREADS_NB];
-	t_thread	args[THREADS_NB];
+	pthread_t	*threads;
+	t_thread	*args;
 	int			i;
 	int			chunk;
 
-	chunk = data->object->nb_vertices / THREADS_NB;
+	threads = malloc(sizeof(pthread_t) * data->threads_nb);
+	args = malloc(sizeof(t_thread) * data->threads_nb);
+	if (!threads || !args)
+		return (free(threads), free(args));
+	chunk = data->object->nb_vertices / data->threads_nb;
 	i = -1;
-	while (++i < THREADS_NB)
+	while (++i < data->threads_nb)
 	{
 		args[i].data = data;
 		args[i].id = i;
 		args[i].start = i * chunk;
 		args[i].end = (i + 1) * chunk;
-		if (i == THREADS_NB - 1)
+		if (i == data->threads_nb - 1)
 			args[i].end = data->object->nb_vertices;
 		pthread_create(&threads[i], NULL, ft_calc_transform_thread, &args[i]);
 	}
-	i = -1;
-	while (++i < THREADS_NB)
+	while (--i >= 0)
 		pthread_join(threads[i], NULL);
+	free(threads);
+	free(args);
 }
 
 /**
@@ -87,23 +92,29 @@ void	*ft_draw_faces_thread(void *arg)
 
 void	ft_draw_threads(t_fdf *data)
 {
-	pthread_t	threads[THREADS_NB];
-	t_thread	args[THREADS_NB];
+	pthread_t	*threads;
+	t_thread	*args;
 	int			i;
 	int			chunk;
 
-	chunk = data->object->nb_faces / THREADS_NB;
+	threads = malloc(sizeof(pthread_t) * data->threads_nb);
+	args = malloc(sizeof(t_thread) * data->threads_nb);
+	if (!threads || !args)
+		return (free(threads), free(args));
+	chunk = data->object->nb_faces / data->threads_nb;
 	i = -1;
-	while (++i < THREADS_NB)
+	while (++i < data->threads_nb)
 	{
 		args[i].data = data;
 		args[i].start = i * chunk;
 		args[i].end = (i + 1) * chunk;
-		if (i == THREADS_NB - 1)
+		if (i == data->threads_nb - 1)
 			args[i].end = data->object->nb_faces;
 		pthread_create(&threads[i], NULL, ft_draw_faces_thread, &args[i]);
 	}
 	i = -1;
-	while (++i < THREADS_NB)
+	while (++i < data->threads_nb)
 		pthread_join(threads[i], NULL);
+	free(threads);
+	free(args);
 }

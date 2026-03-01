@@ -61,7 +61,7 @@ static void	ft_parse_properties(t_model *model, int fd)
 		cursor = ft_skip_spaces(line);
 		if (*cursor == '}')
 			return (free(line));
-		if (IS_TAG(cursor, "P:"))
+		if (ft_is_tag(cursor, "P:"))
 		{
 			if (ft_strnstr(cursor, "\"Lcl Translation\"", 50))
 				ft_extract_property_values(&model->pos, cursor, 'T');
@@ -90,7 +90,7 @@ static void	ft_parse_model_lines(t_model *model, int fd)
 			free(line);
 			break ;
 		}
-		if (IS_TAG(cursor, "Properties70"))
+		if (ft_is_tag(cursor, "Properties70"))
 			ft_parse_properties(model, fd);
 		free(line);
 	}

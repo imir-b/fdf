@@ -15,13 +15,13 @@
 static void	ft_parse_deformer_tags(t_deformer *def, char **line, char *cur,
 			int fd)
 {
-	if (IS_TAG(cur, "Indexes"))
+	if (ft_is_tag(cur, "Indexes"))
 		def->verticies = ft_parse_verticies(line, cur, fd, &def->n_vertices);
-	else if (IS_TAG(cur, "Weights"))
+	else if (ft_is_tag(cur, "Weights"))
 		def->weights = ft_parse_weights(line, cur, fd);
-	else if (IS_TAG(cur, "TransformLink"))
+	else if (ft_is_tag(cur, "TransformLink"))
 		def->t_link = ft_parse_transform(line, cur, fd);
-	else if (IS_TAG(cur, "Transform"))
+	else if (ft_is_tag(cur, "Transform"))
 		def->transform = ft_parse_transform(line, cur, fd);
 }
 

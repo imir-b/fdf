@@ -33,16 +33,16 @@ static void	ft_extract_connection(t_fbx *fbx_data, char *line)
 	if (*line)
 		line++;
 	ft_read_ids(line, ids);
-	if (IS_TAG(line, "OO"))
+	if (ft_is_tag(line, "OO"))
 		ft_connect_obj_to_obj(fbx_data, ids);
-	else if (IS_TAG(line, "OP"))
+	else if (ft_is_tag(line, "OP"))
 	{
 		line = ft_strrchr(line, ',');
 		while (*line && (*line == ' ' || *line == '\"' || *line == ','))
 			line++;
-		if (IS_TAG(line, "Lcl"))
+		if (ft_is_tag(line, "Lcl"))
 			ft_connect_anim_to_model(fbx_data, line, ids);
-		else if (IS_TAG(line, "d|"))
+		else if (ft_is_tag(line, "d|"))
 			ft_connect_anim_to_anim(fbx_data, line, ids);
 	}
 }
@@ -62,7 +62,7 @@ int	ft_parse_connections(t_fbx *fbx_data, int fd)
 		if (!line || line[0] == '}')
 			break ;
 		cursor = ft_skip_spaces(line);
-		if (IS_TAG(cursor, "C:"))
+		if (ft_is_tag(cursor, "C:"))
 			ft_extract_connection(fbx_data, cursor);
 		free(line);
 	}

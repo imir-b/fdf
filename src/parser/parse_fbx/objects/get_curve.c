@@ -128,9 +128,9 @@ t_anim_curve	*ft_get_anim_curve(char *cursor, int fd)
 		cursor = ft_skip_spaces(line);
 		if (*cursor == '}')
 			return (free(line), curve);
-		if (IS_TAG(cursor, "KeyTime"))
+		if (ft_is_tag(cursor, "KeyTime"))
 			ft_parse_keytime(curve, &line, cursor, fd);
-		else if (IS_TAG(cursor, "KeyValueFloat"))
+		else if (ft_is_tag(cursor, "KeyValueFloat"))
 			ft_parse_keyvalue(curve, &line, cursor, fd);
 		free(line);
 	}

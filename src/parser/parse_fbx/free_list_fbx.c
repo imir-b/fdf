@@ -78,6 +78,7 @@ void	*ft_free_fbx_data(t_fbx *data)
 		return (NULL);
 	ft_free_geometry_list(data);
 	ft_free_animation_list(data);
+	ft_free_layers_and_stacks(data);
 	free(data);
 	return (NULL);
 }

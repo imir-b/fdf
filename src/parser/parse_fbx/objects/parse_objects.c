@@ -30,23 +30,23 @@ static int	ft_add_element(char *cursor, int fd, t_list **list,
 
 void	ft_add_current_element(char *line, int fd, t_fbx *data)
 {
-	if (IS_TAG(line, "Geometry"))
+	if (ft_is_tag(line, "Geometry"))
 		ft_add_element(line + 9, fd, &data->geo, (t_get_func)ft_get_geometry);
-	else if (IS_TAG(line, "Model"))
+	else if (ft_is_tag(line, "Model"))
 		ft_add_element(line + 6, fd, &data->model, (t_get_func)ft_get_model);
-	else if (IS_TAG(line, "Deformer"))
+	else if (ft_is_tag(line, "Deformer"))
 		ft_add_element(line + 9, fd, &data->deformer,
 			(t_get_func)ft_get_deformer);
-	else if (IS_TAG(line, "AnimationCurveNode"))
+	else if (ft_is_tag(line, "AnimationCurveNode"))
 		ft_add_element(line + 19, fd, &data->anim_node,
 			(t_get_func)ft_get_anim_node);
-	else if (IS_TAG(line, "AnimationCurve"))
+	else if (ft_is_tag(line, "AnimationCurve"))
 		ft_add_element(line + 15, fd, &data->anim_curve,
 			(t_get_func)ft_get_anim_curve);
-	else if (IS_TAG(line, "AnimationStack"))
+	else if (ft_is_tag(line, "AnimationStack"))
 		ft_add_element(line + 15, fd, &data->anim_stack,
 			(t_get_func)ft_get_anim_stack);
-	else if (IS_TAG(line, "AnimationLayer"))
+	else if (ft_is_tag(line, "AnimationLayer"))
 		ft_add_element(line + 15, fd, &data->anim_layer,
 			(t_get_func)ft_get_anim_layer);
 }

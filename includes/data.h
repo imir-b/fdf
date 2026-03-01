@@ -29,13 +29,11 @@
 
 # define WHITE 16777215
 
-# define THREADS_NB 4
+
 
 # define FBX_SEC 46186158000.0
 
 # define M_PI 3.14159265358979323846
-
-# define IS_TAG(str, tag) (!ft_strncmp(str, tag, sizeof(tag) - 1)) // remplacer par une fonction ft_is_tag ou par strncmp directement?
 
 typedef void					*(*t_get_func)(char *, int);
 
@@ -369,6 +367,7 @@ struct s_fdf
 	t_fbx		*fbx;
 	t_mouse		mouse;
 	t_timer		timer;
+	int			threads_nb;
 };
 
 struct s_thread

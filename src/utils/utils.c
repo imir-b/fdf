@@ -69,3 +69,10 @@ int	ft_direction(int pos1, int pos2)
 		return (1);
 	return (-1);
 }
+
+int	ft_is_tag(const char *str, const char *tag)
+{
+	if (!str || !tag)
+		return (0);
+	return (!ft_strncmp(str, tag, ft_strlen(tag)));
+}

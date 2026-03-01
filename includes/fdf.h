@@ -24,8 +24,7 @@
 # include <errno.h>
 # include <sys/time.h>
 # include <stdbool.h>
-// **************** DEBUG ****************
-# include <stdio.h>
+
 
 # define SUCCESS 0
 # define ERROR 1
@@ -43,6 +42,7 @@ long				ft_atol(const char *s);
 long long			ft_atoll(const char *s);
 int					ft_absolute(int n);
 int					ft_direction(int x1, int x2);
+int					ft_is_tag(const char *str, const char *tag);
 void				my_mlx_pixel_put(t_fdf *data, int x, int y, int color);
 int					ft_close_window(t_fdf *data);
 t_fdf				*ft_init_data(t_object *obj, t_camera *cam, t_fbx *fbx);
@@ -88,6 +88,7 @@ long				ft_get_time_ms(void);
 void				ft_transform_threads(t_fdf *data);
 t_vec3				ft_get_new_pos(t_geometry *geo, t_model *model, int i);
 void				ft_process_face(t_fdf *data, t_face *face);
+void				ft_get_bone_world_matrix(t_model *bone, t_mat4 *world, int depth);
 
 // -----------------------------------------------------------------------------
 // *** ANIMATE ***
@@ -127,9 +128,7 @@ t_fbx				*ft_parse_fbx(const char *filename);
 t_object			*ft_convert_fbx_to_object(t_fbx *fbx);
 char				*ft_skip_spaces(char *str);
 void				ft_jump_to_next_value(char **cursor, char **line, int fd);
-void				ft_skip_to_content(char **cursor);
 void				ft_skip_closing_brace(char **cursor, char **line, int fd);
-void				ft_move_cursor(char **cursor);
 int					ft_extract_line(char **cursor, char **line, int fd);
 void				*ft_get_by_id(t_list *list, long id);
 int					ft_parse_objects(t_fbx *fbx_data, int fd);
@@ -145,6 +144,8 @@ int					ft_parse_face(t_object *obj, char **line, char *cursor,
 						int fd);
 t_geometry			*ft_get_geometry(char *cursor, int fd);
 void				*ft_free_geo(t_geometry *geo);
+void				*ft_free_anim(t_anim_curve *anim_curve);
+void				*ft_free_stack(t_anim_stack *anim_stack);
 t_model				*ft_get_model(char *cursor, int fd);
 t_deformer			*ft_get_deformer(char *cursor, int fd);
 int					*ft_parse_verticies(char **line, char *cursor, int fd,

@@ -44,38 +44,6 @@ void	ft_next_anim(t_fdf *data)
 		data->timer.duration = 1.0;
 }
 
-// void	ft_prev_anim(t_fdf *data)
-// {
-// 	t_list			*anims;
-// 	t_list			*last;
-
-// 	if (!data->fbx || !data->fbx->anim_stack)
-// 		return ;
-// 	anims = data->fbx->anim_stack;
-// 	if (data->fbx->current_anim == anims->content)
-// 	{
-// 		last = ft_lstlast(anims);
-// 		if (last)
-// 			data->fbx->current_anim = (t_anim_stack *)last->content;
-// 	}
-// 	else
-// 	{
-// 		while (anims->next)
-// 		{
-// 			if ((t_anim_stack *)anims->next->content == data->fbx->current_anim)
-// 			{
-// 				data->fbx->current_anim = (t_anim_stack *)anims->content;
-// 				break ;
-// 			}
-// 			anims = anims->next;
-// 		}
-// 	}
-// 	ft_reset_models_to_base(data);
-// 	data->timer.weighted_value = 0;
-// 	data->timer.duration = data->fbx->current_anim->duration;
-// 	if (data->timer.duration == 0)
-// 		data->timer.duration = 1.0;
-// }
 
 void	ft_prev_anim(t_fdf *data)
 {

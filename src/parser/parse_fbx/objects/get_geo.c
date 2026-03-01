@@ -81,9 +81,9 @@ t_object	*ft_get_obj(t_object *obj, int fd)
 			free(line);
 			break ;
 		}
-		if (IS_TAG(cursor, "Vertices"))
+		if (ft_is_tag(cursor, "Vertices"))
 			ft_parse_vertex(obj, &line, cursor, fd);
-		else if (IS_TAG(cursor, "PolygonVertexIndex"))
+		else if (ft_is_tag(cursor, "PolygonVertexIndex"))
 			ft_parse_face(obj, &line, cursor, fd);
 		free(line);
 	}
