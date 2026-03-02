@@ -21,3 +21,14 @@ int	ft_pause(t_fdf *data)
 		data->timer.last_frame = ft_get_time_ms();
 	return (SUCCESS);
 }
+
+/**
+ * Affiche les temps de l'animation au format 00:00 / 01:25
+ */
+void	ft_print_times(t_fdf *data)
+{
+	data->timer->weighted_value;
+	data->timer->duration;
+	mlx_string_put(data->mlx_ptr, data->win_ptr, 80, 200, 0xFFFFFF,
+			"PAUSED");
+}

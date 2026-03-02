@@ -31,9 +31,6 @@ t_model	*find_model_for_geo(t_list *models, t_geometry *target_geo)
 	return (NULL);
 }
 
-/**
- * 
- */
 static void	ft_scale(t_vec3 *p, t_properties s)
 {
 	t_transform_data	d;
