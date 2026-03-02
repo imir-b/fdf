@@ -311,6 +311,7 @@ struct s_camera
 	int		projection;
 	double	angle_x;
 	double	angle_y;
+	double	angle_z;
 };
 
 struct s_maths
@@ -319,6 +320,8 @@ struct s_maths
 	float	cos_alpha;
 	float	sin_beta;
 	float	cos_beta;
+	float	sin_gamma;
+	float	cos_gamma;
 };
 
 struct s_bresenham

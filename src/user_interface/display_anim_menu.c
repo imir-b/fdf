@@ -87,7 +87,7 @@ int	ft_display_anim_menu(t_fdf *data)
 		mlx_string_put(data->mlx_ptr, data->win_ptr, 50, 100, 0xFFFFFF,
 			current->name);
 	if (data->timer.is_paused)
-		mlx_string_put(data->mlx_ptr, data->win_ptr, 80, 200, 0xFFFFFF,
+		mlx_string_put(data->mlx_ptr, data->win_ptr, 190, 60, 0xFFFFFF,
 			"PAUSED");
 	return (SUCCESS);
 }

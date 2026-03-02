@@ -72,7 +72,7 @@ void	ft_display_slider(t_fdf *data)
 
 	ft_get_timecode(timecode_start, data->timer.weighted_value);
 	ft_get_timecode(timecode_end, data->timer.duration);
-	ft_draw_slider(data, y, x_end, x_start);
+	ft_draw_slider(data, y, x_start, x_end);
 	mlx_string_put(data->mlx_ptr, data->win_ptr, x_start - 45, y + 5, 0xFFFFFF,
 		timecode_start);
 	mlx_string_put(data->mlx_ptr, data->win_ptr, x_end + 15, y + 5, 0xFFFFFF,

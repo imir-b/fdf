@@ -23,9 +23,11 @@
 
 # define N 110
 # define P 112
+# define R 114
 # define SPACE 32
 
 # define NUM0 65438
+# define TAB 65289
 # define NUM1 65436
 # define NUM2 65433
 # define NUM3 65435

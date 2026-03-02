@@ -65,6 +65,10 @@ static int	ft_key_hook(int keycode, t_fdf *data)
 		data->camera->shift_y += 10;
 	if (keycode == DOWN)
 		data->camera->shift_y -= 10;
+	if (keycode == R)
+		data->camera->angle_z += RADIAN_90;
+	if (keycode == TAB)
+		data->camera->angle_y += RADIAN_90;
 	ft_num_hook(keycode, data);
 	if (data->fbx)
 		ft_anim_hook(keycode, data);

@@ -30,6 +30,8 @@ void	ft_render_image(t_fdf *data)
 	data->trigo.cos_alpha = cos(data->camera->angle_x);
 	data->trigo.sin_beta = sin(data->camera->angle_y);
 	data->trigo.cos_beta = cos(data->camera->angle_y);
+	data->trigo.sin_gamma = sin(data->camera->angle_z);
+	data->trigo.cos_gamma = cos(data->camera->angle_z);
 	if (data->fbx && data->fbx->current_anim)
 	{
 		ft_update_time(&data->timer);

@@ -37,11 +37,24 @@ static void	ft_rotate_y(double *x, double *z, t_maths trigo)
 }
 
 /**
+ * Applique la rotation autour de l'axe Z.
+ */
+static void	ft_rotate_z(double *x, double *y, t_maths trigo)
+{
+	int	x_copy;
+
+	x_copy = *x;
+	*x = x_copy * trigo.cos_gamma - *y * trigo.sin_gamma;
+	*y = x_copy * trigo.sin_gamma + *y * trigo.cos_gamma;
+}
+
+/**
  * Applique les rotations de la caméra et la projection isométrique
  * spécifiquement pour les points des axes (X, Y, Z) dessinés à l'écran.
  */
 void	ft_transform_axis_point(double *x, double *y, double *z, t_fdf *data)
 {
+	ft_rotate_z(x, y, data->trigo);
 	ft_rotate_y(x, z, data->trigo);
 	ft_rotate_x(y, z, data->trigo);
 	if (data->camera->projection == ISOMETRIC)
@@ -72,6 +85,7 @@ void	ft_project_point(t_vec3 *v, t_fdf *data)
 	x *= data->camera->zoom;
 	y *= data->camera->zoom;
 	z *= data->camera->zoom * data->camera->z_scale;
+	ft_rotate_z(&x, &y, data->trigo);
 	ft_rotate_y(&x, &z, data->trigo);
 	ft_rotate_x(&y, &z, data->trigo);
 	x += data->camera->shift_x;
