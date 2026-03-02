@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 03:38:14 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/28 22:54:03 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/03/02 23:40:18 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int	ft_display_anim_menu(t_fdf *data)
 		current = (t_anim_stack *)anims->content;
 	else
 		return (SUCCESS);
+	ft_display_slider(data);
 	if (current && current->name)
 		mlx_string_put(data->mlx_ptr, data->win_ptr, 50, 100, 0xFFFFFF,
 			current->name);

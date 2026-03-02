@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/28 22:27:28 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/03/02 23:41:22 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void				ft_update_mesh_from_animation(t_fdf *data);
 // -----------------------------------------------------------------------------
 int					ft_display_fps(t_fdf *data);
 int					ft_display_anim_menu(t_fdf *data);
+void				ft_display_slider(t_fdf *data);
 
 // -----------------------------------------------------------------------------
 // *** EVENTS ***
