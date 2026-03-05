@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 03:38:14 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/03/02 23:40:18 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/03/03 14:11:09 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	ft_next_anim(t_fdf *data)
 	if (data->timer.duration == 0)
 		data->timer.duration = 1.0;
 }
-
 
 void	ft_prev_anim(t_fdf *data)
 {

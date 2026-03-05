@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 22:45:09 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/28 22:56:57 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/03/03 14:10:05 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,7 @@ t_fdf	*ft_init_data(t_object *obj, t_camera *camera, t_fbx *fbx)
 	data->mlx_ptr = mlx_init();
 	if (!data->mlx_ptr)
 		return (ft_free_data(data));
-	data->win_ptr = mlx_new_window(data->mlx_ptr, WIN_WIDTH, WIN_HEIGHT,
-			"FDF vbleskin");
+	data->win_ptr = mlx_new_window(data->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "FDF");
 	if (!data->win_ptr)
 		return (ft_free_data(data));
 	data->img.ptr = mlx_new_image(data->mlx_ptr, WIN_WIDTH, WIN_HEIGHT);

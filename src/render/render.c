@@ -6,11 +6,21 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:14:21 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 11:53:00 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/03/04 22:08:01 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+void	ft_precalc(t_fdf *data)
+{
+	data->trigo.sin_alpha = sin(data->camera->angle_x);
+	data->trigo.cos_alpha = cos(data->camera->angle_x);
+	data->trigo.sin_beta = sin(data->camera->angle_y);
+	data->trigo.cos_beta = cos(data->camera->angle_y);
+	data->trigo.sin_gamma = sin(data->camera->angle_z);
+	data->trigo.cos_gamma = cos(data->camera->angle_z);
+}
 
 /**
  * Fonction qui rend l'image en 6 etapes :
@@ -26,12 +36,7 @@
  */
 void	ft_render_image(t_fdf *data)
 {
-	data->trigo.sin_alpha = sin(data->camera->angle_x);
-	data->trigo.cos_alpha = cos(data->camera->angle_x);
-	data->trigo.sin_beta = sin(data->camera->angle_y);
-	data->trigo.cos_beta = cos(data->camera->angle_y);
-	data->trigo.sin_gamma = sin(data->camera->angle_z);
-	data->trigo.cos_gamma = cos(data->camera->angle_z);
+	ft_precalc(data);
 	if (data->fbx && data->fbx->current_anim)
 	{
 		ft_update_time(&data->timer);

@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/28 22:51:49 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/03/02 23:40:52 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/03/03 14:11:42 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	ft_draw_slider(t_fdf *data, int y, int x_start, int x_end)
 		(t_point){x, y, 0}, 0xFFFFFF);
 	ft_draw_line(data, (t_point){x, y - 5, 0},
 		(t_point){x, y + 5, 0}, 0xFF0000);
-
 }
 
 /**

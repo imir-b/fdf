@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:17:30 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 13:47:25 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/03/03 14:10:54 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ int	ft_check_filename(const char *filename)
 /**
  * Fonction de routage principale (dispatcher) pour le parsing.
  * Détecte l'extension du fichier et appelle le parser correspondant
- * (fdf, obj ou fbx). Convertit ensuite la géométrie pour retourner l'objet final.
+ * (fdf, obj ou fbx). Convertit ensuite la géométrie pour retourner 
+ * l'objet final.
  */
 t_object	*ft_parse_dispatch(const char *filename, t_fbx **fbx)
 {
