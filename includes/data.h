@@ -50,6 +50,7 @@ typedef struct s_point			t_point;
 typedef struct s_vec3			t_vec3;
 
 typedef struct s_mat4			t_mat4;
+typedef struct s_quat			t_quat;
 
 typedef struct s_transform_data	t_transform_data;
 
@@ -279,6 +280,14 @@ struct s_transform_data
 	double	sx;
 	double	sy;
 	double	sz;
+};
+
+struct s_quat
+{
+	double	x;
+	double	y;
+	double	z;
+	double	w;
 };
 
 struct s_mat4

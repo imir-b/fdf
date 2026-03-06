@@ -51,6 +51,45 @@ static void	ft_get_anim_at_time(t_properties *transformed,
 		transformed->z = ft_get_value_at_time(current->z, timer.weighted_value);
 }
 
+static void	ft_get_rot_at_time(t_properties *rot, t_anim_node *node, double time)
+{
+	t_anim_curve	*cx;
+	t_anim_curve	*cy;
+	t_anim_curve	*cz;
+	int				i;
+	double			ratio;
+	t_quat			q1;
+	t_quat			q2;
+
+	cx = node->x;
+	cy = node->y;
+	cz = node->z;
+	if (!cx || !cy || !cz || cx->n_keys < 2 || cy->n_keys < 2 || cz->n_keys < 2)
+	{
+		if (cx) rot->x = ft_get_value_at_time(cx, time);
+		if (cy) rot->y = ft_get_value_at_time(cy, time);
+		if (cz) rot->z = ft_get_value_at_time(cz, time);
+		return ;
+	}
+	if (time >= cx->time[cx->n_keys - 1])
+	{
+		rot->x = cx->value[cx->n_keys - 1];
+		rot->y = cy->value[cy->n_keys - 1];
+		rot->z = cz->value[cz->n_keys - 1];
+		return ;
+	}
+	i = 0;
+	while (i < cx->n_keys - 1 && time >= cx->time[i + 1])
+		i++;
+	if (cx->time[i + 1] - cx->time[i] == 0)
+		ratio = 0;
+	else
+		ratio = (time - cx->time[i]) / (cx->time[i + 1] - cx->time[i]);
+	q1 = ft_euler_to_quat(cx->value[i], cy->value[i], cz->value[i]);
+	q2 = ft_euler_to_quat(cx->value[i + 1], cy->value[i + 1], cz->value[i + 1]);
+	*rot = ft_quat_to_euler(ft_slerp(q1, q2, ratio));
+}
+
 static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
 {
 	t_anim_node		*node;
@@ -67,7 +106,7 @@ static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
 			if (node->type == 'S')
 				ft_get_anim_at_time(&model_target->scale, node, data->timer);
 			else if (node->type == 'R')
-				ft_get_anim_at_time(&model_target->rot, node, data->timer);
+				ft_get_rot_at_time(&model_target->rot, node, data->timer.weighted_value);
 			else if (node->type == 'T')
 				ft_get_anim_at_time(&model_target->pos, node, data->timer);
 		}

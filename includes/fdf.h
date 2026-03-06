@@ -62,7 +62,9 @@ t_vec3				ft_apply_mat4(t_mat4 *mat, t_vec3 v);
 void				ft_mat4_identity(t_mat4 *out);
 void				ft_mat4_inverse(t_mat4 *m, t_mat4 *inv);
 void				ft_mat4_multiply(t_mat4 *a, t_mat4 *b, t_mat4 *out);
-t_vec3				ft_apply_mat4(t_mat4 *mat, t_vec3 v);
+t_quat				ft_euler_to_quat(double rx, double ry, double rz);
+t_quat				ft_slerp(t_quat q1, t_quat q2, double t);
+t_properties		ft_quat_to_euler(t_quat q);
 
 // -----------------------------------------------------------------------------
 // *** RENDER ***
