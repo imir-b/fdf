@@ -43,6 +43,10 @@ static char	ft_extract_type(char *line)
  *			P: ...
  *		}
  *	}
+ * 
+ * @param cursor Pointeur vers le curseur de lecture.
+ * @param fd Descripteur de fichier.
+ * @return Pointeur vers la structure t_anim_node allouée et remplie, ou NULL.
  */
 t_anim_node	*ft_get_anim_node(char *cursor, int fd)
 {

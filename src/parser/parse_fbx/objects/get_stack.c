@@ -34,10 +34,13 @@ static char	*ft_extract_name(char *cursor)
 	return (name);
 }
 
-/*
-** Extrait et assigne le nom de l'animation en cherchant
-** le délimiteur approprié (deux-points ou guillemets).
-*/
+/**
+ * Extrait et assigne le nom de l'animation en cherchant
+ * le délimiteur approprié (deux-points ou guillemets).
+ * 
+ * @param anim Pile d'animation où assigner le nom.
+ * @param cursor Curseur de lecture.
+ */
 static void	ft_set_anim_name(t_anim_stack *anim, char *cursor)
 {
 	char	*colon;
@@ -66,6 +69,10 @@ static void	ft_set_anim_name(t_anim_stack *anim, char *cursor)
  *			P: "ReferenceStop", "KTime", "Time", "", 461861580000
  *		}
  *	}
+ * 
+ * @param cursor Pointeur vers le curseur de lecture.
+ * @param fd Descripteur de fichier.
+ * @return Pointeur vers la structure t_anim_stack allouée, ou NULL.
  */
 t_anim_stack	*ft_get_anim_stack(char *cursor, int fd)
 {
@@ -92,6 +99,10 @@ t_anim_stack	*ft_get_anim_stack(char *cursor, int fd)
 /**
  *	AnimationLayer: id, "AnimLayer::", "" {
  *	}
+ * 
+ * @param cursor Pointeur vers le curseur de lecture.
+ * @param fd Descripteur de fichier.
+ * @return Pointeur vers la couche d'animation t_anim_layer allouée, ou NULL.
  */
 t_anim_layer	*ft_get_anim_layer(char *cursor, int fd)
 {

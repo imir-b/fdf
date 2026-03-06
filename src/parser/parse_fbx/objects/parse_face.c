@@ -78,10 +78,14 @@ static t_face	*ft_extract_faces(int *raw, int total,
 	return (faces);
 }
 
-/*
-** Initialise le parsing des faces en trouvant le nombre d'indices
-** et en allouant le tableau correspondant. Met à jour le curseur.
-*/
+/**
+ * Initialise le parsing des faces en trouvant le nombre d'indices
+ * et en allouant le tableau correspondant. Met à jour le curseur.
+ * 
+ * @param cursor Curseur de lecture.
+ * @param nb Pointeur pour stocker le nombre d'indices trouvés.
+ * @return Tableau d'entiers alloué, ou NULL en cas d'erreur.
+ */
 static int	*ft_init_face_parse(char **cursor, int *nb)
 {
 	int	*raw;

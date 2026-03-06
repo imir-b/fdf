@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/03/02 23:41:22 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/03/06 18:40:13 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ double				ft_atof(const char *str);
 long				ft_atol(const char *s);
 long long			ft_atoll(const char *s);
 int					ft_absolute(int n);
+double				ft_abs_double(double n);
 int					ft_direction(int x1, int x2);
 int					ft_is_tag(const char *str, const char *tag);
 void				my_mlx_pixel_put(t_fdf *data, int x, int y, int color);

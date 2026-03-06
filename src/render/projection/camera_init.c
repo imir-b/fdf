@@ -3,17 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   camera_init.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 11:20:07 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/28 22:47:23 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/03/06 18:42:01 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
 /**
+ * Calcule l'étendue (span) absolue maximale de l'objet sur tous les axes.
  * 
+ * @param obj Objet pour lequel calculer l'étendue.
+ * @return Valeur de l'étendue maximale.
  */
 static double	ft_get_obj_span(t_object *obj)
 {
@@ -24,12 +27,12 @@ static double	ft_get_obj_span(t_object *obj)
 	i = 0;
 	while (i < obj->nb_vertices)
 	{
-		if (fabs(obj->vertices[i].x) > span)
-			span = fabs(obj->vertices[i].x);
-		if (fabs(obj->vertices[i].y) > span)
-			span = fabs(obj->vertices[i].y);
-		if (fabs(obj->vertices[i].z) > span)
-			span = fabs(obj->vertices[i].z);
+		if (ft_abs_double(obj->vertices[i].x) > span)
+			span = ft_abs_double(obj->vertices[i].x);
+		if (ft_abs_double(obj->vertices[i].y) > span)
+			span = ft_abs_double(obj->vertices[i].y);
+		if (ft_abs_double(obj->vertices[i].z) > span)
+			span = ft_abs_double(obj->vertices[i].z);
 		i++;
 	}
 	return (span);
@@ -46,12 +49,12 @@ static double	ft_calc_geo_span(t_geometry *geo, t_model *mdl, double span)
 		v = geo->obj->vertices[i];
 		if (mdl)
 			v = ft_get_world_transform(v, mdl);
-		if (fabs(v.x) > span)
-			span = fabs(v.x);
-		if (fabs(v.y) > span)
-			span = fabs(v.y);
-		if (fabs(v.z) > span)
-			span = fabs(v.z);
+		if (ft_abs_double(v.x) > span)
+			span = ft_abs_double(v.x);
+		if (ft_abs_double(v.y) > span)
+			span = ft_abs_double(v.y);
+		if (ft_abs_double(v.z) > span)
+			span = ft_abs_double(v.z);
 	}
 	return (span);
 }
@@ -76,7 +79,11 @@ static double	ft_get_fbx_span(t_fbx *fbx)
 }
 
 /**
+ * Ajuste le zoom de la caméra selon la taille des objets.
  * 
+ * @param cam La caméra à ajuster.
+ * @param obj Objet fdf ou obj classique.
+ * @param fbx Structure fbx si chargée.
  */
 static void	ft_set_cam_zoom(t_camera *cam, t_object *obj, t_fbx *fbx)
 {
@@ -108,6 +115,10 @@ static void	ft_set_cam_zoom(t_camera *cam, t_object *obj, t_fbx *fbx)
  * Initialise la caméra (angles par défaut, position, zoom dynamique).
  * Le zoom est ajusté en fonction de la taille ("span") du modèle chargé
  * afin qu'il rentre correctement dans la fenêtre au lancement.
+ * 
+ * @param obj Objet de base fdf ou obj.
+ * @param fbx Structure fbx contenant la scène.
+ * @return Structure de caméra initialisée, ou NULL si erreur d'allocation.
  */
 t_camera	*ft_init_camera(t_object *obj, t_fbx *fbx)
 {

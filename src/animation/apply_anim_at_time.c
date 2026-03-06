@@ -34,6 +34,8 @@ static void	ft_process_geo_vertices(t_fdf *data, t_geometry *geo, int *g_idx)
  * Pour les modèles avec deformers (skinning squelettique),
  * applique la formule de skinning par vertex.
  * Pour les modèles sans deformers, applique le transform rigide.
+ * 
+ * @param data Structure contenant les données du jeu.
  */
 void	ft_update_mesh_from_animation(t_fdf *data)
 {
@@ -55,7 +57,10 @@ void	ft_update_mesh_from_animation(t_fdf *data)
 }
 
 /**
+ * Réinitialise les modèles animés à leurs positions, rotations
+ * et échelles de base.
  * 
+ * @param data Structure globale contenant les données FBX.
  */
 void	ft_reset_models_to_base(t_fdf *data)
 {

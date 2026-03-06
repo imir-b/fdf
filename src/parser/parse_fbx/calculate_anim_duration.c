@@ -12,10 +12,13 @@
 
 #include "fdf.h"
 
-/*
-** Met à jour le temps maximum d'animation en comparant
-** les courbes temporelles x, y et z d'un nœud donné.
-*/
+/**
+ * Met à jour le temps maximum d'animation en comparant
+ * les courbes temporelles x, y et z d'un nœud donné.
+ * 
+ * @param node Nœud d'animation contenant les courbes.
+ * @param max_time Pointeur vers le temps maximum à mettre à jour.
+ */
 static void	ft_update_max_time(t_anim_node *node, double *max_time)
 {
 	if (node->x && node->x->n_keys > 0)
@@ -35,10 +38,12 @@ static void	ft_update_max_time(t_anim_node *node, double *max_time)
 	}
 }
 
-/*
-** Calcule la durée totale d'une animation en trouvant
-** la dernière clé temporelle (keyframe) parmi toutes les couches.
-*/
+/**
+ * Calcule la durée totale d'une animation en trouvant
+ * la dernière clé temporelle (keyframe) parmi toutes les couches.
+ * 
+ * @param anim Structure de l'animation dont on calcule la durée.
+ */
 void	ft_calculate_anim_duration(t_anim_stack *anim)
 {
 	t_list			*l_layer;

@@ -14,6 +14,10 @@
 
 /**
  * Premiere lecture pour recuperer le nombre de sommets et de faces.
+ * 
+ * @param obj Pointeur vers l'objet à remplir.
+ * @param filename Nom du fichier obj.
+ * @return SUCCESS ou ERROR.
  */
 static int	ft_get_count_elems(t_object *obj, const char *filename)
 {

@@ -14,6 +14,10 @@
 
 /**
  * Premiere lecture pour recuperer la hauteur et la largeur de la grille.
+ * 
+ * @param obj Structure de l'objet pour stocker les dimensions.
+ * @param fd Descripteur du fichier fdf.
+ * @return SUCCESS ou code d'erreur.
  */
 int	ft_get_dimensions(t_object *obj, int fd)
 {

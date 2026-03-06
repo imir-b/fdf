@@ -24,6 +24,8 @@ static inline void	fast_pixel_put(t_fdf *data, int x, int y, int color)
 /**
  * Fonction pour afficher les axes de rotation en bas a droite de l'ecran.
  * (Utile pour se reperer dans l'espace)
+ * 
+ * @param data Structure contenant les données du jeu.
  */
 void	ft_draw_axes(t_fdf *data)
 {
@@ -73,6 +75,11 @@ void	ft_process_face(t_fdf *data, t_face *face)
  * l'algo dans la structure t_bresenham. On dessine le pixel au coordonnes x y
  * de p1 et on avance de step_x et/ou step_y pour dessiner le prochain.
  * Quand p1 est egal a p2 on a dessine toute la ligne, on sort de la boucle.
+ * 
+ * @param data Structure principale du programme.
+ * @param p1 Premier point.
+ * @param p2 Deuxième point.
+ * @param color Couleur de la ligne.
  */
 void	ft_draw_line(t_fdf *data, t_point p1, t_point p2, int color)
 {

@@ -97,6 +97,10 @@ t_object	*ft_get_obj(t_object *obj, int fd)
  *		Vertices: ... { ... }
  *		PolygonVertexIndex: ... { ... }
  *	}
+ * 
+ * @param cursor Pointeur vers le curseur de lecture.
+ * @param fd Descripteur de fichier.
+ * @return Pointeur vers la structure t_geometry allouée et remplie, ou NULL.
  */
 t_geometry	*ft_get_geometry(char *cursor, int fd)
 {

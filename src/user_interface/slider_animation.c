@@ -60,6 +60,8 @@ void	ft_draw_slider(t_fdf *data, int y, int x_start, int x_end)
 
 /**
  * Affiche les temps de l'animation au format 00:00 / 01:25
+ * 
+ * @param data Structure principale contenant les données temporelles.
  */
 void	ft_display_slider(t_fdf *data)
 {

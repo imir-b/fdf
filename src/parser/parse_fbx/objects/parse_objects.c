@@ -54,6 +54,10 @@ void	ft_add_current_element(char *line, int fd, t_fbx *data)
 /**
  * Fonction de parsing pour recuperer les donnees dans la partie 'Objects'
  * d'un fichier .fbx
+ * 
+ * @param data Pointeur vers la structure principale fbx.
+ * @param fd Descripteur de fichier ouvert correspondant à l'fbx.
+ * @return SUCCESS ou un code d'erreur.
  */
 int	ft_parse_objects(t_fbx *data, int fd)
 {

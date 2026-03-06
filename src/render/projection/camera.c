@@ -14,6 +14,10 @@
 
 /**
  * Applique la rotation autour de l'axe X.
+ * 
+ * @param y Pointeur vers la coordonnée y.
+ * @param z Pointeur vers la coordonnée z.
+ * @param trigo Structure de trigonométrie contenant les angles précalculés.
  */
 static void	ft_rotate_x(double *y, double *z, t_maths trigo)
 {
@@ -26,6 +30,10 @@ static void	ft_rotate_x(double *y, double *z, t_maths trigo)
 
 /**
  * Applique la rotation autour de l'axe Y.
+ * 
+ * @param x Pointeur vers la coordonnée x.
+ * @param z Pointeur vers la coordonnée z.
+ * @param trigo Structure de trigonométrie contenant les angles précalculés.
  */
 static void	ft_rotate_y(double *x, double *z, t_maths trigo)
 {
@@ -38,6 +46,10 @@ static void	ft_rotate_y(double *x, double *z, t_maths trigo)
 
 /**
  * Applique la rotation autour de l'axe Z.
+ * 
+ * @param x Pointeur vers la coordonnée x.
+ * @param y Pointeur vers la coordonnée y.
+ * @param trigo Structure de trigonométrie contenant les angles précalculés.
  */
 static void	ft_rotate_z(double *x, double *y, t_maths trigo)
 {
@@ -51,6 +63,11 @@ static void	ft_rotate_z(double *x, double *y, t_maths trigo)
 /**
  * Applique les rotations de la caméra et la projection isométrique
  * spécifiquement pour les points des axes (X, Y, Z) dessinés à l'écran.
+ * 
+ * @param x Pointeur vers la coordonnée x.
+ * @param y Pointeur vers la coordonnée y.
+ * @param z Pointeur vers la coordonnée z.
+ * @param data Structure contenant les données globales.
  */
 void	ft_transform_axis_point(double *x, double *y, double *z, t_fdf *data)
 {
@@ -66,6 +83,9 @@ void	ft_transform_axis_point(double *x, double *y, double *z, t_fdf *data)
 /**
  * Fonction qui applique les transformations zoom, rotate_x, rotate_y, la
  * position sur la fenetre et la projection isometrique sur un point 'p'.
+ * 
+ * @param v Pointeur vers le vecteur 3D à projeter.
+ * @param data Structure contenant les données globales.
  */
 void	ft_project_point(t_vec3 *v, t_fdf *data)
 {

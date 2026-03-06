@@ -45,6 +45,9 @@ static void	ft_set_bone_rotation(t_mat4 *out, double c[3], double s[3],
 /**
  * Construit une matrice 4x4 à partir de pos/rot/scale d'un modèle.
  * Ordre : Scale → RotX → RotY → RotZ → Translation
+ * 
+ * @param model Le modèle source pour la matrice.
+ * @param out Pointeur vers la matrice de destination.
  */
 static void	ft_build_bone_matrix(t_model *model, t_mat4 *out)
 {
@@ -73,6 +76,10 @@ static void	ft_build_bone_matrix(t_model *model, t_mat4 *out)
 /**
  * Construit la matrice monde d'un bone en remontant la chaîne parent.
  * world = local × parent_world
+ * 
+ * @param bone Bone (modèle) de départ.
+ * @param world Pointeur vers la matrice monde résultante.
+ * @param depth Profondeur courante dans la hiérarchie.
  */
 void	ft_get_bone_world_matrix(t_model *bone, t_mat4 *world, int depth)
 {

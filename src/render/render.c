@@ -33,6 +33,8 @@ void	ft_precalc(t_fdf *data)
  * l'ecran.
  * - 6 User interface : j'appelle les fonctions qui affichent les éléments de
  * l'interface.
+ * 
+ * @param data Structure contentant la fenêtre et l'état de l'application.
  */
 void	ft_render_image(t_fdf *data)
 {

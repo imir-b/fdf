@@ -35,6 +35,12 @@ static int	ft_init_curve_arr(t_anim_curve *c, char **cur, int is_val)
 
 /**
  *	KeyTime: *3 { 0, 153953860000, 307907720000 }
+ * 
+ * @param c Structure de courbe d'animation.
+ * @param line Pointeur vers la ligne courante.
+ * @param cur Curseur de lecture.
+ * @param fd Descripteur de fichier.
+ * @return SUCCESS en cas de réussite, ERROR sinon.
  */
 static int	ft_parse_keytime(t_anim_curve *c, char **line, char *cur, int fd)
 {
@@ -82,6 +88,12 @@ static int	ft_jump_to_float_val(char **cur, char **line, int fd)
 
 /**
  *	KeyValueFloat: *3 { 0.0, 5.0, 10.0 }
+ * 
+ * @param c Structure de courbe d'animation.
+ * @param line Pointeur vers la ligne courante.
+ * @param cur Curseur de lecture.
+ * @param fd Descripteur de fichier.
+ * @return SUCCESS en cas de réussite, ERROR sinon.
  */
 static int	ft_parse_keyvalue(t_anim_curve *c, char **line, char *cur, int fd)
 {
@@ -110,6 +122,10 @@ static int	ft_parse_keyvalue(t_anim_curve *c, char **line, char *cur, int fd)
  *		KeyTime: ...
  *		KeyValueFloat: ...
  *	}
+ * 
+ * @param cursor Pointeur vers le curseur de lecture.
+ * @param fd Descripteur de fichier.
+ * @return Pointeur vers la structure t_anim_curve allouée, ou NULL.
  */
 t_anim_curve	*ft_get_anim_curve(char *cursor, int fd)
 {

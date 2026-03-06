@@ -51,6 +51,10 @@ static void	ft_get_anim_at_time(t_properties *transformed,
 		transformed->z = ft_get_value_at_time(current->z, timer.weighted_value);
 }
 
+/**
+ * Assemble les Quaternions A et B à partir des frames connues et demande à ft_slerp 
+ *un résultat ponctuel et interpolé, supprimant le risque de vrilles au franchissement de 180°.
+ **/
 static void	ft_get_rot_at_time(t_properties *rot, t_anim_node *node, double time)
 {
 	t_anim_curve	*cx;
@@ -123,6 +127,8 @@ static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
  * t = 0 <-- 100% A + 0% B
  * t = 0.5 <-- 50% A + 50% B
  * t = 0.9 <-- 10% A + 90% B
+ * 
+ * @param data Structure principale du programme.
  */
 void	ft_animate(t_fdf *data)
 {

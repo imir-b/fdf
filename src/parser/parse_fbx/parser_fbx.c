@@ -12,10 +12,14 @@
 
 #include "fdf.h"
 
-/*
-** Lit l'intégralité d'un fichier dans un buffer alloué dynamiquement.
-** Calcule la taille totale et la stocke dans le pointeur total.
-*/
+/**
+ * Lit l'intégralité d'un fichier dans un buffer alloué dynamiquement.
+ * Calcule la taille totale et la stocke dans le pointeur total.
+ * 
+ * @param filename Nom du fichier à lire.
+ * @param total Pointeur pour stocker la taille totale du fichier.
+ * @return Pointeur vers le buffer alloué contenant les données du fichier, ou NULL.
+ */
 static char	*ft_read_entire_file(const char *filename, ssize_t *total)
 {
 	int		fd;
@@ -40,10 +44,14 @@ static char	*ft_read_entire_file(const char *filename, ssize_t *total)
 	return (buf);
 }
 
-/*
-** Remplace les octets nuls par des espaces, écrit le contenu nettoyé
-** dans un fichier temporaire et retourne son descripteur de fichier.
-*/
+/**
+ * Remplace les octets nuls par des espaces, écrit le contenu nettoyé
+ * dans un fichier temporaire et retourne son descripteur de fichier.
+ * 
+ * @param buf Pointeur vers le buffer contenant les données.
+ * @param total Taille totale du buffer.
+ * @return Descripteur du fichier temporaire ouvert, ou -1 en cas d'erreur.
+ */
 static int	ft_write_and_open_temp(char *buf, ssize_t total)
 {
 	int		fd_tmp;
@@ -69,15 +77,18 @@ static int	ft_write_and_open_temp(char *buf, ssize_t total)
 	return (open("/tmp/.fdf_clean.fbx", O_RDONLY));
 }
 
-/*
-** Lit le contenu d'un fichier dans un buffer, remplace les octets NUL
-** par des espaces, écrit le contenu nettoyé dans un fichier temporaire,
-** et retourne son descripteur de fichier.
-** Certains exportateurs FBX intègrent des octets \0 dans les chaînes
-** de noms d'objets, ce qui casse les opérations sur les chaînes C
-** (comme strchr ou strlen).
-** Retourne -1 en cas d'erreur.
-*/
+/**
+ * Lit le contenu d'un fichier dans un buffer, remplace les octets NUL
+ * par des espaces, écrit le contenu nettoyé dans un fichier temporaire,
+ * et retourne son descripteur de fichier.
+ * Certains exportateurs FBX intègrent des octets \0 dans les chaînes
+ * de noms d'objets, ce qui casse les opérations sur les chaînes C
+ * (comme strchr ou strlen).
+ * Retourne -1 en cas d'erreur.
+ * 
+ * @param filename Chemin vers le fichier FBX.
+ * @return Descripteur du fichier temporaire ouvert, ou -1 en cas d'erreur.
+ */
 static int	ft_open_clean_fbx(const char *filename)
 {
 	char	*buf;
@@ -94,6 +105,8 @@ static int	ft_open_clean_fbx(const char *filename)
  * 1. Supprime le fichier temporaire généré pour la lecture propre.
  * 2. Parcourt les stacks d'animation fraîchement parsés pour calculer
  * et assigner la durée totale de chaque séquence.
+ * 
+ * @param fbx_data Structure contenant les données FBX.
  */
 static inline void	ft_clean_and_finish_parse_fbx(t_fbx *fbx_data)
 {
@@ -124,6 +137,8 @@ static inline void	ft_clean_and_finish_parse_fbx(t_fbx *fbx_data)
  * 		...
  * 	}
  * 
+ * @param filename Chemin vers le fichier FBX.
+ * @return Pointeur vers la structure t_fbx allouée et remplie, ou NULL.
  */
 t_fbx	*ft_parse_fbx(const char *filename)
 {

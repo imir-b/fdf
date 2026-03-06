@@ -51,6 +51,9 @@ static double	ft_mat4_cofactor(t_mat4 *m, int r, int c)
 /**
  * Calcule l'inverse d'une matrice 4x4
  * Utilise la méthode des cofacteurs / adjugée
+ * 
+ * @param m Matrice source à inverser.
+ * @param inv Matrice de destination pour le résultat.
  */
 void	ft_mat4_inverse(t_mat4 *m, t_mat4 *inv)
 {

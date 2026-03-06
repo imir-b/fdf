@@ -41,6 +41,10 @@ static void	ft_parse_deformer_tags(t_deformer *def, char **line, char *cur,
  *		TransformLink: *16 {
  *			a: 0.385069906711578,-0.127643629908562,-0.914017617702484,...
  *	}
+ * 
+ * @param cursor Pointeur vers le curseur de lecture.
+ * @param fd Descripteur de fichier.
+ * @return Pointeur vers la structure t_deformer allouée et remplie, ou NULL.
  */
 t_deformer	*ft_get_deformer(char *cursor, int fd)
 {

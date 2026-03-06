@@ -15,6 +15,9 @@
 /**
  * On regarde s'il y a une virgule apres la valeur dans le .fdf,
  * si oui on recupere la couleur en hexa, sinon on dessine en blanc.
+ * 
+ * @param s Chaine représentant la valeur et éventuellement la couleur.
+ * @return Couleur sous forme d'entier hexadécimal.
  */
 int	ft_extract_color(char *s)
 {
@@ -74,6 +77,10 @@ static int	ft_parse_row(t_object *obj, char **split, int y)
 
 /**
  * Deuxieme lecture pour remplir les tableaux de donnees.
+ * 
+ * @param obj Pointeur vers l'objet à remplir.
+ * @param fd Descripteur du fichier fdf.
+ * @return SUCCESS ou code d'erreur.
  */
 int	ft_fill_fdf_data(t_object *obj, int fd)
 {

@@ -17,6 +17,10 @@
  * les dernieres valeurs 'x', 'y' et 'z' dans 'line'.
  * Exemple de ligne :
  * 'P: "Nom", "Type", "Label", "Flags", x, y, z'
+ * 
+ * @param p Structure de propriétés cibles.
+ * @param line Chaine de caractères à parser.
+ * @param type Type de la propriété ('T', 'R' ou 'S').
  */
 static void	ft_extract_property_values(t_properties *p, char *line, char type)
 {
@@ -47,6 +51,9 @@ static void	ft_extract_property_values(t_properties *p, char *line, char type)
  * 	Properties70:  {
  * 		...
  * 	}
+ * 
+ * @param model Pointeur vers le modèle à remplir.
+ * @param fd Descripteur de fichier.
  */
 static void	ft_parse_properties(t_model *model, int fd)
 {
@@ -102,6 +109,10 @@ static void	ft_parse_model_lines(t_model *model, int fd)
  *			P: "Lcl Translation", "Lcl Translation", "", "A", 0, 10, 0
  *		}
  *	}
+ * 
+ * @param cursor Pointeur vers le curseur de lecture.
+ * @param fd Descripteur de fichier.
+ * @return Pointeur vers la structure t_model allouée et remplie, ou NULL.
  */
 t_model	*ft_get_model(char *cursor, int fd)
 {

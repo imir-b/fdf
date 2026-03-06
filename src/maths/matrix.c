@@ -33,6 +33,10 @@ void	ft_mat4_identity(t_mat4 *out_matrix)
 
 /**
  * Multiplie deux matrices 4x4 (row-major): result = A × B
+ * 
+ * @param mat_a Première matrice (A).
+ * @param mat_b Deuxième matrice (B).
+ * @param out_matrix Matrice de destination (result).
  */
 void	ft_mat4_multiply(t_mat4 *mat_a, t_mat4 *mat_b, t_mat4 *out_matrix)
 {
@@ -59,6 +63,10 @@ void	ft_mat4_multiply(t_mat4 *mat_a, t_mat4 *mat_b, t_mat4 *out_matrix)
 
 /**
  * Multiplie une matrice 4x4 (row-major FBX) par un vec3 (w=1).
+ * 
+ * @param matrix Matrice de transformation 4x4.
+ * @param in_vec Vecteur d'entrée (t_vec3).
+ * @return Vecteur transformé.
  */
 t_vec3	ft_apply_mat4(t_mat4 *matrix, t_vec3 in_vec)
 {

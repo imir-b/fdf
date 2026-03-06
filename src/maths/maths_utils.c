@@ -3,16 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   maths_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 11:10:53 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 11:11:46 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/03/06 18:39:44 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
 int	ft_absolute(int n)
+{
+	if (n < 0)
+		return (-n);
+	return (n);
+}
+
+double	ft_abs_double(double n)
 {
 	if (n < 0)
 		return (-n);

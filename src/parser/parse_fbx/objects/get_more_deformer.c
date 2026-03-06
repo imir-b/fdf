@@ -22,6 +22,11 @@ static void	ft_skip_number(char **cursor)
 
 /**
  * Weights: *26 { a: 0.047, 0.098, ... }
+ * 
+ * @param line Pointeur vers la chaîne contenant la ligne.
+ * @param cursor Curseur de lecture.
+ * @param fd Descripteur de fichier.
+ * @return Tableau de double alloué, ou NULL.
  */
 double	*ft_parse_weights(char **line, char *cursor, int fd)
 {
@@ -58,6 +63,11 @@ double	*ft_parse_weights(char **line, char *cursor, int fd)
  * ou :
  * Transform: *16 { a: 0.385, ... }
  * Matrice 4x4
+ * 
+ * @param line Pointeur vers la ligne courante.
+ * @param cursor Curseur de lecture.
+ * @param fd Descripteur de fichier.
+ * @return Pointeur vers la structure t_mat4 allouée, ou NULL.
  */
 t_mat4	*ft_parse_transform(char **line, char *cursor, int fd)
 {
@@ -108,6 +118,12 @@ static int	*ft_init_verticies(char **cursor, int *count)
 
 /**
  * Indexes: *26 { a: 1480, 1481, ... }
+ * 
+ * @param line Pointeur vers la ligne.
+ * @param cursor Curseur de lecture.
+ * @param fd Descripteur de fichier.
+ * @param out_count Pointeur pour stocker le nombre de sommets.
+ * @return Tableau d'entiers alloué, ou NULL.
  */
 int	*ft_parse_verticies(char **line, char *cursor, int fd, int *out_count)
 {

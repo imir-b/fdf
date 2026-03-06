@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quaternion.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 20:50:00 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/03/05 20:50:00 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/03/06 21:08:44 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,44 +15,43 @@
 /**
  * Convertit les angles d'Euler en quaternion.
  * 
- * @param rx Angle de rotation autour de l'axe X en degrés.
- * @param ry Angle de rotation autour de l'axe Y en degrés.
- * @param rz Angle de rotation autour de l'axe Z en degrés.
+ * @param rot_x Angle de rotation autour de l'axe X en degrés.
+ * @param rot_y Angle de rotation autour de l'axe Y en degrés.
+ * @param rot_z Angle de rotation autour de l'axe Z en degrés.
  * @return Quaternion représentant la rotation. 
-*/
-t_quat	ft_euler_to_quat(double rx, double ry, double rz)
+ */
+t_quat	ft_euler_to_quat(double rot_x, double rot_y, double rot_z)
 {
-	t_quat	q;
-	double	cr;
-	double	sr;
-	double	cp;
-	double	sp;
-	double	cy;
-	double	sy;
+	t_quat	quaternion;
+	t_quat_maths	q_maths;
 
-	rx = ft_to_rad(rx);
-	ry = ft_to_rad(ry);
-	rz = ft_to_rad(rz);
-	cr = cos(rx * 0.5);
-	sr = sin(rx * 0.5);
-	cp = cos(ry * 0.5);
-	sp = sin(ry * 0.5);
-	cy = cos(rz * 0.5);
-	sy = sin(rz * 0.5);
-	q.w = cr * cp * cy + sr * sp * sy;
-	q.x = sr * cp * cy - cr * sp * sy;
-	q.y = cr * sp * cy + sr * cp * sy;
-	q.z = cr * cp * sy - sr * sp * cy;
-	return (q);
+	rot_x = ft_to_rad(rot_x);
+	rot_y = ft_to_rad(rot_y);
+	rot_z = ft_to_rad(rot_z);
+	q_maths.cr = cos(rot_x * 0.5);
+	q_maths.sr = sin(rot_x * 0.5);
+	q_maths.cp = cos(rot_y * 0.5);
+	q_maths.sp = sin(rot_y * 0.5);
+	q_maths.cy = cos(rot_z * 0.5);
+	q_maths.sy = sin(rot_z * 0.5);
+	quaternion.w = q_maths.cr * q_maths.cp * q_maths.cy + 
+		q_maths.sr * q_maths.sp * q_maths.sy;
+	quaternion.x = q_maths.sr * q_maths.cp * q_maths.cy - 
+		q_maths.cr * q_maths.sp * q_maths.sy;
+	quaternion.y = q_maths.cr * q_maths.sp * q_maths.cy + 
+		q_maths.sr * q_maths.cp * q_maths.sy;
+	quaternion.z = q_maths.cr * q_maths.cp * q_maths.sy - 
+		q_maths.sr * q_maths.sp * q_maths.cy;
+	return (quaternion);
 }
 
-/*
+/**
  * Convertit un quaternion en angles d'Euler.
  * 
- * @param q Quaternion à convertir.
+ * @param quat Quaternion à convertir.
  * @return Angles d'Euler en degrés. 
-*/
-t_properties	ft_quat_to_euler(t_quat q)
+ */
+t_properties	ft_quat_to_euler(t_quat quat)
 {
 	t_properties	rot;
 	double			sinr_cosp;
@@ -62,11 +61,11 @@ t_properties	ft_quat_to_euler(t_quat q)
 	double			cosy_cosp;
 
 	rot.type = 'R';
-	sinr_cosp = 2.0 * (q.w * q.x + q.y * q.z);
-	cosr_cosp = 1.0 - 2.0 * (q.x * q.x + q.y * q.y);
+	sinr_cosp = 2.0 * (quat.w * quat.x + quat.y * quat.z);
+	cosr_cosp = 1.0 - 2.0 * (quat.x * quat.x + quat.y * quat.y);
 	rot.x = atan2(sinr_cosp, cosr_cosp) * 180.0 / M_PI;
-	sinp = 2.0 * (q.w * q.y - q.z * q.x);
-	if (fabs(sinp) >= 1.0)
+	sinp = 2.0 * (quat.w * quat.y - quat.z * quat.x);
+	if (ft_abs_double(sinp) >= 1.0)
 	{
 		if (sinp > 0.0)
 			rot.y = (M_PI / 2.0) * 180.0 / M_PI;
@@ -75,53 +74,63 @@ t_properties	ft_quat_to_euler(t_quat q)
 	}
 	else
 		rot.y = asin(sinp) * 180.0 / M_PI;
-	siny_cosp = 2.0 * (q.w * q.z + q.x * q.y);
-	cosy_cosp = 1.0 - 2.0 * (q.y * q.y + q.z * q.z);
+	siny_cosp = 2.0 * (quat.w * quat.z + quat.x * quat.y);
+	cosy_cosp = 1.0 - 2.0 * (quat.y * quat.y + quat.z * quat.z);
 	rot.z = atan2(siny_cosp, cosy_cosp) * 180.0 / M_PI;
 	return (rot);
 }
 
-/*
- * Interpolation sphérique linéaire entre deux quaternions.
+/**
+ * Interpolation linéaire entre deux quaternions.
  * 
- * @param q1 Premier quaternion.
- * @param q2 Second quaternion.
- * @param t Facteur d'interpolation (0.0 à 1.0).
+ * @param quat1 Premier quaternion.
+ * @param quat2 Second quaternion.
+ * @param factor Facteur d'interpolation (0.0 à 1.0).
  * @return Quaternion interpolé.
 */
-t_quat	ft_slerp(t_quat q1, t_quat q2, double t)
+static t_quat	ft_lerp_quat(t_quat quat1, t_quat quat2, double factor)
 {
-	t_quat	res;
-	double	dot;
-	double	theta;
-	double	sin_theta;
-	double	w1;
-	double	w2;
+	t_quat	interpolated_quat;
 
-	dot = q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w;
+	interpolated_quat.x = quat1.x + factor * (quat2.x - quat1.x);
+	interpolated_quat.y = quat1.y + factor * (quat2.y - quat1.y);
+	interpolated_quat.z = quat1.z + factor * (quat2.z - quat1.z);
+	interpolated_quat.w = quat1.w + factor * (quat2.w - quat1.w);
+	return (interpolated_quat);
+}
+
+/**
+ * Interpolation sphérique linéaire entre deux quaternions.
+ * 
+ * @param quat1 Premier quaternion.
+ * @param quat2 Second quaternion.
+ * @param factor Facteur d'interpolation (0.0 à 1.0).
+ * @return Quaternion interpolé.
+*/
+t_quat	ft_slerp(t_quat quat1, t_quat quat2, double factor)
+{
+	t_quat	inter_quat;
+	double	v[4];
+	double	dot;
+
+	dot = quat1.x * quat2.x + quat1.y * quat2.y + quat1.z * quat2.z + quat1.w * quat2.w;
 	if (dot < 0.0)
 	{
-		q2.x = -q2.x;
-		q2.y = -q2.y;
-		q2.z = -q2.z;
-		q2.w = -q2.w;
+		quat2.x = -quat2.x;
+		quat2.y = -quat2.y;
+		quat2.z = -quat2.z;
+		quat2.w = -quat2.w;
 		dot = -dot;
 	}
 	if (dot > 0.9995)
-	{
-		res.x = q1.x + t * (q2.x - q1.x);
-		res.y = q1.y + t * (q2.y - q1.y);
-		res.z = q1.z + t * (q2.z - q1.z);
-		res.w = q1.w + t * (q2.w - q1.w);
-		return (res);
-	}
-	theta = acos(dot);
-	sin_theta = sin(theta);
-	w1 = sin((1.0 - t) * theta) / sin_theta;
-	w2 = sin(t * theta) / sin_theta;
-	res.x = q1.x * w1 + q2.x * w2;
-	res.y = q1.y * w1 + q2.y * w2;
-	res.z = q1.z * w1 + q2.z * w2;
-	res.w = q1.w * w1 + q2.w * w2;
-	return (res);
+		return (ft_lerp_quat(quat1, quat2, factor));
+	v[0] = acos(dot);
+	v[1] = sin(v[0]);
+	v[2] = sin((1.0 - factor) * v[0]) / v[1];
+	v[3] = sin(factor * v[0]) / v[1];
+	inter_quat.x = quat1.x * v[2] + quat2.x * v[3];
+	inter_quat.y = quat1.y * v[2] + quat2.y * v[3];
+	inter_quat.z = quat1.z * v[2] + quat2.z * v[3];
+	inter_quat.w = quat1.w * v[2] + quat2.w * v[3];
+	return (inter_quat);
 }

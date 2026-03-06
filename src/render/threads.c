@@ -16,6 +16,9 @@
  * Fonction du thread, je lui passe une structure 't_thread' en argument car
  * elle ne peut prendre qu'un argument void *.
  * J'itere 'start' jusqu'a 'end' pour trouver tous les points 'p' et j
+ * 
+ * @param arg Paramètre générique pointant vers une structure t_thread.
+ * @return NULL.
  */
 void	*ft_calc_transform_thread(void *arg)
 {
@@ -37,6 +40,8 @@ void	*ft_calc_transform_thread(void *arg)
 /**
  * Utilise le multi-threading pour faire les calculs de projection en fonction
  * des transformations.
+ * 
+ * @param data Structure principale fdf.
  */
 void	ft_transform_threads(t_fdf *data)
 {
@@ -72,6 +77,9 @@ void	ft_transform_threads(t_fdf *data)
  * On parcourt toute la map, on trace un trait entre le point et son voisin
  * en appelant la fonction ft_draw_line. Si on est au dernier point de la ligne
  * ou de la colone, on ne dessine pas car plus de voisin, la droite est tracee.
+ * 
+ * @param arg Paramètre générique pointant vers une structure t_thread.
+ * @return NULL.
  */
 void	*ft_draw_faces_thread(void *arg)
 {

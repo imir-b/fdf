@@ -15,6 +15,11 @@
 /**
  * Defini 'line_ptr' sur la prochaine ligne si 'cursor' est
  * nul '\0', a la fin de la partie '}' ou en fin de ligne '\n'.
+ * 
+ * @param cursor Curseur a avancer.
+ * @param line_ptr Pointeur vers la ligne courante.
+ * @param fd Descripteur de fichier.
+ * @return SUCCESS en cas de réussite, ERROR sinon.
  */
 int	ft_extract_line(char **cursor, char **line_ptr, int fd)
 {

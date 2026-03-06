@@ -12,10 +12,14 @@
 
 #include "fdf.h"
 
-/*
-** Compte le nombre total de vertices et de faces présents dans
-** toutes les géométries de la scène FBX.
-*/
+/**
+ * Compte le nombre total de vertices et de faces présents dans
+ * toutes les géométries de la scène FBX.
+ * 
+ * @param fbx Structure contenant les données FBX.
+ * @param v Pointeur pour stocker le nombre de vertices.
+ * @param f Pointeur pour stocker le nombre de faces.
+ */
 static void	ft_count_fbx_elements(t_fbx *fbx, int *v, int *f)
 {
 	t_list		*curr;
@@ -36,10 +40,15 @@ static void	ft_count_fbx_elements(t_fbx *fbx, int *v, int *f)
 	}
 }
 
-/*
-** Copie les indices de faces d'un objet source vers un objet de destination
-** en appliquant un décalage (offset) sur les index de vertices.
-*/
+/**
+ * Copie les indices de faces d'un objet source vers un objet de destination
+ * en appliquant un décalage (offset) sur les index de vertices.
+ * 
+ * @param dst Objet de destination.
+ * @param src Objet source.
+ * @param f_off Décalage de l'indice des faces.
+ * @param v_off Décalage de l'indice des vertices.
+ */
 static void	ft_copy_faces(t_object *dst, t_object *src, int f_off, int v_off)
 {
 	int	j;
@@ -61,10 +70,13 @@ static void	ft_copy_faces(t_object *dst, t_object *src, int f_off, int v_off)
 	}
 }
 
-/*
-** Remplit le grand objet final avec les vertices et les faces
-** de toutes les géométries contenues dans la structure FBX.
-*/
+/**
+ * Remplit le grand objet final avec les vertices et les faces
+ * de toutes les géométries contenues dans la structure FBX.
+ * 
+ * @param fbx Structure contenant les données FBX originelles.
+ * @param big_obj Grand objet unifié à remplir.
+ */
 static void	ft_fill_obj(t_fbx *fbx, t_object *big_obj)
 {
 	t_list		*curr;
@@ -92,10 +104,13 @@ static void	ft_fill_obj(t_fbx *fbx, t_object *big_obj)
 	}
 }
 
-/*
-** Convertit l'ensemble des géométries FBX en un seul objet unifié,
-** en allouant la mémoire nécessaire pour les vertices et les faces.
-*/
+/**
+ * Convertit l'ensemble des géométries FBX en un seul objet unifié,
+ * en allouant la mémoire nécessaire pour les vertices et les faces.
+ * 
+ * @param fbx Structure contenant l'ensemble des données FBX parsées.
+ * @return Nouvel objet unifié regroupant toutes les géométries.
+ */
 t_object	*ft_convert_fbx_to_object(t_fbx *fbx)
 {
 	t_object	*big;

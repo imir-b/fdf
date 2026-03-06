@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/28 23:04:57 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/03/06 21:14:09 by vlad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,11 @@ typedef struct s_camera			t_camera;
  * afin d'optimiser les performances lors des rotations répétées.
  */
 typedef struct s_maths			t_maths;
+
+/*
+ * Variables de travail pour la conversion des angles d'Euler en quaternion.
+*/
+typedef struct	s_quat_maths	t_quat_maths;
 
 /*
  * Variables de travail pour l'algorithme de tracé de ligne de Bresenham
@@ -331,6 +336,16 @@ struct s_maths
 	float	cos_beta;
 	float	sin_gamma;
 	float	cos_gamma;
+};
+
+struct	s_quat_maths
+{
+	double	cr;
+	double	sr;
+	double	cp;
+	double	sp;
+	double	cy;
+	double	sy;
 };
 
 struct s_bresenham

@@ -50,6 +50,10 @@ static void	ft_extract_connection(t_fbx *fbx_data, char *line)
 /**
  * Fonction de parsing pour recuperer les donnes dans la partie 'Connections'
  * d'un fichier .fbx
+ * 
+ * @param fbx_data Structure contenant les données FBX a remplir.
+ * @param fd Descripteur de fichier du fbx.
+ * @return SUCCESS ou code d'erreur.
  */
 int	ft_parse_connections(t_fbx *fbx_data, int fd)
 {

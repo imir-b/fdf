@@ -38,6 +38,8 @@ static void	ft_distribute_group(t_anim_curve *c, int start, int i)
  * frames (ex: 60 frames listées à 0 seconde). Cette fonction repère ces groupes
  * et les espace de manière égale jusqu'à la seconde suivante pour interpoler
  * chaque frame fluidement sans accoups.
+ * 
+ * @param curve Structure de la courbe d'animation à redistribuer.
  */
 void	ft_redistribute_keytimes(t_anim_curve *curve)
 {

@@ -47,6 +47,11 @@ static void	ft_apply_weight(t_deformer *def, int j, t_vec3 v, t_vec3 *res)
 /**
  * Applique le skinning sur un vertex donné en utilisant tous les deformers.
  * Formule : final = Transform * Inverse(TransformLink) * BoneWorld
+ * 
+ * @param vertex Sommet à skinner.
+ * @param vtx_idx Index du sommet.
+ * @param deformers Liste de déformateurs (liste chaînée).
+ * @return Nouvelle position du sommet.
  */
 static t_vec3	ft_skin_vertex(t_vec3 vertex, int vtx_idx, t_list *deformers)
 {
@@ -82,6 +87,11 @@ static t_vec3	ft_skin_vertex(t_vec3 vertex, int vtx_idx, t_list *deformers)
  * Si la géométrie possède des déformateurs (skinning), applique l'influence
  * des os. Sinon, applique la transformation du modèle parent. Si aucun des
  * deux n'existe, retourne le sommet avec les transformations par défaut.
+ * 
+ * @param geo La géométrie contenant l'objet.
+ * @param model Le modèle contenant les transformations globales.
+ * @param i Index du sommet.
+ * @return Nouvelle position du sommet.
  */
 t_vec3	ft_get_new_pos(t_geometry *geo, t_model *model, int i)
 {

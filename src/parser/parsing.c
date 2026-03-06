@@ -25,6 +25,9 @@ int	ft_is_extension(const char *filename, const char *extension)
 /**
  * Vérifie que l'extension du fichier passé en argument est bien supportée
  * par le programme (.fdf, .obj, ou .fbx).
+ * 
+ * @param filename Chaine contenant le nom du fichier.
+ * @return SUCCESS si l'extension est supportée, ERROR sinon.
  */
 int	ft_check_filename(const char *filename)
 {
@@ -50,6 +53,10 @@ int	ft_check_filename(const char *filename)
  * Détecte l'extension du fichier et appelle le parser correspondant
  * (fdf, obj ou fbx). Convertit ensuite la géométrie pour retourner 
  * l'objet final.
+ * 
+ * @param filename Chemin vers le fichier 3D.
+ * @param fbx Double pointeur vers la structure FBX.
+ * @return L'objet parsé, ou NULL.
  */
 t_object	*ft_parse_dispatch(const char *filename, t_fbx **fbx)
 {
