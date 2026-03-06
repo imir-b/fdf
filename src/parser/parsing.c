@@ -67,6 +67,7 @@ t_object	*ft_parse_dispatch(const char *filename, t_fbx **fbx)
 		*fbx = ft_parse_fbx(filename);
 		if (!*fbx)
 			return (ft_free_object(object));
+		ft_free_object(object);
 		object = ft_convert_fbx_to_object(*fbx);
 		if (!object)
 			return (NULL);

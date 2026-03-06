@@ -119,6 +119,7 @@ t_camera	*ft_init_camera(t_object *obj, t_fbx *fbx)
 	ft_set_cam_zoom(cam, obj, fbx);
 	cam->angle_x = RADIAN_30;
 	cam->angle_y = RADIAN_30;
+	cam->angle_z = 0.0;
 	cam->z_scale = 1.0;
 	cam->shift_x = WIN_WIDTH / 2;
 	cam->shift_y = WIN_HEIGHT / 2;

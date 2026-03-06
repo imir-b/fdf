@@ -60,7 +60,11 @@ int	ft_parse_connections(t_fbx *fbx_data, int fd)
 	{
 		line = get_next_line(fd);
 		if (!line || line[0] == '}')
+		{
+			if (line)
+				free(line);
 			break ;
+		}
 		cursor = ft_skip_spaces(line);
 		if (ft_is_tag(cursor, "C:"))
 			ft_extract_connection(fbx_data, cursor);

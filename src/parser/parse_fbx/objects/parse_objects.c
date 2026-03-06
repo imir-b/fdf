@@ -64,7 +64,11 @@ int	ft_parse_objects(t_fbx *data, int fd)
 	{
 		line = get_next_line(fd);
 		if (!line || line[0] == '}')
+		{
+			if (line)
+				free(line);
 			break ;
+		}
 		cursor = ft_skip_spaces(line);
 		ft_add_current_element(cursor, fd, data);
 		free(line);

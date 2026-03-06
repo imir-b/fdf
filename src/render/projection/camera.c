@@ -17,7 +17,7 @@
  */
 static void	ft_rotate_x(double *y, double *z, t_maths trigo)
 {
-	int	y_copy;
+	double	y_copy;
 
 	y_copy = *y;
 	*y = y_copy * trigo.cos_alpha - *z * trigo.sin_alpha;
@@ -29,7 +29,7 @@ static void	ft_rotate_x(double *y, double *z, t_maths trigo)
  */
 static void	ft_rotate_y(double *x, double *z, t_maths trigo)
 {
-	int	x_copy;
+	double	x_copy;
 
 	x_copy = *x;
 	*x = x_copy * trigo.cos_beta + *z * trigo.sin_beta;
@@ -41,7 +41,7 @@ static void	ft_rotate_y(double *x, double *z, t_maths trigo)
  */
 static void	ft_rotate_z(double *x, double *y, t_maths trigo)
 {
-	int	x_copy;
+	double	x_copy;
 
 	x_copy = *x;
 	*x = x_copy * trigo.cos_gamma - *y * trigo.sin_gamma;
