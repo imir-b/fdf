@@ -42,7 +42,7 @@ Going far beyond the standard curriculum requirements, this project has been upg
 
 ![alt text](img/image.png)
 
-### 🌧 Compilation
+### 🌧 **Compilation**
 
 The project uses a `Makefile` to compile the source files.
 
@@ -63,13 +63,13 @@ The project uses a `Makefile` to compile the source files.
 * **Clean and compile :**
     `make re`
 
-### 🌟 Execution
+### 🌟 **Execution**
 
 To run the program:
 `./fdf [file]`
     -> Example: ./fdf maps/42.fdf
 
-### 🎮 Controls
+### 🎮 **Controls**
 
 	- ESC			: Close the window and exit the program.
 	- Arrows		: Translate camera position.
@@ -92,42 +92,42 @@ To run the program:
 
 ## Resources & AI Usage
 
-* **💻 VIDEOS**
+### **💻 VIDEOS**
 
-	- PROJETER un POINT 3D sur un Plan 2D [Tout ce qu'il faut savoir] - Quantale :
-	https://www.youtube.com/watch?v=SGLK2p3PIqE&list=LL&index=20&t=2s
+* **PROJETER un POINT 3D sur un Plan 2D [Tout ce qu'il faut savoir] - Quantale :**
+https://www.youtube.com/watch?v=SGLK2p3PIqE&list=LL&index=20&t=2s
 
-	- Comment comprendre FACILEMENT les matrices - ParaMaths :
-	https://www.youtube.com/watch?v=Dr9J1BIcVBw&list=WL
+* **Comment comprendre FACILEMENT les matrices - ParaMaths :**
+https://www.youtube.com/watch?v=Dr9J1BIcVBw&list=WL
 
-	- Essence of linear algebra - 3Blue1Brown :
-	https://youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab&si=6JXNZDeUJRwmWLm7
+* **Essence of linear algebra - 3Blue1Brown :**
+https://youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab&si=6JXNZDeUJRwmWLm7
 
-	- How to make a 3D Renderer [Explained Simply] - GraverDev :
-	https://www.youtube.com/watch?v=nvWDgBGcAIM&t=130s
+* **How to make a 3D Renderer [Explained Simply] - GraverDev :**
+https://www.youtube.com/watch?v=nvWDgBGcAIM&t=130s
 
-	- The Hairy Ball Theorem - 3Blue1Brown :
-	https://youtu.be/BHdbsHFs2P0?is=3d5N5q7XCrxXZI42
+* **The Hairy Ball Theorem - 3Blue1Brown :**
+https://youtu.be/BHdbsHFs2P0?is=3d5N5q7XCrxXZI42
 
-* **📚 ARTICLES**
+### **📚 ARTICLES**
 
-	- The Bresenham Line-Drawing Algorithm :
-	https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html
+* **The Bresenham Line-Drawing Algorithm :**
+https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html
 
-	- Introduction to multithreading in C/C++ :
-	https://hoangvankhoa.medium.com/introduction-to-multithreading-in-c-c-adf7ffbe045d
+* **Introduction to multithreading in C/C++ :**
+https://hoangvankhoa.medium.com/introduction-to-multithreading-in-c-c-adf7ffbe045d
 
-	- Les angles d’Euler par Ilian Bonev :
-	https://mecademic.com/fr/connaissance/tutoriels-academiques/comment-orientation-espace-est-elle-representee-par-angles-euler/
+* **Les angles d’Euler par Ilian Bonev :**
+https://mecademic.com/fr/connaissance/tutoriels-academiques/comment-orientation-espace-est-elle-representee-par-angles-euler/
 
-* **🤖 AI USAGE**
+### **🤖 AI USAGE**
 
-	Throughout the development of this project, Artificial Intelligence (LLMs) was utilized as a supportive tool to enhance productivity and deepen my understanding of the engine's underlying mechanics. Specifically, AI was leveraged to:
+Throughout the development of this project, Artificial Intelligence (LLMs) was utilized as a supportive tool to enhance productivity and deepen my understanding of the engine's underlying mechanics. Specifically, AI was leveraged to:
 
-	Automate Repetitive Tasks: Speeding up the writing of boilerplate code and repetitive structures, saving valuable development time.
+* **Automate Repetitive Tasks :** Speeding up the writing of boilerplate code and repetitive structures, saving valuable development time.
 
-	Norm Compliance: Assisting in the refactoring and formatting of the codebase to ensure strict adherence to the rigorous 42 school coding standard ("la Norme").
+* **Norm Compliance :** Assisting in the refactoring and formatting of the codebase to ensure strict adherence to the rigorous 42 school coding standard ("la Norme").
 
-	Mathematical Comprehension: Acting as an interactive tutor to break down, visualize, and explain complex linear algebra concepts (such as matrix inversions, Euler angles, and skeletal animation algorithms).
+* **Mathematical Comprehension :** Acting as an interactive tutor to break down, visualize, and explain complex linear algebra concepts (such as matrix inversions, Euler angles, and skeletal animation algorithms).
 
-	Research & Troubleshooting: Serving as a powerful research assistant to quickly navigate technical documentation, find optimal algorithmic approaches, and debug obscure C programming errors.
+* **Research & Troubleshooting :** Serving as a powerful research assistant to quickly navigate technical documentation, find optimal algorithmic approaches, and debug obscure C programming errors.
