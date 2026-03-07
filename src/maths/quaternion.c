@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 20:50:00 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/03/07 10:54:04 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/03/07 12:09:32 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,32 +51,26 @@ t_quat	ft_euler_to_quat(double rot_x, double rot_y, double rot_z)
  * @param quat Quaternion à convertir.
  * @return Angles d'Euler en degrés. 
  */
-t_properties	ft_quat_to_euler(t_quat quat)
+t_properties	ft_quat_to_euler(t_quat q)
 {
 	t_properties	rot;
-	double			sinr_cosp;
-	double			cosr_cosp;
 	double			sinp;
-	double			siny_cosp;
-	double			cosy_cosp;
 
 	rot.type = 'R';
-	sinr_cosp = 2.0 * (quat.w * quat.x + quat.y * quat.z);
-	cosr_cosp = 1.0 - 2.0 * (quat.x * quat.x + quat.y * quat.y);
-	rot.x = atan2(sinr_cosp, cosr_cosp) * 180.0 / M_PI;
-	sinp = 2.0 * (quat.w * quat.y - quat.z * quat.x);
+	rot.x = atan2(2.0 * (q.w * q.x + q.y * q.z),
+			1.0 - 2.0 * (q.x * q.x + q.y * q.y)) * 180.0 / M_PI;
+	sinp = 2.0 * (q.w * q.y - q.z * q.x);
 	if (ft_abs_double(sinp) >= 1.0)
 	{
 		if (sinp > 0.0)
-			rot.y = (M_PI / 2.0) * 180.0 / M_PI;
+			rot.y = 90.0;
 		else
-			rot.y = -(M_PI / 2.0) * 180.0 / M_PI;
+			rot.y = -90.0;
 	}
 	else
 		rot.y = asin(sinp) * 180.0 / M_PI;
-	siny_cosp = 2.0 * (quat.w * quat.z + quat.x * quat.y);
-	cosy_cosp = 1.0 - 2.0 * (quat.y * quat.y + quat.z * quat.z);
-	rot.z = atan2(siny_cosp, cosy_cosp) * 180.0 / M_PI;
+	rot.z = atan2(2.0 * (q.w * q.z + q.x * q.y),
+			1.0 - 2.0 * (q.y * q.y + q.z * q.z)) * 180.0 / M_PI;
 	return (rot);
 }
 
