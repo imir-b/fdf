@@ -2,6 +2,10 @@
 
 # FDF
 
+![alt text](img/image-2.png)
+![alt text](img/image-3.png)
+![alt text](img/image-1.png)
+
 ## Description
 
 **FDF** is a 42 school graphic project focused on creating a 3D wireframe renderer. The goal is to read a landscape map from a .fdf file, where each point's value represents its altitude, and represent it as a 3D perspective using an isometric projection.
@@ -35,6 +39,8 @@ Going far beyond the standard curriculum requirements, this project has been upg
     Interactive UI: Features a custom on-screen progress bar and timecodes to track animation playback seamlessly.
 
 ## Instructions
+
+![alt text](img/image.png)
 
 ### 🌧 Compilation
 
