@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 21:13:32 by vlad              #+#    #+#             */
-/*   Updated: 2026/03/06 18:40:13 by vlad             ###   ########.fr       */
+/*   Updated: 2026/03/07 10:51:45 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # include <errno.h>
 # include <sys/time.h>
 # include <stdbool.h>
-
 
 # define SUCCESS 0
 # define ERROR 1
@@ -91,7 +90,8 @@ long				ft_get_time_ms(void);
 void				ft_transform_threads(t_fdf *data);
 t_vec3				ft_get_new_pos(t_geometry *geo, t_model *model, int i);
 void				ft_process_face(t_fdf *data, t_face *face);
-void				ft_get_bone_world_matrix(t_model *bone, t_mat4 *world, int depth);
+void				ft_get_bone_world_matrix(t_model *bone, t_mat4 *world,
+						int depth);
 
 // -----------------------------------------------------------------------------
 // *** ANIMATE ***
@@ -104,6 +104,11 @@ void				ft_prev_anim(t_fdf *data);
 void				ft_update_time(t_timer *t);
 void				ft_init_timer(t_timer *t, double duration_sec);
 void				ft_update_mesh_from_animation(t_fdf *data);
+double				ft_get_lerp_ratio(t_anim_curve *c, double time, int *idx);
+double				ft_get_value_at_time(t_anim_curve *curve,
+						double current_time);
+void				ft_apply_slerp(t_properties *rot, t_anim_node *node,
+						double time);
 
 // -----------------------------------------------------------------------------
 // *** USER INTERFACE ***

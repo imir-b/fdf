@@ -6,39 +6,11 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 21:27:49 by vlad              #+#    #+#             */
-/*   Updated: 2026/02/28 22:35:24 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/03/07 10:53:09 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-static double	ft_get_value_at_time(t_anim_curve *curve, double current_time)
-{
-	int			i;
-	double		ratio;
-	double		t_start;
-	double		t_end;
-
-	if (!curve || curve->n_keys == 0 || !curve->time || !curve->value)
-		return (0.0);
-	if (curve->n_keys == 1)
-		return (curve->value[0]);
-	if (current_time >= curve->time[curve->n_keys - 1])
-		return (curve->value[curve->n_keys - 1]);
-	i = 0;
-	while (i < curve->n_keys - 1)
-	{
-		if (current_time < curve->time[i + 1])
-			break ;
-		i++;
-	}
-	t_start = curve->time[i];
-	t_end = curve->time[i + 1];
-	if (t_end - t_start == 0)
-		return (curve->value[i]);
-	ratio = (current_time - t_start) / (t_end - t_start);
-	return (curve->value[i] * (1.0 - ratio) + curve->value[i + 1] * ratio);
-}
 
 static void	ft_get_anim_at_time(t_properties *transformed,
 	t_anim_node *current, t_timer timer)
@@ -52,46 +24,29 @@ static void	ft_get_anim_at_time(t_properties *transformed,
 }
 
 /**
- * Assemble les Quaternions A et B à partir des frames connues et demande à ft_slerp 
- *un résultat ponctuel et interpolé, supprimant le risque de vrilles au franchissement de 180°.
+ * Assemble les Quaternions A et B à partir des frames connues et 
+ * demande à ft_slerp un résultat ponctuel et interpolé, supprimant le 
+ * risque de vrilles au franchissement de 180°.
  **/
-static void	ft_get_rot_at_time(t_properties *rot, t_anim_node *node, double time)
+static void	ft_get_rot_at_time(t_properties *rot, t_anim_node *node,
+				double time)
 {
-	t_anim_curve	*cx;
-	t_anim_curve	*cy;
-	t_anim_curve	*cz;
-	int				i;
-	double			ratio;
-	t_quat			q1;
-	t_quat			q2;
-
-	cx = node->x;
-	cy = node->y;
-	cz = node->z;
-	if (!cx || !cy || !cz || cx->n_keys < 2 || cy->n_keys < 2 || cz->n_keys < 2)
+	if (!node->x || !node->y || !node->z || node->x->n_keys < 2
+		|| node->y->n_keys < 2 || node->z->n_keys < 2)
 	{
-		if (cx) rot->x = ft_get_value_at_time(cx, time);
-		if (cy) rot->y = ft_get_value_at_time(cy, time);
-		if (cz) rot->z = ft_get_value_at_time(cz, time);
+		rot->x = ft_get_value_at_time(node->x, time);
+		rot->y = ft_get_value_at_time(node->y, time);
+		rot->z = ft_get_value_at_time(node->z, time);
 		return ;
 	}
-	if (time >= cx->time[cx->n_keys - 1])
+	if (time >= node->x->time[node->x->n_keys - 1])
 	{
-		rot->x = cx->value[cx->n_keys - 1];
-		rot->y = cy->value[cy->n_keys - 1];
-		rot->z = cz->value[cz->n_keys - 1];
+		rot->x = node->x->value[node->x->n_keys - 1];
+		rot->y = node->y->value[node->y->n_keys - 1];
+		rot->z = node->z->value[node->z->n_keys - 1];
 		return ;
 	}
-	i = 0;
-	while (i < cx->n_keys - 1 && time >= cx->time[i + 1])
-		i++;
-	if (cx->time[i + 1] - cx->time[i] == 0)
-		ratio = 0;
-	else
-		ratio = (time - cx->time[i]) / (cx->time[i + 1] - cx->time[i]);
-	q1 = ft_euler_to_quat(cx->value[i], cy->value[i], cz->value[i]);
-	q2 = ft_euler_to_quat(cx->value[i + 1], cy->value[i + 1], cz->value[i + 1]);
-	*rot = ft_quat_to_euler(ft_slerp(q1, q2, ratio));
+	ft_apply_slerp(rot, node, time);
 }
 
 static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
@@ -110,7 +65,8 @@ static void	ft_animate_nodes(t_anim_layer *layer, t_fdf *data)
 			if (node->type == 'S')
 				ft_get_anim_at_time(&model_target->scale, node, data->timer);
 			else if (node->type == 'R')
-				ft_get_rot_at_time(&model_target->rot, node, data->timer.weighted_value);
+				ft_get_rot_at_time(&model_target->rot, node,
+					data->timer.weighted_value);
 			else if (node->type == 'T')
 				ft_get_anim_at_time(&model_target->pos, node, data->timer);
 		}

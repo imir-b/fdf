@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 13:17:15 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/03/06 21:14:09 by vlad             ###   ########.fr       */
+/*   Updated: 2026/03/07 10:35:30 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@
 # define PARALLEL 1
 
 # define WHITE 16777215
-
-
 
 # define FBX_SEC 46186158000.0
 
@@ -81,7 +79,7 @@ typedef struct s_maths			t_maths;
 /*
  * Variables de travail pour la conversion des angles d'Euler en quaternion.
 */
-typedef struct	s_quat_maths	t_quat_maths;
+typedef struct s_quat_maths		t_quat_maths;
 
 /*
  * Variables de travail pour l'algorithme de tracé de ligne de Bresenham

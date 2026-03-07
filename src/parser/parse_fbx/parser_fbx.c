@@ -6,7 +6,7 @@
 /*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 22:36:04 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/02/27 14:19:35 by vbleskin         ###   ########.fr       */
+/*   Updated: 2026/03/07 10:54:39 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
  * 
  * @param filename Nom du fichier à lire.
  * @param total Pointeur pour stocker la taille totale du fichier.
- * @return Pointeur vers le buffer alloué contenant les données du fichier, ou NULL.
+ * @return Pointeur vers le buffer alloué contenant les données du 
+ * fichier, ou NULL.
  */
 static char	*ft_read_entire_file(const char *filename, ssize_t *total)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quaternion.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlad <vlad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vbleskin <vbleskin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 20:50:00 by vbleskin          #+#    #+#             */
-/*   Updated: 2026/03/06 21:08:44 by vlad             ###   ########.fr       */
+/*   Updated: 2026/03/07 10:54:04 by vbleskin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
  */
 t_quat	ft_euler_to_quat(double rot_x, double rot_y, double rot_z)
 {
-	t_quat	quaternion;
+	t_quat			quaternion;
 	t_quat_maths	q_maths;
 
 	rot_x = ft_to_rad(rot_x);
@@ -34,14 +34,14 @@ t_quat	ft_euler_to_quat(double rot_x, double rot_y, double rot_z)
 	q_maths.sp = sin(rot_y * 0.5);
 	q_maths.cy = cos(rot_z * 0.5);
 	q_maths.sy = sin(rot_z * 0.5);
-	quaternion.w = q_maths.cr * q_maths.cp * q_maths.cy + 
-		q_maths.sr * q_maths.sp * q_maths.sy;
-	quaternion.x = q_maths.sr * q_maths.cp * q_maths.cy - 
-		q_maths.cr * q_maths.sp * q_maths.sy;
-	quaternion.y = q_maths.cr * q_maths.sp * q_maths.cy + 
-		q_maths.sr * q_maths.cp * q_maths.sy;
-	quaternion.z = q_maths.cr * q_maths.cp * q_maths.sy - 
-		q_maths.sr * q_maths.sp * q_maths.cy;
+	quaternion.w = q_maths.cr * q_maths.cp * q_maths.cy
+		+ q_maths.sr * q_maths.sp * q_maths.sy;
+	quaternion.x = q_maths.sr * q_maths.cp * q_maths.cy
+		- q_maths.cr * q_maths.sp * q_maths.sy;
+	quaternion.y = q_maths.cr * q_maths.sp * q_maths.cy
+		+ q_maths.sr * q_maths.cp * q_maths.sy;
+	quaternion.z = q_maths.cr * q_maths.cp * q_maths.sy
+		- q_maths.sr * q_maths.sp * q_maths.cy;
 	return (quaternion);
 }
 
@@ -113,7 +113,8 @@ t_quat	ft_slerp(t_quat quat1, t_quat quat2, double factor)
 	double	v[4];
 	double	dot;
 
-	dot = quat1.x * quat2.x + quat1.y * quat2.y + quat1.z * quat2.z + quat1.w * quat2.w;
+	dot = quat1.x * quat2.x + quat1.y * quat2.y
+		+ quat1.z * quat2.z + quat1.w * quat2.w;
 	if (dot < 0.0)
 	{
 		quat2.x = -quat2.x;
